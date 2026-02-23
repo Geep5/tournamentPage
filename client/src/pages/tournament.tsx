@@ -68,21 +68,29 @@ export default function TournamentPage() {
     { id: "payouts", label: "Payouts", icon: Wallet },
   ];
 
-  const adminNavItems = [
-    { id: "admin-overview", label: "Overview", icon: LayoutGrid },
-    { id: "admin-rules", label: "Rules", icon: ClipboardList },
-    { id: "admin-contributions", label: "Contributions", icon: Coins },
-    { id: "admin-teams", label: "Participants", icon: Users, badge: "62" },
-    { id: "admin-bracket", label: "Bracket", icon: GitMerge },
-    { id: "admin-prizepool", label: "Prize Pool", icon: Trophy },
-    { id: "admin-stream", label: "Marketplace", icon: Store },
-    { id: "admin-payouts", label: "Payouts", icon: Wallet },
-    { id: "admin-sponsors", label: "Sponsors", icon: Heart },
-    { id: "admin-streaming", label: "Stream", icon: Tv },
-    { id: "admin-location", label: "Location", icon: MapPin },
-    { id: "admin-venues", label: "Venues & Series", icon: Flag },
-    { id: "admin-messaging", label: "Messaging", icon: MessageSquare },
+  const adminNavGroups = [
+    { label: "Configure", items: [
+      { id: "admin-overview", label: "General", icon: LayoutGrid },
+      { id: "admin-rules", label: "Rules", icon: ClipboardList },
+      { id: "admin-contributions", label: "Crowdfunding", icon: Coins },
+      { id: "admin-bracket", label: "Bracket", icon: GitMerge },
+    ]},
+    { label: "Tournament", items: [
+      { id: "admin-teams", label: "Participants", icon: Users, badge: "62" },
+      { id: "admin-prizepool", label: "Prize Pool", icon: Trophy },
+      { id: "admin-stream", label: "Marketplace", icon: Store },
+      { id: "admin-payouts", label: "Payouts", icon: Wallet },
+    ]},
+    { label: "Operations", items: [
+      { id: "admin-sponsors", label: "Sponsors", icon: Heart },
+      { id: "admin-streaming", label: "Stream", icon: Tv },
+      { id: "admin-location", label: "Location", icon: MapPin },
+      { id: "admin-venues", label: "Venues & Series", icon: Flag },
+      { id: "admin-messaging", label: "Messaging", icon: MessageSquare },
+    ]},
   ];
+
+  const adminNavItems = adminNavGroups.flatMap(g => g.items);
 
   const currentNavItems = isAdminMode ? adminNavItems : navItems;
 
@@ -241,39 +249,76 @@ export default function TournamentPage() {
                 </div>
               </button>
 
-              {currentNavItems.map((item) => {
-                const Icon = item.icon;
-                const isActive = activeTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => {
-                      setActiveTab(item.id);
-                      // Scroll to section based on mapped ID
-                      const sectionId = item.id === 'overview' ? 'about' 
-                                      : item.id === 'contributions' ? 'prize-pool'
-                                      : item.id === 'teams' ? 'participants'
-                                      : item.id;
-                      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-semibold transition-all ${
-                      isActive 
-                        ? "bg-white/10 text-white border-l-4 border-primary" 
-                        : "text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent"
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <Icon className="w-5 h-5 opacity-70" />
-                      {item.label}
+              {isAdminMode ? (
+                adminNavGroups.map((group, gi) => (
+                  <div key={gi} className={gi > 0 ? 'mt-4 pt-3 border-t border-white/5' : ''}>
+                    <div className="px-3 mb-2">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-white/30">{group.label}</span>
                     </div>
-                    {item.badge && (
-                      <Badge variant="secondary" className="bg-white/10 text-white/70 hover:bg-white/20 border-none px-1.5 py-0">
-                        {item.badge}
-                      </Badge>
-                    )}
-                  </button>
-                )
-              })}
+                    {group.items.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = activeTab === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => {
+                            setActiveTab(item.id);
+                            document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
+                          }}
+                          className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                            isActive
+                              ? 'bg-white/10 text-white border-l-4 border-primary'
+                              : 'text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <Icon className="w-4 h-4 opacity-70" />
+                            {item.label}
+                          </div>
+                          {'badge' in item && item.badge && (
+                            <Badge variant="secondary" className="bg-white/10 text-white/70 hover:bg-white/20 border-none px-1.5 py-0 text-[10px]">
+                              {item.badge}
+                            </Badge>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                ))
+              ) : (
+                currentNavItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        const sectionId = item.id === 'overview' ? 'about'
+                                        : item.id === 'contributions' ? 'prize-pool'
+                                        : item.id === 'teams' ? 'participants'
+                                        : item.id;
+                        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-semibold transition-all ${
+                        isActive
+                          ? 'bg-white/10 text-white border-l-4 border-primary'
+                          : 'text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon className="w-5 h-5 opacity-70" />
+                        {item.label}
+                      </div>
+                      {item.badge && (
+                        <Badge variant="secondary" className="bg-white/10 text-white/70 hover:bg-white/20 border-none px-1.5 py-0">
+                          {item.badge}
+                        </Badge>
+                      )}
+                    </button>
+                  );
+                })
+              )}
             </div>
           </div>
         </aside>
@@ -917,19 +962,19 @@ export default function TournamentPage() {
               </div>
             ) : (
             <section id="admin" className="space-y-6 scroll-mt-24">
-              <div className="flex items-center justify-between border-b border-white/5 pb-4">
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400">
-                    <Settings className="w-5 h-5" />
-                  </div>
-                  <h2 className="text-2xl font-display font-semibold">Admin Panel</h2>
+              {/* Admin Mode Banner */}
+              <div className="flex items-center gap-4 px-5 py-3 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                <div className="flex items-center gap-2 text-amber-400">
+                  <Settings className="w-5 h-5 animate-[spin_8s_linear_infinite]" />
+                  <span className="text-sm font-bold uppercase tracking-wider">Admin Mode</span>
                 </div>
+                <div className="h-4 w-px bg-amber-500/30" />
+                <span className="text-xs text-amber-400/70">Changes are saved per-section. Use the sidebar to navigate.</span>
               </div>
-              <div className="bg-card border border-white/5 rounded-2xl p-6">
-                {/* Admin Content Area (Mockup of Settings) */}
-                <div className="space-y-12">
+                {/* Admin Content Area */}
+                <div className="space-y-8">
                   {/* General Settings */}
-                  <section id="admin-overview" className="space-y-6 scroll-mt-24">
+                  <section id="admin-overview" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-semibold border-b border-white/5 pb-2 flex-1">General Settings</h3>
                       <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold">Save</Button>
@@ -991,7 +1036,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Header Image */}
                       <div className="space-y-2">
@@ -1009,7 +1054,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Hide Unpublished */}
                       <div className="flex items-center justify-between py-1">
@@ -1026,7 +1071,7 @@ export default function TournamentPage() {
                         </button>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Hide Crowdfunding */}
                       <div className="flex items-center justify-between py-1">
@@ -1043,7 +1088,7 @@ export default function TournamentPage() {
                         </button>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Game */}
                       <div className="space-y-2">
@@ -1062,7 +1107,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Start Time */}
                       <div className="space-y-2">
@@ -1077,7 +1122,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Timezone */}
                       <div className="space-y-2">
@@ -1098,7 +1143,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Console / Platform */}
                       <div className="space-y-2">
@@ -1116,7 +1161,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Participant Signups */}
                       <div className="flex items-center justify-between py-1">
@@ -1133,7 +1178,7 @@ export default function TournamentPage() {
                         </button>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Team Signups */}
                       <div className="flex items-center justify-between py-1">
@@ -1150,7 +1195,7 @@ export default function TournamentPage() {
                         </button>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Charity Contributions */}
                       <div className="flex items-center justify-between py-1">
@@ -1167,7 +1212,7 @@ export default function TournamentPage() {
                         </button>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Prize Pool Label */}
                       <div className="flex items-center justify-between py-1">
@@ -1178,7 +1223,7 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Rules Settings */}
-                  <section id="admin-rules" className="space-y-4 scroll-mt-24">
+                  <section id="admin-rules" className="space-y-4 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
                     <h3 className="text-lg font-semibold border-b border-white/5 pb-2">Rules</h3>
                     <div className="border border-white/10 rounded-xl overflow-hidden">
                       <div className="flex items-center gap-1 px-3 py-2 bg-white/5 border-b border-white/10 flex-wrap">
@@ -1246,14 +1291,14 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Stream Link */}
-                  <section className="space-y-6 scroll-mt-24">
+                  <section className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
                     <div className="space-y-6">
                       <div className="flex items-center justify-between py-1">
                         <span className="text-sm font-semibold text-foreground">Stream Link</span>
                         <input type="text" className="w-64 bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm text-right focus:outline-none focus:border-primary/50 placeholder:text-muted-foreground" placeholder="URL e.g. https://" />
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Event Socials */}
                       <div className="space-y-3">
@@ -1280,7 +1325,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Custom Tournament URL */}
                       <div className="space-y-2">
@@ -1291,7 +1336,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Reset / Save */}
                       <div className="flex items-center justify-end gap-3 pt-2">
@@ -1302,10 +1347,9 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Actions */}
-                  <section className="space-y-6 scroll-mt-24">
-                    <div className="flex items-center gap-3 border-b border-primary/30 pb-4">
-                      <span className="text-2xl">🎮</span>
-                      <h3 className="text-2xl font-bold">Actions</h3>
+                  <section className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
+                    <div className="flex items-center gap-3 border-b border-white/10 pb-3">
+                      <h3 className="text-lg font-bold">Actions</h3>
                     </div>
 
                     {/* Publish */}
@@ -1361,11 +1405,10 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Bracket */}
-                  <section id="admin-bracket" className="space-y-6 scroll-mt-24">
+                  <section id="admin-bracket" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 border-b border-primary/30 pb-4 flex-1">
-                        <span className="text-2xl">⚔️</span>
-                        <h3 className="text-2xl font-bold">Bracket</h3>
+                      <div className="flex items-center gap-3 border-b border-white/10 pb-3 flex-1">
+                        <h3 className="text-lg font-bold">Bracket</h3>
                       </div>
                       <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold ml-4">Link Another Bracket Site</Button>
                     </div>
@@ -1385,7 +1428,7 @@ export default function TournamentPage() {
                         </select>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Bracket Format */}
                       <div className="flex items-center justify-between py-1">
@@ -1398,7 +1441,7 @@ export default function TournamentPage() {
                         </select>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Match Format */}
                       <div className="flex items-center justify-between py-1">
@@ -1415,7 +1458,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Best of / First to */}
                       <div className="flex items-center gap-4 py-1 flex-wrap">
@@ -1435,7 +1478,7 @@ export default function TournamentPage() {
                         </select>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Toggle options */}
                       {[
@@ -1493,7 +1536,7 @@ export default function TournamentPage() {
                         </select>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Check In */}
                       <div className="flex items-center justify-between py-1">
@@ -1511,7 +1554,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Reset / Create */}
                       <div className="flex items-center justify-end gap-3 pt-2">
@@ -1522,11 +1565,10 @@ export default function TournamentPage() {
                   </section>
                   
                   {/* Staff */}
-                  <section className="space-y-6 scroll-mt-24">
+                  <section className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 border-b border-primary/30 pb-4 flex-1">
-                        <span className="text-2xl">👥</span>
-                        <h3 className="text-2xl font-bold">Staff</h3>
+                      <div className="flex items-center gap-3 border-b border-white/10 pb-3 flex-1">
+                        <h3 className="text-lg font-bold">Staff</h3>
                       </div>
                       <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold ml-4">Add</Button>
                     </div>
@@ -1544,10 +1586,9 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Crowdfunding */}
-                  <section id="admin-contributions" className="space-y-6 scroll-mt-24">
-                    <div className="flex items-center gap-3 border-b border-primary/30 pb-4">
-                      <span className="text-2xl">⚙️</span>
-                      <h3 className="text-2xl font-bold">Crowdfunding</h3>
+                  <section id="admin-contributions" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
+                    <div className="flex items-center gap-3 border-b border-white/10 pb-3">
+                      <h3 className="text-lg font-bold">Crowdfunding</h3>
                     </div>
 
                     {/* Main Goal */}
@@ -1566,7 +1607,7 @@ export default function TournamentPage() {
                         <input type="text" className="w-56 bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm text-right focus:outline-none focus:border-primary/50 placeholder:text-muted-foreground" placeholder="Desired funding goal $" />
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Hide Users from Supporter List */}
                       <div className="flex items-center justify-between py-1">
@@ -1585,7 +1626,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Contribute Link */}
                       <div className="flex items-center justify-between py-1">
@@ -1594,7 +1635,7 @@ export default function TournamentPage() {
                       </div>
                     </div>
 
-                    <div className="border-t border-white/5" />
+                    <div className="border-t border-white/[0.04]" />
 
                     {/* Stretch Goals */}
                     <div className="space-y-4">
@@ -1614,10 +1655,9 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Entry */}
-                  <section className="space-y-6 scroll-mt-24">
-                    <div className="flex items-center gap-3 border-b border-primary/30 pb-4">
-                      <span className="text-2xl">🎫</span>
-                      <h3 className="text-2xl font-bold">Entry</h3>
+                  <section className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
+                    <div className="flex items-center gap-3 border-b border-white/10 pb-3">
+                      <h3 className="text-lg font-bold">Entry</h3>
                     </div>
 
                     {/* Fees */}
@@ -1635,7 +1675,7 @@ export default function TournamentPage() {
                         <input type="text" className="w-56 bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm text-right focus:outline-none focus:border-primary/50 placeholder:text-muted-foreground" placeholder="Please input an amount." />
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Organizer Share of Entry Fee */}
                       <div className="flex items-center justify-between py-1">
@@ -1643,7 +1683,7 @@ export default function TournamentPage() {
                         <input type="text" className="w-56 bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm text-right focus:outline-none focus:border-primary/50 placeholder:text-muted-foreground" placeholder="Please input an amount." />
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Password */}
                       <div className="space-y-3">
@@ -1660,7 +1700,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Player Limit */}
                       <div className="flex items-center justify-between py-1">
@@ -1671,7 +1711,7 @@ export default function TournamentPage() {
                         <input type="number" className="w-56 bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm text-right focus:outline-none focus:border-primary/50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" defaultValue="0" />
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* SponsorQuest Registration */}
                       <div className="flex items-center justify-between py-1">
@@ -1685,7 +1725,7 @@ export default function TournamentPage() {
                         </button>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Custom Form */}
                       <div className="space-y-4">
@@ -1713,7 +1753,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Collected Form Data */}
                       <div className="flex items-center justify-between py-1">
@@ -1724,11 +1764,10 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Participants */}
-                  <section id="admin-teams" className="space-y-6 scroll-mt-24">
+                  <section id="admin-teams" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 border-b border-primary/30 pb-4 flex-1">
-                        <span className="text-2xl">👥</span>
-                        <h3 className="text-2xl font-bold">Participants</h3>
+                      <div className="flex items-center gap-3 border-b border-white/10 pb-3 flex-1">
+                        <h3 className="text-lg font-bold">Participants</h3>
                         <button className="text-muted-foreground hover:text-foreground transition-colors" title="Download">⬇</button>
                       </div>
                       <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold ml-4 gap-2">
@@ -1754,7 +1793,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Add participant without account */}
                       <div className="flex items-center justify-between py-1">
@@ -1775,7 +1814,7 @@ export default function TournamentPage() {
                         </div>
                       </div>
 
-                      <div className="border-t border-white/5" />
+                      <div className="border-t border-white/[0.04]" />
 
                       {/* Name table */}
                       <div className="rounded-xl border border-white/10 overflow-hidden">
@@ -1783,17 +1822,16 @@ export default function TournamentPage() {
                           <span className="text-sm font-semibold text-primary">Name</span>
                         </div>
                         <div className="px-5 py-4 text-center">
-                          <span className="text-sm text-muted-foreground">Empty</span>
+                          <span className="text-sm text-muted-foreground italic">No items yet</span>
                         </div>
                       </div>
                     </div>
                   </section>
 
                   {/* Prize Pool */}
-                  <section id="admin-prizepool" className="space-y-6 scroll-mt-24">
-                    <div className="flex items-center gap-3 border-b border-primary/30 pb-4">
-                      <span className="text-2xl">🏆</span>
-                      <h3 className="text-2xl font-bold">Prize Pool</h3>
+                  <section id="admin-prizepool" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
+                    <div className="flex items-center gap-3 border-b border-white/10 pb-3">
+                      <h3 className="text-lg font-bold">Prize Pool</h3>
                     </div>
 
                     <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl px-5 py-4">
@@ -1810,7 +1848,7 @@ export default function TournamentPage() {
                       </div>
 
                       <div className="rounded-xl border border-white/10 overflow-hidden">
-                        <div className="grid grid-cols-6 px-5 py-3 border-b border-white/10 bg-white/5 gap-2">
+                        <div className="grid grid-cols-6 px-5 py-3 border-b border-white/10 bg-white/[0.03] gap-2">
                           <span className="text-sm font-semibold text-primary">#</span>
                           <span className="text-sm font-semibold text-primary">Title</span>
                           <span className="text-sm font-semibold text-primary">Amount</span>
@@ -1819,7 +1857,7 @@ export default function TournamentPage() {
                           <span className="text-sm font-semibold text-primary">Estimate <span className="font-normal text-muted-foreground">(Amount x Users)</span></span>
                         </div>
                         <div className="px-5 py-4 text-center">
-                          <span className="text-sm text-muted-foreground">Empty</span>
+                          <span className="text-sm text-muted-foreground italic">No items yet</span>
                         </div>
                       </div>
                     </div>
@@ -1835,31 +1873,30 @@ export default function TournamentPage() {
                       </div>
 
                       <div className="rounded-xl border border-white/10 overflow-hidden">
-                        <div className="grid grid-cols-4 px-5 py-3 border-b border-white/10 bg-white/5 gap-2">
+                        <div className="grid grid-cols-4 px-5 py-3 border-b border-white/10 bg-white/[0.03] gap-2">
                           <span className="text-sm font-semibold text-primary">#</span>
                           <span className="text-sm font-semibold text-primary">Title</span>
                           <span className="text-sm font-semibold text-primary">Users</span>
                           <span className="text-sm font-semibold text-primary">Amount</span>
                         </div>
                         <div className="px-5 py-4 text-center">
-                          <span className="text-sm text-muted-foreground">Empty</span>
+                          <span className="text-sm text-muted-foreground italic">No items yet</span>
                         </div>
                       </div>
                     </div>
                   </section>
 
                   {/* Marketplace */}
-                  <section id="admin-stream" className="space-y-6 scroll-mt-24">
+                  <section id="admin-stream" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 border-b border-primary/30 pb-4 flex-1">
-                        <span className="text-2xl">🏪</span>
-                        <h3 className="text-2xl font-bold">Marketplace</h3>
+                      <div className="flex items-center gap-3 border-b border-white/10 pb-3 flex-1">
+                        <h3 className="text-lg font-bold">Marketplace</h3>
                       </div>
                       <Button size="sm" className="bg-green-600 hover:bg-green-500 text-white font-semibold ml-4">Add Item to Event</Button>
                     </div>
 
                     <div className="rounded-xl border border-white/10 overflow-hidden">
-                      <div className="grid grid-cols-3 px-5 py-3 border-b border-white/10 bg-white/5 gap-2">
+                      <div className="grid grid-cols-3 px-5 py-3 border-b border-white/10 bg-white/[0.03] gap-2">
                         <span className="text-sm font-semibold text-foreground">Title</span>
                         <span className="text-sm font-semibold text-foreground">Quantity</span>
                         <span className="text-sm font-semibold text-foreground">Created By</span>
@@ -1867,7 +1904,7 @@ export default function TournamentPage() {
                     </div>
                   </section>
 
-                  <section id="admin-payouts" className="space-y-4 scroll-mt-24">
+                  <section id="admin-payouts" className="space-y-4 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
                     <h3 className="text-lg font-semibold border-b border-white/5 pb-2">Payouts Management</h3>
                     <p className="text-sm text-muted-foreground mb-4">Assign players to prize buckets. Payouts are automatically split evenly among the assigned players.</p>
                     
@@ -1997,11 +2034,10 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Sponsors */}
-                  <section id="admin-sponsors" className="space-y-6 scroll-mt-24">
+                  <section id="admin-sponsors" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 border-b border-primary/30 pb-4 flex-1">
-                        <span className="text-2xl">🤝</span>
-                        <h3 className="text-2xl font-bold">Sponsors</h3>
+                      <div className="flex items-center gap-3 border-b border-white/10 pb-3 flex-1">
+                        <h3 className="text-lg font-bold">Sponsors</h3>
                       </div>
                       <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold ml-4">Save</Button>
                     </div>
@@ -2030,11 +2066,11 @@ export default function TournamentPage() {
                       </button>
                     </div>
 
-                    <div className="border-t border-white/5" />
+                    <div className="border-t border-white/[0.04]" />
 
                     {/* Sponsor table */}
                     <div className="rounded-xl border border-white/10 overflow-hidden">
-                      <div className="grid grid-cols-6 px-5 py-3 border-b border-white/10 bg-white/5 gap-2">
+                      <div className="grid grid-cols-6 px-5 py-3 border-b border-white/10 bg-white/[0.03] gap-2">
                         <span className="text-sm font-semibold text-primary">Title</span>
                         <span className="text-sm font-semibold text-primary">Sponsor</span>
                         <span className="text-sm font-semibold text-primary">Region</span>
@@ -2057,10 +2093,9 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Stream */}
-                  <section id="admin-streaming" className="space-y-6 scroll-mt-24">
-                    <div className="flex items-center gap-3 border-b border-primary/30 pb-4">
-                      <span className="text-2xl">📺</span>
-                      <h3 className="text-2xl font-bold">Stream</h3>
+                  <section id="admin-streaming" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
+                    <div className="flex items-center gap-3 border-b border-white/10 pb-3">
+                      <h3 className="text-lg font-bold">Stream</h3>
                     </div>
 
                     {/* Manage Streams */}
@@ -2073,7 +2108,7 @@ export default function TournamentPage() {
                           <span className="text-sm font-semibold text-foreground">Tournament Streams</span>
                           <Button size="sm" className="bg-primary hover:bg-primary/90 text-black font-semibold">Add</Button>
                         </div>
-                        <div className="border-t border-white/5" />
+                        <div className="border-t border-white/[0.04]" />
                         <div className="rounded-xl bg-white/[0.02] border border-white/10 px-5 py-4 text-center">
                           <span className="text-sm text-muted-foreground">No stream list found</span>
                         </div>
@@ -2091,7 +2126,7 @@ export default function TournamentPage() {
                             <span className="inline-block h-4 w-4 transform rounded-full bg-white translate-x-6 transition-transform" />
                           </button>
                         </div>
-                        <div className="border-t border-white/5" />
+                        <div className="border-t border-white/[0.04]" />
                         <div className="rounded-xl bg-white/[0.02] border border-white/10 px-5 py-4 text-center">
                           <span className="text-sm text-muted-foreground">No Stream List Found</span>
                         </div>
@@ -2159,11 +2194,11 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Location */}
-                  <section id="admin-location" className="space-y-6 scroll-mt-24">
+                  <section id="admin-location" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3 border-b border-primary/30 pb-4 flex-1">
+                      <div className="flex items-center gap-3 border-b border-white/10 pb-3 flex-1">
                         <MapPin className="w-6 h-6" />
-                        <h3 className="text-2xl font-bold">Location</h3>
+                        <h3 className="text-lg font-bold">Location</h3>
                       </div>
                       <div className="flex items-center gap-3 ml-4">
                         <Button variant="ghost" className="text-foreground font-semibold hover:text-foreground">Reset</Button>
@@ -2228,22 +2263,21 @@ export default function TournamentPage() {
                   </section>
 
                   {/* Venues & Series */}
-                  <section id="admin-venues" className="space-y-6 scroll-mt-24">
-                    <div className="flex items-center gap-3 border-b border-primary/30 pb-4">
-                      <span className="text-2xl">🏀</span>
-                      <h3 className="text-2xl font-bold">Venues & Series</h3>
+                  <section id="admin-venues" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
+                    <div className="flex items-center gap-3 border-b border-white/10 pb-3">
+                      <h3 className="text-lg font-bold">Venues & Series</h3>
                     </div>
 
                     {/* Venues */}
                     <div className="space-y-3">
                       <span className="text-sm font-bold text-foreground">Venues</span>
                       <div className="rounded-xl border border-white/10 overflow-hidden">
-                        <div className="grid grid-cols-2 px-5 py-3 border-b border-white/10 bg-white/5 gap-2">
+                        <div className="grid grid-cols-2 px-5 py-3 border-b border-white/10 bg-white/[0.03] gap-2">
                           <span className="text-sm font-semibold text-primary">Title</span>
                           <span className="text-sm font-semibold text-primary">Status</span>
                         </div>
                         <div className="px-5 py-4 text-center">
-                          <span className="text-sm text-muted-foreground">Empty</span>
+                          <span className="text-sm text-muted-foreground italic">No items yet</span>
                         </div>
                       </div>
                     </div>
@@ -2252,22 +2286,22 @@ export default function TournamentPage() {
                     <div className="space-y-3">
                       <span className="text-sm font-bold text-foreground">Series</span>
                       <div className="rounded-xl border border-white/10 overflow-hidden">
-                        <div className="grid grid-cols-2 px-5 py-3 border-b border-white/10 bg-white/5 gap-2">
+                        <div className="grid grid-cols-2 px-5 py-3 border-b border-white/10 bg-white/[0.03] gap-2">
                           <span className="text-sm font-semibold text-primary">Title</span>
                           <span className="text-sm font-semibold text-primary">Status</span>
                         </div>
                         <div className="px-5 py-4 text-center">
-                          <span className="text-sm text-muted-foreground">Empty</span>
+                          <span className="text-sm text-muted-foreground italic">No items yet</span>
                         </div>
                       </div>
                     </div>
                   </section>
 
                   {/* Messaging */}
-                  <section id="admin-messaging" className="space-y-6 scroll-mt-24">
-                    <div className="flex items-center gap-3 border-b border-primary/30 pb-4">
+                  <section id="admin-messaging" className="space-y-6 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
+                    <div className="flex items-center gap-3 border-b border-white/10 pb-3">
                       <MessageSquare className="w-6 h-6" />
-                      <h3 className="text-2xl font-bold">Messaging</h3>
+                      <h3 className="text-lg font-bold">Messaging</h3>
                     </div>
 
                     <div className="space-y-4">
@@ -2328,7 +2362,6 @@ export default function TournamentPage() {
                     </div>
                   </section>
                 </div>
-              </div>
             </section>
             )}
           </div>

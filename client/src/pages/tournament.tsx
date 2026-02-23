@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Search, Bell, Trophy, Calendar, Users, Map, Heart, ScrollText, Twitch, MessageSquare, ChevronRight, Menu, BookOpen, Settings, Check, LayoutGrid, ClipboardList, Coins, GitMerge, Radio, Flag, Wallet, Zap, CircleDollarSign, X, Upload, Image, Store, MapPin, Copy, ExternalLink, Paperclip, Tv } from "lucide-react";
+import { Search, Bell, Trophy, Calendar, Users, Map, Heart, ScrollText, Twitch, MessageSquare, ChevronRight, ChevronDown, Menu, BookOpen, Settings, Check, LayoutGrid, ClipboardList, Coins, GitMerge, Radio, Flag, Wallet, Zap, CircleDollarSign, X, Upload, Image, Store, MapPin, Copy, ExternalLink, Paperclip, Tv, Shield, Crown, Clock, ArrowUpDown, Maximize2, ZoomIn, ZoomOut, Eye, Crosshair } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -48,6 +48,8 @@ export default function TournamentPage() {
   const [cols, setCols] = useState(3);
   const [aboutExpanded, setAboutExpanded] = useState(false);
   const [orgLiked, setOrgLiked] = useState(false);
+  const [donorSort, setDonorSort] = useState<"amount" | "recent">("amount");
+  const [donorPage, setDonorPage] = useState(1);
 
   useEffect(() => {
     const updateCols = () => {
@@ -806,9 +808,150 @@ export default function TournamentPage() {
                   </AccordionItem>
                 </Accordion>
               </div>
+
+              {/* Top Donors */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <Crown className="w-5 h-5 text-yellow-500" />
+                    Top Donors
+                  </h3>
+                  <span className="text-sm text-muted-foreground">42 total contributors</span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {/* 1st */}
+                  <div className="relative p-4 rounded-xl bg-gradient-to-br from-yellow-500/15 to-yellow-600/5 border border-yellow-500/30 flex flex-col items-center gap-3 text-center">
+                    <div className="absolute top-2 right-2 text-yellow-500 font-bold text-xs bg-yellow-500/15 px-2 py-0.5 rounded-full">#1</div>
+                    <Avatar className="h-14 w-14 border-2 border-yellow-500/60 shadow-[0_0_15px_rgba(250,204,21,0.2)]">
+                      <AvatarImage src="https://i.pravatar.cc/150?u=topdonor1" />
+                      <AvatarFallback>JM</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold text-foreground">JackMaster</p>
+                      <p className="text-xl font-bold text-yellow-500 mt-1">$850.00</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">2h ago</p>
+                    </div>
+                  </div>
+                  {/* 2nd */}
+                  <div className="relative p-4 rounded-xl bg-gradient-to-br from-zinc-300/10 to-zinc-400/5 border border-zinc-400/20 flex flex-col items-center gap-3 text-center">
+                    <div className="absolute top-2 right-2 text-zinc-300 font-bold text-xs bg-zinc-400/15 px-2 py-0.5 rounded-full">#2</div>
+                    <Avatar className="h-14 w-14 border-2 border-zinc-400/50">
+                      <AvatarImage src="https://i.pravatar.cc/150?u=topdonor2" />
+                      <AvatarFallback>SQ</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold text-foreground">SquadLeader</p>
+                      <p className="text-xl font-bold text-zinc-300 mt-1">$625.00</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">5h ago</p>
+                    </div>
+                  </div>
+                  {/* 3rd */}
+                  <div className="relative p-4 rounded-xl bg-gradient-to-br from-orange-500/10 to-orange-600/5 border border-orange-500/20 flex flex-col items-center gap-3 text-center">
+                    <div className="absolute top-2 right-2 text-orange-500 font-bold text-xs bg-orange-500/15 px-2 py-0.5 rounded-full">#3</div>
+                    <Avatar className="h-14 w-14 border-2 border-orange-500/40">
+                      <AvatarImage src="https://i.pravatar.cc/150?u=topdonor3" />
+                      <AvatarFallback>VX</AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="font-semibold text-foreground">VortexFan</p>
+                      <p className="text-xl font-bold text-orange-500 mt-1">$400.00</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">8h ago</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* All Donors */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-red-400" />
+                    All Contributions
+                  </h3>
+                  <div className="flex items-center gap-1 bg-white/5 border border-white/10 rounded-lg p-0.5">
+                    <button
+                      onClick={() => setDonorSort("amount")}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                        donorSort === "amount"
+                          ? "bg-white/10 text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <CircleDollarSign className="w-3 h-3" />
+                      Amount
+                    </button>
+                    <button
+                      onClick={() => setDonorSort("recent")}
+                      className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+                        donorSort === "recent"
+                          ? "bg-white/10 text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
+                    >
+                      <Clock className="w-3 h-3" />
+                      Recent
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-white/5 border border-white/10 rounded-xl divide-y divide-white/5 overflow-hidden">
+                  {(() => {
+                    const allDonors = ([
+                      { name: "JackMaster", amount: 850, time: "2h ago", avatar: "topdonor1", count: 12, ts: 15 },
+                      { name: "SquadLeader", amount: 625, time: "5h ago", avatar: "topdonor2", count: 8, ts: 14 },
+                      { name: "VortexFan", amount: 400, time: "8h ago", avatar: "topdonor3", count: 5, ts: 13 },
+                      { name: "NeonBlade", amount: 250, time: "12h ago", avatar: "donor4", count: 3, ts: 12 },
+                      { name: "CyberPunkz", amount: 200, time: "1d ago", avatar: "donor5", count: 4, ts: 11 },
+                      { name: "StarGazer99", amount: 175, time: "1d ago", avatar: "donor6", count: 2, ts: 10 },
+                      { name: "PhoenixRise", amount: 150, time: "2d ago", avatar: "donor7", count: 3, ts: 9 },
+                      { name: "DarkMatter", amount: 125, time: "2d ago", avatar: "donor8", count: 1, ts: 8 },
+                      { name: "BlazeRunner", amount: 100, time: "3d ago", avatar: "donor9", count: 2, ts: 7 },
+                      { name: "PixelDust", amount: 100, time: "3d ago", avatar: "donor10", count: 1, ts: 6 },
+                      { name: "GhostRecon", amount: 75, time: "4d ago", avatar: "donor11", count: 1, ts: 5 },
+                      { name: "TurboMax", amount: 75, time: "4d ago", avatar: "donor12", count: 2, ts: 4 },
+                      { name: "NightOwl", amount: 50, time: "5d ago", avatar: "donor13", count: 1, ts: 3 },
+                      { name: "FrostByte", amount: 50, time: "5d ago", avatar: "donor14", count: 1, ts: 2 },
+                      { name: "AlphaWolf", amount: 25, time: "6d ago", avatar: "donor15", count: 1, ts: 1 },
+                    ] as const)
+                      .slice()
+                      .sort((a, b) => donorSort === "amount" ? b.amount - a.amount : b.ts - a.ts);
+                    const visible = allDonors.slice(0, donorPage * 10);
+                    const remaining = allDonors.length - visible.length;
+                    return (<>
+                      {visible.map((donor, idx) => (
+                        <div key={donor.avatar} className="flex items-center justify-between px-4 py-3 hover:bg-white/5 transition-colors">
+                          <div className="flex items-center gap-3">
+                            <span className="text-xs text-muted-foreground w-5 text-right font-mono">{idx + 1}</span>
+                            <Avatar className="h-8 w-8 border border-white/10">
+                              <AvatarImage src={`https://i.pravatar.cc/150?u=${donor.avatar}`} />
+                              <AvatarFallback>{donor.name.slice(0, 2)}</AvatarFallback>
+                            </Avatar>
+                            <div>
+                              <p className="text-sm font-medium text-foreground">{donor.name}</p>
+                              <p className="text-[10px] text-muted-foreground">{donor.time}</p>
+                            </div>
+                          </div>
+                          <span className={`font-semibold text-sm ${ idx === 0 ? "text-yellow-500" : idx === 1 ? "text-zinc-300" : idx === 2 ? "text-orange-500" : "text-foreground" }`}>
+                            ${donor.amount.toFixed(2)}
+                          </span>
+                        </div>
+                      ))}
+                      {remaining > 0 && (
+                        <button
+                          onClick={() => setDonorPage((p) => p + 1)}
+                          className="w-full py-3 text-center text-sm font-medium text-primary hover:bg-white/5 transition-colors flex items-center justify-center gap-2"
+                        >
+                          <ChevronDown className="w-4 h-4" />
+                          Load More ({remaining} remaining)
+                        </button>
+                      )}
+                    </>);
+                  })()}
+                </div>
+              </div>
             </section>
 
-            {/* Bracket Section - Uber mockup */}
+            {/* Bracket Section */}
             <section id="bracket" className="space-y-6 scroll-mt-24">
               <div className="flex items-center justify-between border-b border-white/5 pb-4">
                 <div className="flex items-center gap-3">
@@ -817,7 +960,6 @@ export default function TournamentPage() {
                   </div>
                   <h2 className="text-2xl font-display font-semibold">Bracket</h2>
                 </div>
-                <Button variant="outline" size="sm" className="bg-white/5 border-white/10">Full Screen</Button>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
@@ -827,7 +969,7 @@ export default function TournamentPage() {
                 </div>
                 <div className="p-4 rounded-xl bg-card border border-white/5 flex flex-col gap-1">
                   <span className="text-xs text-muted-foreground uppercase tracking-wider">Structure</span>
-                  <span className="font-semibold text-foreground">Round Robin to Single Elim</span>
+                  <span className="font-semibold text-foreground">Single Elimination</span>
                 </div>
                 <div className="p-4 rounded-xl bg-card border border-white/5 flex flex-col gap-1">
                   <span className="text-xs text-muted-foreground uppercase tracking-wider">Entry Fee</span>
@@ -838,73 +980,188 @@ export default function TournamentPage() {
                   <span className="font-semibold text-foreground">Mobile, Tablet</span>
                 </div>
               </div>
-              
-              <div className="bg-card border border-white/5 rounded-2xl p-6 overflow-x-auto overflow-y-hidden min-h-[300px] flex items-center relative">
-                {/* Visual lines for the bracket tree */}
-                <svg className="absolute inset-0 w-[800px] h-full pointer-events-none opacity-20" preserveAspectRatio="none">
-                  <path d="M 200 80 L 250 80 L 250 150 L 300 150" fill="none" stroke="currentColor" strokeWidth="2" />
-                  <path d="M 200 220 L 250 220 L 250 150 L 300 150" fill="none" stroke="currentColor" strokeWidth="2" />
-                  <path d="M 500 150 L 550 150 L 550 150 L 600 150" fill="none" stroke="currentColor" strokeWidth="2" />
-                </svg>
 
-                <div className="flex gap-16 min-w-max relative z-10 mx-auto">
-                  {/* Round 1 */}
-                  <div className="flex flex-col justify-around h-full gap-8">
-                    {/* Match 1 */}
-                    <div className="flex flex-col gap-1 w-48">
-                      <div className="flex items-center justify-between bg-white/10 rounded border border-white/20 px-3 py-2">
-                        <span className="text-sm font-medium">Team Alpha 1</span>
-                        <span className="text-sm font-bold text-foreground">2</span>
-                      </div>
-                      <div className="flex items-center justify-between bg-black/40 rounded border border-white/5 px-3 py-2 opacity-60">
-                        <span className="text-sm font-medium">Team Beta 4</span>
-                        <span className="text-sm font-bold text-muted-foreground">0</span>
-                      </div>
-                    </div>
-                    {/* Match 2 */}
-                    <div className="flex flex-col gap-1 w-48">
-                      <div className="flex items-center justify-between bg-white/10 rounded border border-white/20 px-3 py-2">
-                        <span className="text-sm font-medium">Team Gamma 7</span>
-                        <span className="text-sm font-bold text-foreground">2</span>
-                      </div>
-                      <div className="flex items-center justify-between bg-black/40 rounded border border-white/5 px-3 py-2 opacity-60">
-                        <span className="text-sm font-medium">Team Delta 2</span>
-                        <span className="text-sm font-bold text-muted-foreground">1</span>
-                      </div>
+              {/* Bracket Viewer */}
+              <div className="bg-card border border-white/5 rounded-2xl overflow-hidden">
+                {/* Toolbar */}
+                <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 bg-white/[0.02]">
+                  {/* Search */}
+                  <div className="flex items-center gap-2">
+                    <div className="relative">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                      <input
+                        type="text"
+                        placeholder="Search by User or Match"
+                        className="bg-white/5 border border-white/10 rounded-lg h-8 pl-9 pr-3 text-xs focus:outline-none focus:border-primary/50 w-52 placeholder:text-muted-foreground"
+                      />
                     </div>
                   </div>
+                  {/* View Controls */}
+                  <div className="flex items-center gap-1">
+                    <button className="p-1.5 rounded-md hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Fullscreen">
+                      <Maximize2 className="w-4 h-4" />
+                    </button>
+                    <button className="p-1.5 rounded-md hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Fit to Screen">
+                      <Crosshair className="w-4 h-4" />
+                    </button>
+                    <button className="p-1.5 rounded-md hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Toggle Labels">
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button className="p-1.5 rounded-md hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Zoom In">
+                      <ZoomIn className="w-4 h-4" />
+                    </button>
+                    <button className="p-1.5 rounded-md hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Zoom Out">
+                      <ZoomOut className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
 
-                  {/* Round 2 */}
-                  <div className="flex flex-col justify-around h-full">
-                    {/* Match 3 */}
-                    <div className="flex flex-col gap-1 w-48">
-                      <div className="flex items-center justify-between bg-black/40 rounded border border-white/5 px-3 py-2 opacity-60">
-                        <span className="text-sm font-medium">Team Alpha 1</span>
-                        <span className="text-sm font-bold text-muted-foreground">1</span>
+                {/* Round Headers */}
+                <div className="grid grid-cols-3 border-b border-white/5">
+                  <div className="px-6 py-2.5 text-center border-r border-white/5">
+                    <span className="text-sm font-semibold text-foreground">Quarterfinals</span>
+                    <span className="text-xs text-muted-foreground ml-1.5">(Best of 3)</span>
+                  </div>
+                  <div className="px-6 py-2.5 text-center border-r border-white/5">
+                    <span className="text-sm font-semibold text-foreground">Semifinals</span>
+                    <span className="text-xs text-muted-foreground ml-1.5">(Best of 3)</span>
+                  </div>
+                  <div className="px-6 py-2.5 text-center">
+                    <span className="text-sm font-semibold text-foreground">Finals</span>
+                    <span className="text-xs text-muted-foreground ml-1.5">(Best of 3)</span>
+                  </div>
+                </div>
+
+                {/* Bracket Tree */}
+                <div className="p-6 overflow-x-auto overflow-y-hidden min-h-[340px] flex items-center relative">
+                  {/* Connector lines */}
+                  <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+                    <line x1="232" y1="60" x2="280" y2="60" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="232" y1="160" x2="280" y2="160" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="280" y1="60" x2="280" y2="160" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="280" y1="110" x2="320" y2="110" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="232" y1="240" x2="280" y2="240" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="232" y1="340" x2="280" y2="340" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="280" y1="240" x2="280" y2="340" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="280" y1="290" x2="320" y2="290" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="540" y1="110" x2="580" y2="110" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="540" y1="290" x2="580" y2="290" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="580" y1="110" x2="580" y2="290" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                    <line x1="580" y1="200" x2="620" y2="200" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  </svg>
+
+                  <div className="flex gap-20 min-w-max relative z-10 mx-auto">
+                    {/* Quarterfinals */}
+                    <div className="flex flex-col justify-around h-full gap-10">
+                      {/* Match 1 */}
+                      <div className="relative">
+                        <div className="absolute -left-5 top-1/2 -translate-y-1/2 w-4 h-4 rounded bg-indigo-500 text-[9px] font-bold text-white flex items-center justify-center">1</div>
+                        <div className="flex flex-col gap-px w-52 rounded-lg overflow-hidden border border-white/10">
+                          <div className="flex items-center justify-between bg-white/[0.08] px-3 py-2">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-5 w-5 border border-white/10">
+                                <AvatarImage src="https://i.pravatar.cc/150?u=hotel" />
+                                <AvatarFallback className="text-[8px]">HM</AvatarFallback>
+                              </Avatar>
+                              <span className="text-sm font-medium">Hotel Moscow</span>
+                            </div>
+                            <span className="text-sm font-bold text-foreground">2</span>
+                          </div>
+                          <div className="flex items-center justify-between bg-black/30 px-3 py-2 opacity-60">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-5 w-5 border border-white/10">
+                                <AvatarImage src="https://i.pravatar.cc/150?u=golden" />
+                                <AvatarFallback className="text-[8px]">GR</AvatarFallback>
+                              </Avatar>
+                              <span className="text-sm font-medium">Golden Rush</span>
+                            </div>
+                            <span className="text-sm font-bold text-muted-foreground">0</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between bg-white/10 rounded border border-white/20 px-3 py-2">
-                        <span className="text-sm font-medium">Team Gamma 7</span>
-                        <span className="text-sm font-bold text-foreground">2</span>
+                      {/* Match 2 */}
+                      <div className="relative">
+                        <div className="absolute -left-5 top-1/2 -translate-y-1/2 w-4 h-4 rounded bg-indigo-500 text-[9px] font-bold text-white flex items-center justify-center">2</div>
+                        <div className="flex flex-col gap-px w-52 rounded-lg overflow-hidden border border-white/10">
+                          <div className="flex items-center justify-between bg-white/[0.08] px-3 py-2">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-5 w-5 border border-white/10">
+                                <AvatarImage src="https://i.pravatar.cc/150?u=russians" />
+                                <AvatarFallback className="text-[8px]">RU</AvatarFallback>
+                              </Avatar>
+                              <span className="text-sm font-medium">Russians Unite</span>
+                            </div>
+                            <span className="text-sm font-bold text-foreground">2</span>
+                          </div>
+                          <div className="flex items-center justify-between bg-black/30 px-3 py-2 opacity-60">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-5 w-5 border border-white/10">
+                                <AvatarImage src="https://i.pravatar.cc/150?u=mnms" />
+                                <AvatarFallback className="text-[8px]">MM</AvatarFallback>
+                              </Avatar>
+                              <span className="text-sm font-medium">M&Ms</span>
+                            </div>
+                            <span className="text-sm font-bold text-muted-foreground">0</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Finals */}
-                  <div className="flex flex-col justify-center h-full">
-                    {/* Match 4 */}
-                    <div className="flex flex-col gap-1 w-48 relative">
-                      <div className="absolute -top-6 left-0 right-0 text-center text-xs font-bold text-yellow-500 uppercase tracking-wider">
-                        Grand Finals
+                    {/* Semifinals */}
+                    <div className="flex flex-col justify-around h-full gap-10">
+                      {/* Match 3 */}
+                      <div className="relative">
+                        <div className="absolute -left-5 top-1/2 -translate-y-1/2 w-4 h-4 rounded bg-indigo-500 text-[9px] font-bold text-white flex items-center justify-center">3</div>
+                        <div className="flex flex-col gap-px w-52 rounded-lg overflow-hidden border border-white/10">
+                          <div className="flex items-center justify-between bg-white/[0.08] px-3 py-2">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-5 w-5 border border-white/10">
+                                <AvatarImage src="https://i.pravatar.cc/150?u=tempest" />
+                                <AvatarFallback className="text-[8px]">TR</AvatarFallback>
+                              </Avatar>
+                              <span className="text-sm font-medium">Tempest Relea...</span>
+                            </div>
+                            <span className="text-sm font-bold text-foreground">0</span>
+                          </div>
+                          <div className="flex items-center justify-between bg-black/30 px-3 py-2">
+                            <span className="text-sm text-muted-foreground italic">Winner of 1</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between bg-yellow-500/20 rounded border border-yellow-500/40 px-3 py-2 shadow-[0_0_15px_rgba(250,204,21,0.2)]">
-                        <span className="text-sm font-bold text-yellow-500 flex items-center gap-2">
-                          <Trophy className="w-3 h-3" /> Team Gamma 7
-                        </span>
-                        <span className="text-sm font-bold text-yellow-500">3</span>
+                      {/* Match 4 */}
+                      <div className="relative">
+                        <div className="absolute -left-5 top-1/2 -translate-y-1/2 w-4 h-4 rounded bg-indigo-500 text-[9px] font-bold text-white flex items-center justify-center">4</div>
+                        <div className="flex flex-col gap-px w-52 rounded-lg overflow-hidden border border-white/10">
+                          <div className="flex items-center justify-between bg-black/30 px-3 py-2">
+                            <span className="text-sm text-muted-foreground italic">Winner of 2</span>
+                          </div>
+                          <div className="flex items-center justify-between bg-white/[0.08] px-3 py-2">
+                            <div className="flex items-center gap-2">
+                              <Avatar className="h-5 w-5 border border-white/10">
+                                <AvatarImage src="https://i.pravatar.cc/150?u=goldman" />
+                                <AvatarFallback className="text-[8px]">GS</AvatarFallback>
+                              </Avatar>
+                              <span className="text-sm font-medium">Goldman is the...</span>
+                            </div>
+                            <span className="text-sm font-bold text-foreground">0</span>
+                          </div>
+                        </div>
                       </div>
-                      <div className="flex items-center justify-between bg-black/40 rounded border border-white/5 px-3 py-2 opacity-60">
-                        <span className="text-sm font-medium">TBD Finalist</span>
-                        <span className="text-sm font-bold text-muted-foreground">0</span>
+                    </div>
+
+                    {/* Finals */}
+                    <div className="flex flex-col justify-center h-full">
+                      {/* Match 5 */}
+                      <div className="relative">
+                        <div className="absolute -left-5 top-1/2 -translate-y-1/2 w-4 h-4 rounded bg-yellow-500 text-[9px] font-bold text-black flex items-center justify-center">5</div>
+                        <div className="flex flex-col gap-px w-52 rounded-lg overflow-hidden border border-white/10">
+                          <div className="flex items-center justify-between bg-black/30 px-3 py-2">
+                            <span className="text-sm text-muted-foreground italic">Winner of 3</span>
+                          </div>
+                          <div className="flex items-center justify-between bg-black/30 px-3 py-2">
+                            <span className="text-sm text-muted-foreground italic">Winner of 4</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1004,6 +1261,95 @@ export default function TournamentPage() {
                 )})}
               </div>
             </section>
+
+                {/* Staff / Admins Section */}
+                <section id="staff" className="space-y-6 scroll-mt-24">
+                  <div className="flex items-center justify-between border-b border-white/5 pb-4">
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400">
+                        <Shield className="w-5 h-5" />
+                      </div>
+                      <h2 className="text-2xl font-display font-semibold">Staff</h2>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Creator / Owner */}
+                    <div className="flex items-center gap-4 p-4 rounded-xl bg-card border border-white/5 hover:border-purple-500/30 transition-colors group">
+                      <Avatar className="h-12 w-12 border-2 border-purple-500/40 group-hover:border-purple-500/60 transition-colors">
+                        <AvatarImage src="https://i.pravatar.cc/150?u=quantum" />
+                        <AvatarFallback>QS</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-foreground truncate">Quantum Studios</p>
+                          <Badge className="bg-purple-500/20 text-purple-400 hover:bg-purple-500/20 border-none text-[10px] px-1.5 py-0 flex-shrink-0">Owner</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">Tournament Creator</p>
+                      </div>
+                    </div>
+
+                    {/* Admin 1 */}
+                    <div className="flex items-center gap-4 p-4 rounded-xl bg-card border border-white/5 hover:border-amber-500/30 transition-colors group">
+                      <Avatar className="h-12 w-12 border-2 border-amber-500/40 group-hover:border-amber-500/60 transition-colors">
+                        <AvatarImage src="https://i.pravatar.cc/150?u=admin1" />
+                        <AvatarFallback>MK</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-foreground truncate">MikeK</p>
+                          <Badge className="bg-amber-500/20 text-amber-400 hover:bg-amber-500/20 border-none text-[10px] px-1.5 py-0 flex-shrink-0">Admin</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">Bracket Manager</p>
+                      </div>
+                    </div>
+
+                    {/* Admin 2 */}
+                    <div className="flex items-center gap-4 p-4 rounded-xl bg-card border border-white/5 hover:border-amber-500/30 transition-colors group">
+                      <Avatar className="h-12 w-12 border-2 border-amber-500/40 group-hover:border-amber-500/60 transition-colors">
+                        <AvatarImage src="https://i.pravatar.cc/150?u=admin2" />
+                        <AvatarFallback>JL</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-foreground truncate">JessicaL</p>
+                          <Badge className="bg-amber-500/20 text-amber-400 hover:bg-amber-500/20 border-none text-[10px] px-1.5 py-0 flex-shrink-0">Admin</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">Stream Coordinator</p>
+                      </div>
+                    </div>
+
+                    {/* Moderator 1 */}
+                    <div className="flex items-center gap-4 p-4 rounded-xl bg-card border border-white/5 hover:border-blue-500/30 transition-colors group">
+                      <Avatar className="h-12 w-12 border-2 border-blue-500/40 group-hover:border-blue-500/60 transition-colors">
+                        <AvatarImage src="https://i.pravatar.cc/150?u=mod1" />
+                        <AvatarFallback>RD</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-foreground truncate">RyanD</p>
+                          <Badge className="bg-blue-500/20 text-blue-400 hover:bg-blue-500/20 border-none text-[10px] px-1.5 py-0 flex-shrink-0">Moderator</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">Match Referee</p>
+                      </div>
+                    </div>
+
+                    {/* Moderator 2 */}
+                    <div className="flex items-center gap-4 p-4 rounded-xl bg-card border border-white/5 hover:border-blue-500/30 transition-colors group">
+                      <Avatar className="h-12 w-12 border-2 border-blue-500/40 group-hover:border-blue-500/60 transition-colors">
+                        <AvatarImage src="https://i.pravatar.cc/150?u=mod2" />
+                        <AvatarFallback>TN</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-foreground truncate">TinaNguyen</p>
+                          <Badge className="bg-blue-500/20 text-blue-400 hover:bg-blue-500/20 border-none text-[10px] px-1.5 py-0 flex-shrink-0">Moderator</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">Community Manager</p>
+                      </div>
+                    </div>
+                  </div>
+                </section>
                   </div>
                 </div>
               </div>

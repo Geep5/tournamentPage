@@ -1271,7 +1271,11 @@ export default function TournamentPage() {
 
                   {/* Rules Settings */}
                   <section id="admin-rules" className="space-y-4 scroll-mt-24 bg-card/50 border border-white/5 rounded-2xl p-6">
-                    <h3 className="text-lg font-semibold border-b border-white/5 pb-2">Rules</h3>
+                    <h3 className="text-lg font-semibold border-b border-white/5 pb-2">Rules & Information</h3>
+
+                    {/* Tournament Rules & Guidelines */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-semibold text-foreground">Tournament Rules & Guidelines</label>
                     <div className="border border-white/10 rounded-xl overflow-hidden">
                       <div className="flex items-center gap-1 px-3 py-2 bg-white/5 border-b border-white/10 flex-wrap">
                         <select className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs h-7 cursor-pointer">
@@ -1333,6 +1337,75 @@ export default function TournamentPage() {
                           <li>Close the game and restart it.</li>
                           <li>Try a new lobby under a different host.</li>
                         </ul>
+                      </div>
+                      </div>
+                    </div>
+
+                    {/* Check-in Process */}
+                    <div className="space-y-2 pt-4 border-t border-white/[0.04]">
+                      <label className="text-sm font-semibold text-foreground">Check-in Process</label>
+                      <div className="border border-white/10 rounded-xl overflow-hidden">
+                        <div className="flex items-center gap-1 px-3 py-2 bg-white/5 border-b border-white/10 flex-wrap">
+                          <select className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs h-7 cursor-pointer">
+                            <option>Normal</option>
+                            <option>Heading 1</option>
+                            <option>Heading 2</option>
+                            <option>Heading 3</option>
+                          </select>
+                          <div className="w-px h-5 bg-white/10 mx-1" />
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Bold"><span className="text-xs font-bold">B</span></button>
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Italic"><span className="text-xs italic">I</span></button>
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Underline"><span className="text-xs underline">U</span></button>
+                          <div className="w-px h-5 bg-white/10 mx-1" />
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Ordered List"><span className="text-xs">1.</span></button>
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Bullet List"><span className="text-xs">{"\u2022"}</span></button>
+                          <div className="w-px h-5 bg-white/10 mx-1" />
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Link"><span className="text-xs">{"\uD83D\uDD17"}</span></button>
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Clear Formatting"><span className="text-xs">T{"\u2093"}</span></button>
+                        </div>
+                        <div
+                          className="w-full bg-white/[0.02] p-4 text-sm focus:outline-none min-h-[150px] text-muted-foreground leading-relaxed"
+                          contentEditable
+                          suppressContentEditableWarning
+                        >
+                          <p>Captain check-in begins 60 minutes before the tournament start time. If the team captain does not check in before the bracket is generated, the team will be disqualified.</p>
+                          <br />
+                          <p>All matches must be played immediately once the bracket is live and your opponent is decided. You have 10 minutes to show up to your match before a forfeit is awarded to the opposing team.</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Payout Information */}
+                    <div className="space-y-2 pt-4 border-t border-white/[0.04]">
+                      <label className="text-sm font-semibold text-foreground">Payout Information</label>
+                      <div className="border border-white/10 rounded-xl overflow-hidden">
+                        <div className="flex items-center gap-1 px-3 py-2 bg-white/5 border-b border-white/10 flex-wrap">
+                          <select className="bg-white/5 border border-white/10 rounded px-2 py-1 text-xs h-7 cursor-pointer">
+                            <option>Normal</option>
+                            <option>Heading 1</option>
+                            <option>Heading 2</option>
+                            <option>Heading 3</option>
+                          </select>
+                          <div className="w-px h-5 bg-white/10 mx-1" />
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Bold"><span className="text-xs font-bold">B</span></button>
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Italic"><span className="text-xs italic">I</span></button>
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Underline"><span className="text-xs underline">U</span></button>
+                          <div className="w-px h-5 bg-white/10 mx-1" />
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Ordered List"><span className="text-xs">1.</span></button>
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Bullet List"><span className="text-xs">{"\u2022"}</span></button>
+                          <div className="w-px h-5 bg-white/10 mx-1" />
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Link"><span className="text-xs">{"\uD83D\uDD17"}</span></button>
+                          <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Clear Formatting"><span className="text-xs">T{"\u2093"}</span></button>
+                        </div>
+                        <div
+                          className="w-full bg-white/[0.02] p-4 text-sm focus:outline-none min-h-[150px] text-muted-foreground leading-relaxed"
+                          contentEditable
+                          suppressContentEditableWarning
+                        >
+                          <p>Prize pool payouts are processed through Matcherino. Winners must have a valid Matcherino account and complete the necessary tax forms to receive their prize money.</p>
+                          <br />
+                          <p>Payouts will be initiated within 7 business days after the conclusion of the tournament and verification of match results.</p>
+                        </div>
                       </div>
                     </div>
                   </section>

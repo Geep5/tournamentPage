@@ -41,10 +41,13 @@ import orionBanner from "@assets/image_1771576047220.png";
 export default function TournamentPage() {
   const [activeTab, setActiveTab] = useState("overview");
   const [expandedTeam, setExpandedTeam] = useState<number | null>(null);
+  const [allTeamsExpanded, setAllTeamsExpanded] = useState(false);
   const [rightTab, setRightTab] = useState("prize-pool");
   const [isAdminMode, setIsAdminMode] = useState(false);
   const [bannerIndex, setBannerIndex] = useState(0);
   const [cols, setCols] = useState(3);
+  const [aboutExpanded, setAboutExpanded] = useState(false);
+  const [orgLiked, setOrgLiked] = useState(false);
 
   useEffect(() => {
     const updateCols = () => {
@@ -218,9 +221,13 @@ export default function TournamentPage() {
               </h2>
               <div className="flex items-center justify-center gap-2 text-sm text-white/70">
                 by <Avatar className="h-6 w-6"><AvatarImage src="https://i.pravatar.cc/150?u=quantum" /><AvatarFallback>QS</AvatarFallback></Avatar> <span className="font-bold text-white hover:text-white/80 transition-colors cursor-pointer">Quantum Studios</span>
-                <Button variant="ghost" size="icon" className="h-6 w-6 text-muted-foreground hover:text-primary hover:bg-primary/10 transition-colors" title="Follow Organizer">
-                  <Heart className="h-3.5 w-3.5" />
-                </Button>
+                <button
+                  onClick={() => setOrgLiked(!orgLiked)}
+                  className={`h-6 w-6 flex items-center justify-center rounded-md transition-all duration-300 ${orgLiked ? 'text-red-500 scale-110' : 'text-muted-foreground hover:text-red-400 hover:bg-red-500/10'}`}
+                  title={orgLiked ? 'Following' : 'Follow Organizer'}
+                >
+                  <Heart className={`h-3.5 w-3.5 transition-all duration-300 ${orgLiked ? 'fill-current scale-125' : ''}`} />
+                </button>
               </div>
               <div className="flex justify-center mt-2">
                 <div className="w-10 h-10 rounded-full bg-[#5865F2] flex items-center justify-center text-white cursor-pointer hover:bg-[#4752C4] transition-colors shadow-lg">
@@ -416,10 +423,33 @@ export default function TournamentPage() {
                       </Button>
                     </div>
                   </div>
-                  <div className="prose prose-invert max-w-none text-muted-foreground space-y-4 leading-relaxed">
-                    <p>
-                      Welcome to the MS Gaming Pro Series! This is a premier Brawl Stars tournament series featuring the best teams in North America competing for a massive prize pool.
-                    </p>
+                  <div className="relative">
+                    <div className={`prose prose-invert max-w-none text-muted-foreground space-y-4 leading-relaxed overflow-hidden transition-[max-height] duration-500 ease-in-out ${aboutExpanded ? 'max-h-[2000px]' : 'max-h-[4.5rem]'}`}>
+                      <p>
+                        Welcome to the MS Gaming Pro Series! This is a premier Brawl Stars tournament series featuring the best teams in North America competing for a massive prize pool. Teams will battle through a double-elimination bracket to prove their worth.
+                      </p>
+                      <p>
+                        All matches will be streamed live on Twitch with professional casting and analysis. We're partnering with top content creators in the Brawl Stars community to bring you the best viewing experience possible. Expect showmatches, giveaways, and community events throughout the tournament weekend.
+                      </p>
+                      <p>
+                        This is the third stop in the 2026 Pro Circuit, with points counting towards the Global Finals seeding in December. Top 8 finishers earn circuit points, and the winner receives a direct invite to the Regional Qualifier. Whether you're a seasoned pro or an up-and-coming team, this is your chance to make a name on the big stage.
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setAboutExpanded(!aboutExpanded)}
+                      className="relative w-full text-left group"
+                    >
+                      {!aboutExpanded && (
+                        <div className="absolute -top-12 left-0 right-0 h-12 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+                      )}
+                      <div className="flex items-center gap-2 pt-2">
+                        <div className="h-px flex-1 bg-white/10" />
+                        <span className="text-xs font-bold uppercase tracking-wider text-primary group-hover:text-primary/80 transition-colors px-3 py-1 rounded-full bg-primary/10 group-hover:bg-primary/15">
+                          {aboutExpanded ? 'Show less' : 'Read more'}
+                        </span>
+                        <div className="h-px flex-1 bg-white/10" />
+                      </div>
+                    </button>
                   </div>
                 </section>
 
@@ -891,13 +921,23 @@ export default function TournamentPage() {
                   </div>
                   <h2 className="text-2xl font-display font-semibold">Participants <span className="text-muted-foreground text-lg ml-2 font-normal">(64/128)</span></h2>
                 </div>
-                <Button variant="outline" size="sm" className="bg-white/5 border-white/10">View All</Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="bg-white/5 border-white/10"
+                  onClick={() => {
+                    setAllTeamsExpanded(!allTeamsExpanded);
+                    setExpandedTeam(null);
+                  }}
+                >
+                  {allTeamsExpanded ? 'Collapse All' : 'Expand All'}
+                </Button>
               </div>
               
               {/* Grid layout instead of super long list */}
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 {Array.from({ length: 24 }, (_, i) => i + 1).map((i) => {
-                  const isExpanded = expandedTeam !== null && Math.floor((i - 1) / cols) === Math.floor((expandedTeam - 1) / cols);
+                  const isExpanded = allTeamsExpanded || (expandedTeam !== null && Math.floor((i - 1) / cols) === Math.floor((expandedTeam - 1) / cols));
                   return (
                   <div 
                     key={i} 
@@ -906,7 +946,14 @@ export default function TournamentPage() {
                         ? 'border-primary/50 shadow-[0_0_15px_rgba(250,204,21,0.1)]' 
                         : 'border-white/5 hover:border-white/10'
                     }`}
-                    onClick={() => setExpandedTeam(expandedTeam === i ? null : i)}
+                    onClick={() => {
+                      if (allTeamsExpanded) {
+                        setAllTeamsExpanded(false);
+                        setExpandedTeam(null);
+                      } else {
+                        setExpandedTeam(expandedTeam === i ? null : i);
+                      }
+                    }}
                   >
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">

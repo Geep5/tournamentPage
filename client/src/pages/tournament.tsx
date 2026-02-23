@@ -99,7 +99,7 @@ export default function TournamentPage() {
 
   return (
     <div 
-      className="min-h-screen bg-background flex flex-col font-sans selection:bg-primary/30 transition-colors duration-500"
+      className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 transition-colors duration-500 overflow-hidden"
       style={{
         '--primary': bannerIndex === 1 ? '330 81% 60%' : bannerIndex === 2 ? '190 90% 50%' : '48 96% 53%',
         '--ring': bannerIndex === 1 ? '330 81% 60%' : bannerIndex === 2 ? '190 90% 50%' : '48 96% 53%'
@@ -190,10 +190,10 @@ export default function TournamentPage() {
       </header>
 
       {/* Main Layout */}
-      <div className="flex flex-1 items-start relative">
+      <div className="flex flex-1 relative h-[calc(100vh-4rem)] min-h-0 overflow-hidden">
         
         {/* Left Sidebar Nav */}
-        <aside className={`w-[280px] flex-col flex-shrink-0 hidden md:flex border-r border-white/5 no-scrollbar sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto transition-all duration-500 relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isAdminMode ? 'bg-[#312020]' : 'bg-[#2b2d31]'}`}>
+        <aside className={`w-[280px] flex-col flex-shrink-0 hidden md:flex border-r border-white/5 no-scrollbar h-full overflow-y-auto transition-all duration-500 relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isAdminMode ? 'bg-[#312020]' : 'bg-[#2b2d31]'}`}>
           {isAdminMode && (
              <div 
                className="absolute inset-0 z-0 opacity-[0.08] pointer-events-none"
@@ -242,7 +242,7 @@ export default function TournamentPage() {
                 onClick={() => {
                   setIsAdminMode(!isAdminMode);
                   setActiveTab(!isAdminMode ? "admin-overview" : "overview");
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-semibold transition-all mb-4 ${
                   isAdminMode 
@@ -331,7 +331,7 @@ export default function TournamentPage() {
         </aside>
 
         {/* Center Content (Main) */}
-        <main className={`flex-1 relative scroll-smooth transition-colors duration-500 min-h-[calc(100vh-4rem)] ${
+        <main className={`flex-1 relative scroll-smooth transition-colors duration-500 overflow-y-auto h-full ${
           isAdminMode 
             ? 'bg-red-950/20' 
             : bannerIndex === 1 
@@ -2488,7 +2488,7 @@ export default function TournamentPage() {
         </main>
 
         {/* Right Sidebar (Stats & Activity) */}
-        <aside className={`w-[320px] border-l border-white/5 hidden xl:flex flex-col flex-shrink-0 sticky top-16 h-[calc(100vh-4rem)] transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/30' : bannerIndex === 2 ? 'bg-cyan-950/30' : 'bg-card/30'}`}>
+        <aside className={`w-[320px] border-l border-white/5 hidden xl:flex flex-col flex-shrink-0 h-full transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/30' : bannerIndex === 2 ? 'bg-cyan-950/30' : 'bg-card/30'}`}>
           <div className={`flex items-center border-b border-white/5 backdrop-blur-sm sticky top-0 z-10 transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/50' : bannerIndex === 2 ? 'bg-cyan-950/50' : 'bg-background/50'}`}>
             <button 
               onClick={() => setRightTab("prize-pool")}

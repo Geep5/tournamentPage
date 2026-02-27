@@ -340,7 +340,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="flex items-center gap-6 shrink-0">
-            <Link href="/">
+            <Link href="/events">
               <img src={helmetLogo} alt="Matcherino" className="w-8 h-8 object-contain brightness-0 invert cursor-pointer" />
             </Link>
             <nav className="hidden md:flex items-center gap-1">

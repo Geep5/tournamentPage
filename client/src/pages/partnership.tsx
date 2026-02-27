@@ -104,9 +104,9 @@ export default function PartnershipPage() {
           </div>
 
           <div className="flex items-center gap-6 shrink-0">
-            <a href="/">
+            <Link href="/events">
               <img src={helmetLogo} alt="Matcherino" className="w-8 h-8 object-contain brightness-0 invert cursor-pointer" />
-            </a>
+            </Link>
             <nav className="hidden md:flex items-center gap-1">
               <a href="/events" className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-white transition-colors border-b-2 border-transparent">Events</a>
               <a href="/partnership" className="px-3 py-1.5 text-sm font-semibold text-white border-b-2 border-primary">Partnership</a>

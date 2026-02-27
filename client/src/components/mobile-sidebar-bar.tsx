@@ -4,9 +4,10 @@ import { PanelLeftOpen, PanelRightOpen, X } from "lucide-react";
 interface MobileSidebarBarProps {
   leftSidebar?: React.ReactNode;
   rightSidebar?: React.ReactNode;
+  centerActions?: React.ReactNode;
 }
 
-export function MobileSidebarBar({ leftSidebar, rightSidebar }: MobileSidebarBarProps) {
+export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: MobileSidebarBarProps) {
   const [openPanel, setOpenPanel] = useState<"left" | "right" | null>(null);
 
   if (!leftSidebar && !rightSidebar) return null;
@@ -53,35 +54,40 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar }: MobileSidebarBar
       <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
         <div className="flex items-center justify-between h-12 bg-[#2b2d31]/95 backdrop-blur-md border-t border-white/5 px-2">
           {/* Left button */}
-          <div className="flex-1 flex justify-start">
+          <div className="flex justify-start">
             {leftSidebar && (
               <button
                 onClick={() => setOpenPanel(openPanel === "left" ? null : "left")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`p-2.5 rounded-lg transition-all ${
                   openPanel === "left"
                     ? "bg-primary/15 text-primary"
                     : "text-muted-foreground hover:text-white hover:bg-white/5"
                 }`}
               >
-                <PanelLeftOpen className="w-4.5 h-4.5" />
-                <span className="text-xs">Menu</span>
+                <PanelLeftOpen className="w-5 h-5" />
               </button>
             )}
           </div>
 
+          {/* Center actions */}
+          {centerActions && (
+            <div className="flex items-center gap-2">
+              {centerActions}
+            </div>
+          )}
+
           {/* Right button */}
-          <div className="flex-1 flex justify-end">
+          <div className="flex justify-end">
             {rightSidebar && (
               <button
                 onClick={() => setOpenPanel(openPanel === "right" ? null : "right")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`p-2.5 rounded-lg transition-all ${
                   openPanel === "right"
                     ? "bg-primary/15 text-primary"
                     : "text-muted-foreground hover:text-white hover:bg-white/5"
                 }`}
               >
-                <span className="text-xs">Sidebar</span>
-                <PanelRightOpen className="w-4.5 h-4.5" />
+                <PanelRightOpen className="w-5 h-5" />
               </button>
             )}
           </div>

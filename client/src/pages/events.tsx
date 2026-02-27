@@ -30,30 +30,30 @@ import helmetLogo from "@assets/mhelmet_1771552283812.png";
 
 
 const featuredEvents = [
-  { name: "Tekken 8 World Tour \u2014 Grand Finals", date: "Sat, Mar 15, 2026 \u2014 12:00 PM PST", game: "Tekken 8", format: "Double Elimination", participants: 256, prize: "$25,000", img: "photo-1511512578047-dfb367046420" },
-  { name: "Road to Brawl Cup SA West", date: "Mon, Feb 16, 2026 \u2014 1:00 PM PST", game: "Brawl Stars", format: "Single Elim", participants: 75, prize: "$303.48", img: "photo-1542751371-adc38448a05e" },
-  { name: "2v2 Circuit 2026 \u2014 Season Opener", date: "Sat, Jan 6, 2026 \u2014 4:00 AM PDT", game: "Starcraft II", format: "Double Elim", participants: 590, prize: "$62,200", img: "photo-1550745165-9bc0b252726f" },
+  { name: "Tekken 8 World Tour \u2014 Grand Finals", date: "Sat, Mar 15, 2026", game: "Tekken 8", format: "Double Elimination", participants: 256, prize: "$25,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/header.jpg" },
+  { name: "Street Fighter 6 Open Qualifier", date: "Mon, Feb 16, 2026", game: "Street Fighter 6", format: "Single Elim", participants: 75, prize: "$303.48", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1326470/header.jpg" },
+  { name: "2v2 Circuit 2026 \u2014 Season Opener", date: "Sat, Jan 6, 2026", game: "Starcraft II", format: "Double Elim", participants: 590, prize: "$62,200", img: "https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg" },
 ];
 
 const recommendedEvents = [
-  { name: "Guilty Gear Strive: Celestial Open", date: "Mar 8, 2026", game: "Guilty Gear Strive", format: "Single Elim", participants: 128, prize: "$3,200", img: "photo-1493711662062-fa541adb3fc8" },
-  { name: "Korean Starcraft League: Week 87", date: "Mar 10, 2026", game: "Starcraft II", format: "Round Robin", participants: 32, prize: "$2,400", img: "photo-1542751371-adc38448a05e" },
-  { name: "Fatal Fury: City of Wolves Invitational", date: "Mar 12, 2026", game: "Fatal Fury", format: "Double Elim", participants: 64, prize: "$5,000", img: "photo-1538481199705-c710c4e965fc" },
-  { name: "2XKO Launch Tournament", date: "Mar 14, 2026", game: "2XKO", format: "Single Elim", participants: 512, prize: "$10,000", img: "photo-1550745165-9bc0b252726f" },
-  { name: "Skullgirls Encore: Revival Series", date: "Mar 16, 2026", game: "Skullgirls Encore", format: "Double Elim", participants: 48, prize: "$1,500", img: "photo-1542751110-97427bbecf20" },
+  { name: "Guilty Gear Strive: Celestial Open", date: "Mar 8, 2026", game: "Guilty Gear Strive", format: "Single Elim", participants: 128, prize: "$3,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1384160/header.jpg" },
+  { name: "Korean Starcraft League: Week 87", date: "Mar 10, 2026", game: "Starcraft II", format: "Round Robin", participants: 32, prize: "$2,400", img: "https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg" },
+  { name: "Fatal Fury: City of Wolves Invitational", date: "Mar 12, 2026", game: "Fatal Fury", format: "Double Elim", participants: 64, prize: "$5,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2725020/header.jpg" },
+  { name: "2XKO Launch Tournament", date: "Mar 14, 2026", game: "2XKO", format: "Single Elim", participants: 512, prize: "$10,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2147950/header.jpg" },
+  { name: "Skullgirls Encore: Revival Series", date: "Mar 16, 2026", game: "Skullgirls Encore", format: "Double Elim", participants: 48, prize: "$1,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/245170/header.jpg" },
 ];
 
 const browseGames = [
-  { name: "Tekken 8", tournaments: 142, likes: 3800, participants: 18400, crowdfunded: "$284,000", contributions: "$52,000", img: "photo-1511512578047-dfb367046420" },
-  { name: "Starcraft II", tournaments: 98, likes: 2100, participants: 9200, crowdfunded: "$196,000", contributions: "$38,000", img: "photo-1542751371-adc38448a05e" },
-  { name: "Guilty Gear Strive", tournaments: 76, likes: 1900, participants: 7600, crowdfunded: "$128,000", contributions: "$24,000", img: "photo-1493711662062-fa541adb3fc8" },
-  { name: "Fatal Fury", tournaments: 34, likes: 890, participants: 3200, crowdfunded: "$45,000", contributions: "$12,000", img: "photo-1538481199705-c710c4e965fc" },
-  { name: "2XKO", tournaments: 28, likes: 2400, participants: 14000, crowdfunded: "$92,000", contributions: "$31,000", img: "photo-1550745165-9bc0b252726f" },
-  { name: "Granblue Fantasy Versus Rising", tournaments: 52, likes: 1200, participants: 4800, crowdfunded: "$78,000", contributions: "$18,000", img: "photo-1552820728-8b83bb6b2b28" },
-  { name: "Ultimate Marvel vs Capcom 3", tournaments: 44, likes: 1600, participants: 5400, crowdfunded: "$110,000", contributions: "$22,000", img: "photo-1542751110-97427bbecf20" },
-  { name: "King of Fighters XV", tournaments: 61, likes: 1400, participants: 6100, crowdfunded: "$98,000", contributions: "$19,000", img: "photo-1548484352-ea579e5233a8" },
-  { name: "Tetris", tournaments: 38, likes: 3200, participants: 22000, crowdfunded: "$64,000", contributions: "$15,000", img: "photo-1614680376593-902f74cf0d41" },
-  { name: "Skullgirls Encore", tournaments: 29, likes: 780, participants: 2800, crowdfunded: "$32,000", contributions: "$8,500", img: "photo-1534423861386-85a16f5d13fd" },
+  { name: "Tekken 8", tournaments: 142, likes: 3800, participants: 18400, crowdfunded: "$284,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/library_600x900_2x.jpg" },
+  { name: "Starcraft II", tournaments: 98, likes: 2100, participants: 9200, crowdfunded: "$196,000", img: "https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg" },
+  { name: "Guilty Gear Strive", tournaments: 76, likes: 1900, participants: 7600, crowdfunded: "$128,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1384160/library_600x900_2x.jpg" },
+  { name: "Fatal Fury", tournaments: 34, likes: 890, participants: 3200, crowdfunded: "$45,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2725020/library_600x900_2x.jpg" },
+  { name: "2XKO", tournaments: 28, likes: 2400, participants: 14000, crowdfunded: "$92,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2147950/library_600x900_2x.jpg" },
+  { name: "Granblue Fantasy Versus Rising", tournaments: 52, likes: 1200, participants: 4800, crowdfunded: "$78,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2157560/library_600x900_2x.jpg" },
+  { name: "Ultimate Marvel vs Capcom 3", tournaments: 44, likes: 1600, participants: 5400, crowdfunded: "$110,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/357190/library_600x900_2x.jpg" },
+  { name: "King of Fighters XV", tournaments: 61, likes: 1400, participants: 6100, crowdfunded: "$98,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1498570/library_600x900_2x.jpg" },
+  { name: "Tetris Effect", tournaments: 38, likes: 3200, participants: 22000, crowdfunded: "$64,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1003590/library_600x900_2x.jpg" },
+  { name: "Skullgirls 2nd Encore", tournaments: 29, likes: 780, participants: 2800, crowdfunded: "$32,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/245170/library_600x900_2x.jpg" },
 ];
 
 const activityItems = [
@@ -179,10 +179,10 @@ export default function EventsPage() {
       <div className="flex flex-1 relative h-[calc(100vh-4rem)] min-h-0 overflow-hidden">
         {/* Center Content */}
         <main className="flex-1 overflow-y-auto h-full bg-[#313338]/50 scroll-smooth pb-12 lg:pb-0">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-10">
+          <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-6">
 
             {/* Featured Events */}
-            <section id="section-featured" className="space-y-6 scroll-mt-8">
+            <section id="section-featured" className="space-y-3 scroll-mt-8">
               <div className="flex items-center gap-3">
                 <div className="p-2 rounded-lg bg-primary/10 text-primary">
                   <Star className="w-5 h-5" />
@@ -191,7 +191,7 @@ export default function EventsPage() {
               </div>
 
               <div className="relative" style={{ perspective: '1200px' }}>
-                <div className="relative h-[400px] w-full flex items-center justify-center overflow-visible pt-4">
+                <div className="relative h-[380px] w-full flex items-center justify-center overflow-visible">
                   {featuredEvents.map((ev, i) => {
                     const total = featuredEvents.length;
                     const diff = ((i - carouselIdx) % total + total) % total;
@@ -210,20 +210,20 @@ export default function EventsPage() {
                       zIndex = 30;
                       opacity = 1;
                     } else if (isLeft || (offset < 0 && isVisible)) {
-                      transform = 'translateX(-55%) rotateY(40deg) scale(0.55)';
+                      transform = 'translateX(-60%) rotateY(40deg) scale(0.55)';
                       zIndex = 20;
-                      opacity = 0.6;
+                      opacity = 0.5;
                     } else if (isRight || (offset > 0 && isVisible)) {
-                      transform = 'translateX(55%) rotateY(-40deg) scale(0.55)';
+                      transform = 'translateX(60%) rotateY(-40deg) scale(0.55)';
                       zIndex = 20;
-                      opacity = 0.6;
+                      opacity = 0.5;
                     }
 
                     return (
                       <Link
                         key={i}
                         href="/"
-                        className="absolute block w-[60%] rounded-2xl overflow-hidden border border-white/10 shadow-2xl"
+                        className="absolute block w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#2b2d31]"
                         style={{
                           transform,
                           zIndex,
@@ -233,29 +233,30 @@ export default function EventsPage() {
                           pointerEvents: isCenter ? 'auto' : 'none',
                         }}
                       >
-                        <div className="aspect-video relative">
+                        {/* Clean image — no overlay */}
+                        <div className="aspect-video overflow-hidden">
                           <img
-                            src={`https://images.unsplash.com/${ev.img}?auto=format&fit=crop&w=900&q=80`}
+                            src={ev.img}
                             alt={ev.name}
                             className="w-full h-full object-cover"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-                          <div className="absolute bottom-0 left-0 right-0 px-6 pb-8 pt-5 space-y-2">
-                            <h3 className="text-xl md:text-2xl font-bold text-white drop-shadow-md">{ev.name}</h3>
-                            <div className="flex flex-wrap items-center justify-between gap-2">
-                              <div className="flex flex-wrap items-center gap-2 text-xs text-white/80">
-                                <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{ev.date}</span>
-                                <span className="text-white/30">|</span>
-                                <span>{ev.game}</span>
-                                <span className="text-white/30">|</span>
-                                <span>{ev.format}</span>
-                                <span className="text-white/30">|</span>
-                                <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{ev.participants}</span>
-                              </div>
-                              <Badge className="bg-primary/20 text-primary border-primary/30 text-sm px-3 py-1 font-bold">
-                                {ev.prize}
-                              </Badge>
+                        </div>
+                        {/* Info below image */}
+                        <div className="px-4 py-3 space-y-1.5">
+                          <h3 className="text-sm md:text-base font-bold text-white truncate">{ev.name}</h3>
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
+                              <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{ev.date}</span>
+                              <span className="text-white/20">|</span>
+                              <span>{ev.game}</span>
+                              <span className="text-white/20">|</span>
+                              <span>{ev.format}</span>
+                              <span className="text-white/20">|</span>
+                              <span className="flex items-center gap-1"><Users className="w-3 h-3" />{ev.participants}</span>
                             </div>
+                            <Badge className="bg-primary/20 text-primary border-primary/30 text-[11px] px-2 py-0 font-bold shrink-0">
+                              {ev.prize}
+                            </Badge>
                           </div>
                         </div>
                       </Link>
@@ -266,17 +267,31 @@ export default function EventsPage() {
                 {/* Arrows */}
                 <button
                   onClick={() => goToSlide((carouselIdx - 1 + featuredEvents.length) % featuredEvents.length)}
-                  className="absolute left-2 top-1/2 -translate-y-1/2 z-40 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white/70 hover:text-white flex items-center justify-center transition-all backdrop-blur-sm"
+                  className="absolute left-4 top-[35%] -translate-y-1/2 z-40 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white/70 hover:text-white flex items-center justify-center transition-all backdrop-blur-sm"
                 >
                   <ChevronRight className="w-4 h-4 rotate-180" />
                 </button>
                 <button
                   onClick={() => goToSlide((carouselIdx + 1) % featuredEvents.length)}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 z-40 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white/70 hover:text-white flex items-center justify-center transition-all backdrop-blur-sm"
+                  className="absolute right-4 top-[35%] -translate-y-1/2 z-40 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white/70 hover:text-white flex items-center justify-center transition-all backdrop-blur-sm"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
+              </div>
 
+              {/* Dots */}
+              <div className="flex items-center justify-center gap-2 mt-1">
+                {featuredEvents.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goToSlide(i)}
+                    className={`rounded-full transition-all duration-300 ${
+                      i === carouselIdx
+                        ? 'w-6 h-2 bg-primary'
+                        : 'w-2 h-2 bg-white/20 hover:bg-white/40'
+                    }`}
+                  />
+                ))}
               </div>
             </section>
 
@@ -303,7 +318,7 @@ export default function EventsPage() {
                   >
                     <div className="aspect-video overflow-hidden">
                       <img
-                        src={`https://images.unsplash.com/${ev.img}?auto=format&fit=crop&w=400&q=80`}
+                        src={ev.img}
                         alt={ev.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
@@ -375,7 +390,7 @@ export default function EventsPage() {
 
                       <div className="aspect-[3/4] overflow-hidden">
                         <img
-                          src={`https://images.unsplash.com/${game.img}?auto=format&fit=crop&w=300&h=400&q=80`}
+                          src={game.img}
                           alt={game.name}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />

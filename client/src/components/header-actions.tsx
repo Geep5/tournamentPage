@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useState } from "react";
 import { Heart, Bell, ChevronDown, X, Trophy, Star, Gift, CheckCircle2, Gamepad2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -89,6 +89,8 @@ const mockFavorites = [
 export function HeaderActions() {
   const [notifications, setNotifications] = useState(mockNotifications);
   const unreadCount = notifications.filter((n) => !n.read).length;
+  const [location] = useLocation();
+  const isProfile = location === "/profile";
 
   const dismissNotification = (id: number) => {
     setNotifications((prev) => prev.filter((n) => n.id !== id));
@@ -248,7 +250,7 @@ export function HeaderActions() {
       {/* Avatar Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="flex items-center gap-2 px-2">
+          <Button variant="ghost" className={`flex items-center gap-2 px-2 ${isProfile ? "bg-primary hover:bg-primary/90 text-black font-semibold" : ""}`}>
             <Avatar className="h-7 w-7 border border-primary/50">
               <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80" />
               <AvatarFallback>M</AvatarFallback>
@@ -258,10 +260,9 @@ export function HeaderActions() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-48 bg-[#2b2d31] border-white/10">
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuLabel className="text-muted-foreground">Balance: <span className="text-white font-bold">$218.36</span></DropdownMenuLabel>
           <DropdownMenuSeparator className="bg-white/5" />
           <DropdownMenuItem asChild><Link href="/profile" className="w-full">Profile</Link></DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuSeparator className="bg-white/5" />
           <DropdownMenuItem>Log out</DropdownMenuItem>
         </DropdownMenuContent>

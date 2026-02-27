@@ -354,16 +354,16 @@ export default function ProfilePage() {
           {/* Tabs */}
           <div className="flex items-center border-b border-white/5 shrink-0">
             <button
-              onClick={() => setSidebarTab("wallet")}
-              className={`flex-1 flex justify-center py-3 text-sm font-medium border-b-2 transition-all ${sidebarTab === "wallet" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
-            >
-              <Wallet className="w-5 h-5" />
-            </button>
-            <button
               onClick={() => setSidebarTab("activity")}
               className={`flex-1 flex justify-center py-3 text-sm font-medium border-b-2 transition-all ${sidebarTab === "activity" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
             >
               <Zap className="w-5 h-5" />
+            </button>
+            <button
+              onClick={() => setSidebarTab("wallet")}
+              className={`flex-1 flex justify-center py-3 text-sm font-medium border-b-2 transition-all ${sidebarTab === "wallet" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+            >
+              <Wallet className="w-5 h-5" />
             </button>
           </div>
 

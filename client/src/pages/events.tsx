@@ -191,7 +191,7 @@ export default function EventsPage() {
               </div>
 
               <div className="relative" style={{ perspective: '1200px' }}>
-                <div className="relative h-[340px] w-full flex items-center justify-center overflow-hidden pt-4">
+                <div className="relative h-[400px] w-full flex items-center justify-center overflow-visible pt-4">
                   {featuredEvents.map((ev, i) => {
                     const total = featuredEvents.length;
                     const diff = ((i - carouselIdx) % total + total) % total;
@@ -240,20 +240,22 @@ export default function EventsPage() {
                             className="w-full h-full object-cover"
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-                          <div className="absolute bottom-0 left-0 right-0 px-6 pb-6 pt-5 space-y-2">
+                          <div className="absolute bottom-0 left-0 right-0 px-6 pb-8 pt-5 space-y-2">
                             <h3 className="text-xl md:text-2xl font-bold text-white drop-shadow-md">{ev.name}</h3>
-                            <div className="flex flex-wrap items-center gap-2 text-xs text-white/80">
-                              <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{ev.date}</span>
-                              <span className="text-white/30">|</span>
-                              <span>{ev.game}</span>
-                              <span className="text-white/30">|</span>
-                              <span>{ev.format}</span>
-                              <span className="text-white/30">|</span>
-                              <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{ev.participants}</span>
+                            <div className="flex flex-wrap items-center justify-between gap-2">
+                              <div className="flex flex-wrap items-center gap-2 text-xs text-white/80">
+                                <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{ev.date}</span>
+                                <span className="text-white/30">|</span>
+                                <span>{ev.game}</span>
+                                <span className="text-white/30">|</span>
+                                <span>{ev.format}</span>
+                                <span className="text-white/30">|</span>
+                                <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" />{ev.participants}</span>
+                              </div>
+                              <Badge className="bg-primary/20 text-primary border-primary/30 text-sm px-3 py-1 font-bold">
+                                {ev.prize}
+                              </Badge>
                             </div>
-                            <Badge className="bg-primary/20 text-primary border-primary/30 text-sm px-3 py-1 font-bold">
-                              {ev.prize}
-                            </Badge>
                           </div>
                         </div>
                       </Link>
@@ -275,20 +277,6 @@ export default function EventsPage() {
                   <ChevronRight className="w-4 h-4" />
                 </button>
 
-                {/* Dots */}
-                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2">
-                  {featuredEvents.map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => goToSlide(i)}
-                      className={`rounded-full transition-all duration-300 ${
-                        i === carouselIdx
-                          ? 'w-6 h-2.5 bg-primary'
-                          : 'w-2 h-2 bg-white/30 hover:bg-white/50'
-                      }`}
-                    />
-                  ))}
-                </div>
               </div>
             </section>
 
@@ -384,15 +372,6 @@ export default function EventsPage() {
                       key={i}
                       className="rounded-2xl bg-card border border-white/5 overflow-hidden hover:border-white/10 transition-all cursor-pointer group relative block"
                     >
-                      {/* Stat pills overlaying top of image */}
-                      <div className="absolute top-2 left-2 right-2 z-10 flex items-center gap-1.5">
-                        <Badge className="bg-primary/90 text-black border-none text-[9px] px-1.5 py-0 font-bold shadow-md">
-                          {game.crowdfunded}
-                        </Badge>
-                        <Badge className="bg-pink-500/90 text-white border-none text-[9px] px-1.5 py-0 font-bold shadow-md">
-                          {game.contributions}
-                        </Badge>
-                      </div>
 
                       <div className="aspect-[3/4] overflow-hidden">
                         <img
@@ -403,16 +382,18 @@ export default function EventsPage() {
                       </div>
                       <div className="p-3 space-y-2">
                         <h4 className="text-sm font-semibold text-white truncate">{game.name}</h4>
-                        <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
-                          <span className="flex items-center gap-1">
-                            <Trophy className="w-3 h-3" /> {game.tournaments}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <ThumbsUp className="w-3 h-3" /> {game.likes.toLocaleString()}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Users className="w-3 h-3" /> {game.participants.toLocaleString()}
-                          </span>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+                            <span className="flex items-center gap-1">
+                              <Trophy className="w-3 h-3" /> {game.tournaments}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Users className="w-3 h-3" /> {game.participants.toLocaleString()}
+                            </span>
+                          </div>
+                          <Badge className="bg-primary/20 text-primary border-none text-[10px] px-1.5 py-0 font-bold">
+                            {game.crowdfunded}
+                          </Badge>
                         </div>
                       </div>
                     </Link>

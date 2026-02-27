@@ -1,6 +1,8 @@
+import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { HeaderActions } from "@/components/header-actions";
 import { Search, Bell, Trophy, Calendar, Users, Map, Heart, ScrollText, Twitch, MessageSquare, ChevronRight, ChevronDown, Menu, BookOpen, Settings, Check, LayoutGrid, ClipboardList, Coins, GitMerge, Radio, Flag, Wallet, Zap, CircleDollarSign, X, Upload, Image, Store, MapPin, Copy, ExternalLink, Paperclip, Tv, Shield, Crown, Clock, ArrowUpDown, Maximize2, ZoomIn, ZoomOut, Eye, Crosshair } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Progress } from "@/components/ui/progress";
@@ -108,86 +110,37 @@ export default function TournamentPage() {
       } as React.CSSProperties}
     >
       {/* Top Navbar */}
-      <header className={`sticky top-0 z-50 w-full border-b border-white/5 backdrop-blur-xl transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/80' : bannerIndex === 2 ? 'bg-cyan-950/80' : 'bg-background/80'}`}>
-        <div className="flex h-16 items-center px-4 md:px-6 gap-4">
-          <div className="flex items-center gap-2 lg:hidden">
+      <header className="sticky top-0 z-50 bg-[#2b2d31]/95 backdrop-blur-md border-b border-white/5">
+        <div className="flex items-center h-14 px-4 gap-4">
+          <div className="flex md:hidden">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
               <Menu className="h-5 w-5" />
             </Button>
           </div>
-          <div className="flex items-center gap-2">
-            <img src={helmetLogo} alt="Matcherino Logo" className="w-8 h-8 object-contain brightness-0 invert" />
+
+          <div className="flex items-center gap-6 shrink-0">
+            <Link href="/">
+              <img src={helmetLogo} alt="Matcherino" className="w-8 h-8 object-contain brightness-0 invert cursor-pointer" />
+            </Link>
+            <nav className="hidden md:flex items-center gap-1">
+              <Link href="/events" className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-white transition-colors border-b-2 border-transparent">Events</Link>
+              <Link href="/partnership" className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-white transition-colors border-b-2 border-transparent">Partnership</Link>
+              <Link href="/create" className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-white transition-colors border-b-2 border-transparent">Create</Link>
+            </nav>
           </div>
 
-          <div className="flex-1 flex justify-center">
+          <div className="flex-1 flex justify-center mx-4">
             <div className="w-full max-w-xl hidden md:flex items-center relative group">
               <Search className="absolute left-3 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-              <input 
-                type="text" 
-                placeholder="Search tournaments, games, or organizers..." 
+              <input
+                type="text"
+                placeholder="Search tournaments, games, or organizers..."
                 className="w-full bg-white/5 border border-white/10 rounded-full h-10 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground"
               />
             </div>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-4">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
-                  <Heart className="h-5 w-5" />
-                  <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-80 max-h-[80vh] overflow-y-auto overflow-x-hidden p-2 bg-background/95 backdrop-blur-xl border-white/10">
-                <DropdownMenuLabel className="flex items-center justify-between text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                  <span>Favorited</span>
-                  <a href="#" className="text-primary hover:underline text-[10px]">View All</a>
-                </DropdownMenuLabel>
-                <div className="space-y-1">
-                  {[1, 2, 3].map((i) => (
-                    <DropdownMenuItem key={`fav-${i}`} className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-white/5">
-                      <div className="w-10 h-10 rounded-md bg-white/10 overflow-hidden flex-shrink-0 border border-white/5">
-                        <img src={`https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=100&q=80&sig=${i}`} alt="Game" className="w-full h-full object-cover" />
-                      </div>
-                      <div className="overflow-hidden flex-1">
-                        <p className="text-sm font-medium truncate text-foreground leading-tight">Brawl Stars Series {i}</p>
-                        <p className="text-xs text-muted-foreground truncate">Starts in {i}d</p>
-                      </div>
-                    </DropdownMenuItem>
-                  ))}
-                </div>
-                
-                <DropdownMenuSeparator className="my-3 border-white/5" />
-                
-                <DropdownMenuLabel className="flex items-center justify-between text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">
-                  <span>Recent Tournaments</span>
-                  <a href="#" className="text-primary hover:underline text-[10px]">View History</a>
-                </DropdownMenuLabel>
-                <div className="space-y-1">
-                  {[1, 2, 3, 4, 5].map((i) => (
-                    <DropdownMenuItem key={`rec-${i}`} className="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-white/5 opacity-80 hover:opacity-100 transition-opacity">
-                      <div className="w-8 h-8 rounded-md bg-white/5 overflow-hidden flex-shrink-0 border border-white/5 grayscale group-hover:grayscale-0 transition-all">
-                        <img src={`https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=100&q=80&sig=${i}`} alt="Game" className="w-full h-full object-cover" />
-                      </div>
-                      <div className="overflow-hidden flex-1">
-                        <p className="text-sm font-medium truncate text-foreground leading-tight">Valorant Cup #{i}</p>
-                        <p className="text-xs text-muted-foreground truncate">Ended {i} weeks ago</p>
-                      </div>
-                    </DropdownMenuItem>
-                  ))}
-                </div>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
-              <Bell className="h-5 w-5" />
-              <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full animate-pulse" />
-            </Button>
-            <Avatar className="h-8 w-8 ring-2 ring-white/10 cursor-pointer hover:ring-primary/50 transition-all">
-              <AvatarImage src="https://i.pravatar.cc/150?u=a042581f4e29026704d" />
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
-          </div>
+          <HeaderActions />
         </div>
       </header>
 

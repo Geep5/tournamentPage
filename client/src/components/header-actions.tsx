@@ -1,0 +1,270 @@
+import { useState } from "react";
+import { Heart, Bell, ChevronDown, X, Trophy, Star, Gift, CheckCircle2, Gamepad2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const mockNotifications = [
+  {
+    id: 1,
+    type: "accepted" as const,
+    message: 'Your application has been accepted!',
+    time: "Mon, Feb 16 at 7:26 PM",
+    read: false,
+  },
+  {
+    id: 2,
+    type: "prize" as const,
+    message: 'Congrats on your prize winnings from "TCL2025 : North Africa #5"!',
+    time: "Tue, Jun 24 at 3:11 AM",
+    read: false,
+  },
+  {
+    id: 3,
+    type: "accepted" as const,
+    message: 'Your application has been accepted!',
+    time: "Wed, Dec 03 at 11:47 AM",
+    read: true,
+  },
+  {
+    id: 4,
+    type: "prize" as const,
+    message: 'Congrats on your prize winnings from "TCL2025 : North Africa #4"!',
+    time: "Mon, Jun 23 at 7:35 AM",
+    read: true,
+  },
+  {
+    id: 5,
+    type: "prize" as const,
+    message: 'Congrats on your prize winnings from "TCL2025 : North Africa #3"!',
+    time: "Mon, Jun 23 at 7:34 AM",
+    read: true,
+  },
+];
+
+const mockFavorites = [
+  {
+    id: 1,
+    title: "SC2 Masters Cup",
+    game: "Starcraft II",
+    image: "photo-1542751371-adc38448a05e",
+    prizePool: "$5,000",
+    live: true,
+  },
+  {
+    id: 2,
+    title: "Tekken World Tour",
+    game: "Tekken 8",
+    image: "photo-1511512578047-dfb367046420",
+    prizePool: "$12,500",
+    live: false,
+  },
+  {
+    id: 3,
+    title: "GG Strive Open",
+    game: "Guilty Gear Strive",
+    image: "photo-1493711662062-fa541adb3fc8",
+    prizePool: "$3,200",
+    live: false,
+  },
+  {
+    id: 4,
+    title: "KOF Community Cup",
+    game: "KOF XV",
+    image: "photo-1550745165-9bc0b252726f",
+    prizePool: "$1,800",
+    live: true,
+  },
+];
+
+export function HeaderActions() {
+  const [notifications, setNotifications] = useState(mockNotifications);
+  const unreadCount = notifications.filter((n) => !n.read).length;
+
+  const dismissNotification = (id: number) => {
+    setNotifications((prev) => prev.filter((n) => n.id !== id));
+  };
+
+  const markAllRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
+  };
+
+  return (
+    <div className="flex items-center gap-2 shrink-0">
+      {/* Favorites */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
+            <Heart className="h-5 w-5" />
+            {mockFavorites.length > 0 && (
+              <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full" />
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="end"
+          sideOffset={8}
+          className="w-[360px] p-0 bg-[#1e1f22] border-white/10 rounded-xl shadow-2xl"
+        >
+          <div className="p-4 border-b border-white/5">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-bold text-white">Favorites</h3>
+              <span className="text-xs text-muted-foreground">{mockFavorites.length} events</span>
+            </div>
+          </div>
+          <div className="max-h-[380px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {mockFavorites.map((fav) => (
+              <div
+                key={fav.id}
+                className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors cursor-pointer border-b border-white/5 last:border-0"
+              >
+                <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0 border border-white/10">
+                  <img
+                    src={`https://images.unsplash.com/${fav.image}?auto=format&fit=crop&w=100&q=80`}
+                    alt={fav.title}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm font-semibold text-white truncate">{fav.title}</p>
+                    {fav.live && (
+                      <span className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-red-500/20 text-red-400 shrink-0">
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-400 animate-pulse" />
+                        LIVE
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground truncate">{fav.game}</p>
+                </div>
+                <div className="text-right shrink-0">
+                  <div className="flex items-center gap-1 text-xs font-semibold text-primary">
+                    <Trophy className="w-3 h-3" />
+                    {fav.prizePool}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </PopoverContent>
+      </Popover>
+
+      {/* Notifications */}
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative">
+            <Bell className="h-5 w-5" />
+            {unreadCount > 0 && (
+              <span className="absolute top-1.5 right-1.5 min-w-[16px] h-4 px-1 flex items-center justify-center text-[10px] font-bold bg-red-500 text-white rounded-full">
+                {unreadCount}
+              </span>
+            )}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          align="end"
+          sideOffset={8}
+          className="w-[380px] p-0 bg-[#1e1f22] border-white/10 rounded-xl shadow-2xl"
+        >
+          <div className="p-4 border-b border-white/5">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-bold text-white">Notifications</h3>
+              {unreadCount > 0 && (
+                <button
+                  onClick={markAllRead}
+                  className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
+                >
+                  Mark all read
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="max-h-[420px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            {notifications.length === 0 ? (
+              <div className="p-8 text-center">
+                <Bell className="w-8 h-8 text-muted-foreground/30 mx-auto mb-2" />
+                <p className="text-sm text-muted-foreground">No notifications</p>
+              </div>
+            ) : (
+              notifications.map((notif) => (
+                <div
+                  key={notif.id}
+                  className={`relative px-4 py-3 border-b border-white/5 last:border-0 transition-colors ${
+                    notif.read ? "opacity-60" : ""
+                  }`}
+                >
+                  <div
+                    className={`rounded-lg p-3 border ${
+                      notif.type === "prize"
+                        ? "bg-indigo-500/10 border-indigo-500/30"
+                        : "bg-white/[0.03] border-white/10"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                          notif.type === "prize"
+                            ? "bg-indigo-500/20"
+                            : "bg-green-500/20"
+                        }`}
+                      >
+                        {notif.type === "prize" ? (
+                          <Gift className="w-4 h-4 text-indigo-400" />
+                        ) : (
+                          <CheckCircle2 className="w-4 h-4 text-green-400" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0 pr-6">
+                        <p className="text-sm font-semibold text-white leading-snug">{notif.message}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{notif.time}</p>
+                      </div>
+                      <button
+                        onClick={() => dismissNotification(notif.id)}
+                        className="absolute top-3 right-4 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                    {!notif.read && (
+                      <div className="absolute top-3 left-1 w-1.5 h-1.5 rounded-full bg-primary" />
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </PopoverContent>
+      </Popover>
+
+      {/* Avatar Dropdown */}
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="flex items-center gap-2 px-2">
+            <Avatar className="h-7 w-7 border border-primary/50">
+              <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=80" />
+              <AvatarFallback>M</AvatarFallback>
+            </Avatar>
+            <span className="hidden md:inline text-sm font-medium">Matcherino</span>
+            <ChevronDown className="h-3 w-3 text-muted-foreground" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-48 bg-[#2b2d31] border-white/10">
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuSeparator className="bg-white/5" />
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuSeparator className="bg-white/5" />
+          <DropdownMenuItem>Log out</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </div>
+  );
+}

@@ -34,6 +34,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
+import { MobileSidebarBar } from "@/components/mobile-sidebar-bar";
 import helmetLogo from "@assets/mhelmet_1771552283812.png";
 
 // --- Mock Data ---
@@ -129,6 +130,203 @@ const activityItems = [
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("events");
   const [sidebarTab, setSidebarTab] = useState<"wallet" | "activity">("wallet");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const leftSidebarContent = (
+    <div className="p-4 space-y-6">
+      {/* Avatar */}
+      <div className="flex flex-col items-center">
+        <div className="relative">
+          <Avatar className="w-28 h-28 border-2 border-primary/50">
+            <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" />
+            <AvatarFallback className="text-2xl">GM</AvatarFallback>
+          </Avatar>
+          <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-blue-500 border-2 border-[#2b2d31] flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-colors">
+            <Pencil className="w-3.5 h-3.5 text-white" />
+          </div>
+          <div className="absolute top-0 right-0 w-5 h-5 rounded-full bg-blue-500 border-2 border-[#2b2d31] flex items-center justify-center">
+            <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Name + Tag */}
+      <div className="text-center space-y-1">
+        <div className="flex items-center justify-center gap-2">
+          <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
+          <h2 className="text-xl font-bold text-white">Grant Matcherino</h2>
+        </div>
+        <p className="text-sm text-white/70">#1004</p>
+        <p className="text-sm text-white/60 mt-2">Co-Founder of Matcherino</p>
+      </div>
+
+      {/* Social Links */}
+      <div className="flex items-center justify-center gap-2">
+        {socialLinks.map((s) => (
+          <a
+            key={s.name}
+            href={s.url}
+            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+            title={s.name}
+          >
+            <span className="text-xs text-muted-foreground font-bold">{s.name[0]}</span>
+          </a>
+        ))}
+      </div>
+
+      {/* Following / Followers */}
+      <div className="flex items-center justify-center gap-4 text-sm">
+        <span><strong className="text-white">8</strong> <span className="text-muted-foreground">Following</span></span>
+        <span><strong className="text-white">1</strong> <span className="text-muted-foreground">Followers</span></span>
+      </div>
+
+      {/* Navigation */}
+      <div className="space-y-1">
+        {profileNav.map((item) => {
+          const isActive = activeTab === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
+              className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-semibold transition-all ${
+                isActive
+                  ? 'bg-white/10 text-white border-l-4 border-primary'
+                  : 'text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent'
+              }`}
+            >
+              <item.icon className="w-5 h-5 opacity-70" />
+              {item.label}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+
+  const rightSidebarContent = (
+    <>
+      {/* Tabs */}
+      <div className="flex items-center border-b border-white/5 shrink-0">
+        <button
+          onClick={() => setSidebarTab("activity")}
+          className={`flex-1 flex justify-center py-3 text-sm font-medium border-b-2 transition-all ${sidebarTab === "activity" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+        >
+          <Zap className="w-5 h-5" />
+        </button>
+        <button
+          onClick={() => setSidebarTab("wallet")}
+          className={`flex-1 flex justify-center py-3 text-sm font-medium border-b-2 transition-all ${sidebarTab === "wallet" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+        >
+          <Wallet className="w-5 h-5" />
+        </button>
+      </div>
+
+      <div className="p-5 space-y-5 flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {sidebarTab === "wallet" ? (
+          <>
+            {/* Wallet */}
+            <div>
+              <h3 className="text-lg font-bold text-white mb-1">Wallet</h3>
+              <span className="text-xs text-muted-foreground">Balance</span>
+            </div>
+
+            <div className="rounded-xl border border-white/5 bg-card/50 p-5">
+              <p className="text-3xl font-bold text-white">$28.33</p>
+            </div>
+
+            {/* Cash Out */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <h4 className="text-sm font-bold text-white">Cash Out</h4>
+                <span className="text-xs text-muted-foreground">$1.00 minimum</span>
+              </div>
+              <input
+                type="text"
+                placeholder="Enter Amount to Withdraw"
+                className="w-full bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-muted-foreground/60"
+              />
+              <div className="grid grid-cols-2 gap-2">
+                <button className="flex items-center justify-center gap-2 py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-white">
+                  <CreditCard className="w-4 h-4 text-muted-foreground" />
+                  PayPal
+                </button>
+                <button className="flex items-center justify-center gap-2 py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-white">
+                  <Banknote className="w-4 h-4 text-muted-foreground" />
+                  Bank
+                </button>
+              </div>
+              <div className="flex items-center justify-between text-xs">
+                <a href="#" className="text-primary hover:text-primary/80 transition-colors">Problems Cashing Out?</a>
+                <button className="text-muted-foreground hover:text-white border border-white/10 rounded-lg px-3 py-1.5 transition-colors">
+                  Complete Tax Interview Here
+                </button>
+              </div>
+            </div>
+
+            {/* Transactions */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h4 className="text-base font-bold text-white">Transactions</h4>
+                <ArrowDownToLine className="w-4 h-4 text-muted-foreground cursor-pointer hover:text-white transition-colors" />
+              </div>
+
+              <div className="space-y-1">
+                {transactions.map((tx, i) => (
+                  <div key={i} className="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-white truncate">{tx.name}</p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <Badge
+                          variant="outline"
+                          className={`text-[10px] px-1.5 py-0 border ${
+                            tx.type === "Coupon" ? "border-amber-500/30 text-amber-400" :
+                            tx.type === "Purchase" ? "border-blue-500/30 text-blue-400" :
+                            tx.type === "Contribution" ? "border-purple-500/30 text-purple-400" :
+                            "border-green-500/30 text-green-400"
+                          }`}
+                        >
+                          {tx.type}
+                        </Badge>
+                        <span className="text-[10px] text-muted-foreground">{tx.date}</span>
+                      </div>
+                    </div>
+                    <span className={`text-sm font-bold shrink-0 ml-3 ${tx.positive ? "text-green-400" : "text-red-400"}`}>
+                      {tx.amount}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+        ) : (
+          <>
+            {/* Activity */}
+            <div>
+              <h3 className="text-lg font-bold text-white mb-1">Activity</h3>
+              <span className="text-xs text-muted-foreground bg-white/5 px-2 py-0.5 rounded-full">Profile (Latest)</span>
+            </div>
+
+            <div className="space-y-2">
+              {activityItems.map((item, i) => (
+                <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] hover:bg-white/5 transition-colors border border-white/5">
+                  <Avatar className="h-8 w-8 shrink-0 border border-white/10">
+                    <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">{item.avatar}</AvatarFallback>
+                  </Avatar>
+                  <div className="min-w-0 space-y-0.5">
+                    <p className="text-sm leading-snug">
+                      <span className="font-semibold text-white">{item.user}</span>{" "}
+                      <span className="text-muted-foreground">{item.action}</span>
+                    </p>
+                    <p className="text-xs text-muted-foreground/60">{item.time}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </>
+  );
 
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
@@ -172,78 +370,11 @@ export default function ProfilePage() {
 
         {/* Left Sidebar */}
         <aside className="w-[280px] flex-col flex-shrink-0 hidden md:flex border-r border-white/5 h-full overflow-y-auto bg-[#2b2d31] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-          <div className="p-4 space-y-6">
-            {/* Avatar */}
-            <div className="flex flex-col items-center">
-              <div className="relative">
-                <Avatar className="w-28 h-28 border-2 border-primary/50">
-                  <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" />
-                  <AvatarFallback className="text-2xl">GM</AvatarFallback>
-                </Avatar>
-                <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-blue-500 border-2 border-[#2b2d31] flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-colors">
-                  <Pencil className="w-3.5 h-3.5 text-white" />
-                </div>
-                <div className="absolute top-0 right-0 w-5 h-5 rounded-full bg-blue-500 border-2 border-[#2b2d31] flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
-                </div>
-              </div>
-            </div>
-
-            {/* Name + Tag */}
-            <div className="text-center space-y-1">
-              <div className="flex items-center justify-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
-                <h2 className="text-xl font-bold text-white">Grant Matcherino</h2>
-              </div>
-              <p className="text-sm text-white/70">#1004</p>
-              <p className="text-sm text-white/60 mt-2">Co-Founder of Matcherino</p>
-            </div>
-
-            {/* Social Links */}
-            <div className="flex items-center justify-center gap-2">
-              {socialLinks.map((s) => (
-                <a
-                  key={s.name}
-                  href={s.url}
-                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
-                  title={s.name}
-                >
-                  <span className="text-xs text-muted-foreground font-bold">{s.name[0]}</span>
-                </a>
-              ))}
-            </div>
-
-            {/* Following / Followers */}
-            <div className="flex items-center justify-center gap-4 text-sm">
-              <span><strong className="text-white">8</strong> <span className="text-muted-foreground">Following</span></span>
-              <span><strong className="text-white">1</strong> <span className="text-muted-foreground">Followers</span></span>
-            </div>
-
-            {/* Navigation */}
-            <div className="space-y-1">
-              {profileNav.map((item) => {
-                const isActive = activeTab === item.id;
-                return (
-                  <button
-                    key={item.id}
-                    onClick={() => setActiveTab(item.id)}
-                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-semibold transition-all ${
-                      isActive
-                        ? 'bg-white/10 text-white border-l-4 border-primary'
-                        : 'text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent'
-                    }`}
-                  >
-                    <item.icon className="w-5 h-5 opacity-70" />
-                    {item.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          {leftSidebarContent}
         </aside>
 
         {/* Center Content */}
-        <main className="flex-1 overflow-y-auto h-full bg-[#313338]/50 scroll-smooth">
+        <main className="flex-1 overflow-y-auto h-full bg-[#313338]/50 scroll-smooth pb-12 md:pb-0">
           <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 space-y-6">
 
             {/* Events Section */}
@@ -455,128 +586,11 @@ export default function ProfilePage() {
 
         {/* Right Sidebar: Wallet + Activity */}
         <aside className="w-[320px] flex-col flex-shrink-0 hidden xl:flex border-l border-white/5 h-full bg-[#2b2d31]">
-          {/* Tabs */}
-          <div className="flex items-center border-b border-white/5 shrink-0">
-            <button
-              onClick={() => setSidebarTab("activity")}
-              className={`flex-1 flex justify-center py-3 text-sm font-medium border-b-2 transition-all ${sidebarTab === "activity" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
-            >
-              <Zap className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => setSidebarTab("wallet")}
-              className={`flex-1 flex justify-center py-3 text-sm font-medium border-b-2 transition-all ${sidebarTab === "wallet" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
-            >
-              <Wallet className="w-5 h-5" />
-            </button>
-          </div>
-
-          <div className="p-5 space-y-5 flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-            {sidebarTab === "wallet" ? (
-              <>
-                {/* Wallet */}
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-1">Wallet</h3>
-                  <span className="text-xs text-muted-foreground">Balance</span>
-                </div>
-
-                <div className="rounded-xl border border-white/5 bg-card/50 p-5">
-                  <p className="text-3xl font-bold text-white">$28.33</p>
-                </div>
-
-                {/* Cash Out */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <h4 className="text-sm font-bold text-white">Cash Out</h4>
-                    <span className="text-xs text-muted-foreground">$1.00 minimum</span>
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Enter Amount to Withdraw"
-                    className="w-full bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all placeholder:text-muted-foreground/60"
-                  />
-                  <div className="grid grid-cols-2 gap-2">
-                    <button className="flex items-center justify-center gap-2 py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-white">
-                      <CreditCard className="w-4 h-4 text-muted-foreground" />
-                      PayPal
-                    </button>
-                    <button className="flex items-center justify-center gap-2 py-2.5 rounded-lg border border-white/10 bg-white/5 hover:bg-white/10 transition-colors text-sm font-medium text-white">
-                      <Banknote className="w-4 h-4 text-muted-foreground" />
-                      Bank
-                    </button>
-                  </div>
-                  <div className="flex items-center justify-between text-xs">
-                    <a href="#" className="text-primary hover:text-primary/80 transition-colors">Problems Cashing Out?</a>
-                    <button className="text-muted-foreground hover:text-white border border-white/10 rounded-lg px-3 py-1.5 transition-colors">
-                      Complete Tax Interview Here
-                    </button>
-                  </div>
-                </div>
-
-                {/* Transactions */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-base font-bold text-white">Transactions</h4>
-                    <ArrowDownToLine className="w-4 h-4 text-muted-foreground cursor-pointer hover:text-white transition-colors" />
-                  </div>
-
-                  <div className="space-y-1">
-                    {transactions.map((tx, i) => (
-                      <div key={i} className="flex items-center justify-between py-2.5 border-b border-white/5 last:border-0">
-                        <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-white truncate">{tx.name}</p>
-                          <div className="flex items-center gap-2 mt-0.5">
-                            <Badge
-                              variant="outline"
-                              className={`text-[10px] px-1.5 py-0 border ${
-                                tx.type === "Coupon" ? "border-amber-500/30 text-amber-400" :
-                                tx.type === "Purchase" ? "border-blue-500/30 text-blue-400" :
-                                tx.type === "Contribution" ? "border-purple-500/30 text-purple-400" :
-                                "border-green-500/30 text-green-400"
-                              }`}
-                            >
-                              {tx.type}
-                            </Badge>
-                            <span className="text-[10px] text-muted-foreground">{tx.date}</span>
-                          </div>
-                        </div>
-                        <span className={`text-sm font-bold shrink-0 ml-3 ${tx.positive ? "text-green-400" : "text-red-400"}`}>
-                          {tx.amount}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            ) : (
-              <>
-                {/* Activity */}
-                <div>
-                  <h3 className="text-lg font-bold text-white mb-1">Activity</h3>
-                  <span className="text-xs text-muted-foreground bg-white/5 px-2 py-0.5 rounded-full">Profile (Latest)</span>
-                </div>
-
-                <div className="space-y-2">
-                  {activityItems.map((item, i) => (
-                    <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] hover:bg-white/5 transition-colors border border-white/5">
-                      <Avatar className="h-8 w-8 shrink-0 border border-white/10">
-                        <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">{item.avatar}</AvatarFallback>
-                      </Avatar>
-                      <div className="min-w-0 space-y-0.5">
-                        <p className="text-sm leading-snug">
-                          <span className="font-semibold text-white">{item.user}</span>{" "}
-                          <span className="text-muted-foreground">{item.action}</span>
-                        </p>
-                        <p className="text-xs text-muted-foreground/60">{item.time}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
+          {rightSidebarContent}
         </aside>
       </div>
+      <MobileSidebarBar leftSidebar={leftSidebarContent} rightSidebar={rightSidebarContent} />
     </div>
   );
 }
+

@@ -1,11 +1,14 @@
+import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { HeaderActions } from "@/components/header-actions";
+import { MobileSidebarBar } from "@/components/mobile-sidebar-bar";
 import {
   Search,
   Menu,
+  X,
   Pencil,
   Trophy,
   BarChart3,
@@ -82,14 +85,42 @@ const activityItems = [
 ];
 
 export default function CreatePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const rightSidebarContent = (
+    <div className="p-5 space-y-4 flex-1">
+      <div>
+        <h3 className="text-lg font-bold text-white mb-1">Activity</h3>
+        <span className="text-xs text-muted-foreground bg-white/5 px-2 py-0.5 rounded-full">Event Creation (Latest)</span>
+      </div>
+
+      <div className="space-y-3">
+        {activityItems.map((item, i) => (
+          <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] hover:bg-white/5 transition-colors border border-white/5">
+            <Avatar className="h-8 w-8 shrink-0 border border-white/10">
+              <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">{item.avatar}</AvatarFallback>
+            </Avatar>
+            <div className="min-w-0 space-y-0.5">
+              <p className="text-sm leading-snug">
+                <span className="font-semibold text-white">{item.user}</span>{" "}
+                <span className="text-muted-foreground">{item.action}</span>
+              </p>
+              <p className="text-xs text-muted-foreground/60">{item.time}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#2b2d31]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
           <div className="flex md:hidden">
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-              <Menu className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
 
@@ -117,11 +148,25 @@ export default function CreatePage() {
 
           <HeaderActions />
         </div>
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-white/5 bg-[#2b2d31] px-4 py-3 space-y-2">
+            <Link href="/events" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Events</Link>
+            <Link href="/partnership" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Partnership</Link>
+            <Link href="/create" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Create</Link>
+            <Link href="/profile" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Profile</Link>
+            <div className="pt-2 border-t border-white/5">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <input type="text" placeholder="Search..." className="w-full bg-white/5 border border-white/10 rounded-full h-10 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted-foreground" />
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Content */}
       <div className="flex flex-1 relative min-h-0 overflow-hidden">
-        <main className="flex-1 min-w-0 overflow-y-auto h-full bg-[#313338]/50 scroll-smooth">
+        <main className="flex-1 min-w-0 overflow-y-auto h-full bg-[#313338]/50 scroll-smooth pb-12 xl:pb-0">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-10">
 
             {/* Page Title */}
@@ -273,31 +318,10 @@ export default function CreatePage() {
 
         {/* Right Sidebar: Activity */}
         <aside className="w-[320px] flex-col flex-shrink-0 hidden xl:flex border-l border-white/5 h-full bg-[#2b2d31]">
-          <div className="p-5 space-y-4 flex-1">
-            <div>
-              <h3 className="text-lg font-bold text-white mb-1">Activity</h3>
-              <span className="text-xs text-muted-foreground bg-white/5 px-2 py-0.5 rounded-full">Event Creation (Latest)</span>
-            </div>
-
-            <div className="space-y-3">
-              {activityItems.map((item, i) => (
-                <div key={i} className="flex items-start gap-3 p-3 rounded-xl bg-white/[0.03] hover:bg-white/5 transition-colors border border-white/5">
-                  <Avatar className="h-8 w-8 shrink-0 border border-white/10">
-                    <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">{item.avatar}</AvatarFallback>
-                  </Avatar>
-                  <div className="min-w-0 space-y-0.5">
-                    <p className="text-sm leading-snug">
-                      <span className="font-semibold text-white">{item.user}</span>{" "}
-                      <span className="text-muted-foreground">{item.action}</span>
-                    </p>
-                    <p className="text-xs text-muted-foreground/60">{item.time}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          {rightSidebarContent}
         </aside>
       </div>
+      <MobileSidebarBar rightSidebar={rightSidebarContent} />
     </div>
   );
 }

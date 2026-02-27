@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { HeaderActions } from "@/components/header-actions";
-import { Search, Bell, Trophy, Calendar, Users, Map, Heart, ScrollText, Twitch, MessageSquare, ChevronRight, ChevronDown, Menu, BookOpen, Settings, Check, LayoutGrid, ClipboardList, Coins, GitMerge, Radio, Flag, Wallet, Zap, CircleDollarSign, X, Upload, Image, Store, MapPin, Copy, ExternalLink, Paperclip, Tv, Shield, Crown, Clock, ArrowUpDown, Maximize2, ZoomIn, ZoomOut, Eye, Crosshair } from "lucide-react";
+import { Search, Bell, Trophy, Calendar, Users, Map, Heart, ScrollText, Twitch, MessageSquare, ChevronRight, ChevronDown, ChevronLeft, Menu, BookOpen, Settings, Check, LayoutGrid, ClipboardList, Coins, GitMerge, Radio, Flag, Wallet, Zap, CircleDollarSign, X, Upload, Image, Store, MapPin, Copy, ExternalLink, Paperclip, Tv, Shield, Crown, Clock, ArrowUpDown, Maximize2, ZoomIn, ZoomOut, Eye, Crosshair, Save } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -39,6 +39,7 @@ import mandyPinImage from "@assets/image_1771571405228.png";
 import winnerPinImage from "@assets/image_1771571494940.png";
 import valentinesBanner from "@assets/image_1771574496559.png";
 import orionBanner from "@assets/image_1771576047220.png";
+import { MobileSidebarBar } from "@/components/mobile-sidebar-bar";
 
 export default function TournamentPage() {
   const [activeTab, setActiveTab] = useState("overview");
@@ -52,6 +53,7 @@ export default function TournamentPage() {
   const [orgLiked, setOrgLiked] = useState(false);
   const [donorSort, setDonorSort] = useState<"amount" | "recent">("amount");
   const [donorPage, setDonorPage] = useState(1);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const updateCols = () => {
@@ -101,6 +103,348 @@ export default function TournamentPage() {
 
   const currentNavItems = isAdminMode ? adminNavItems : navItems;
 
+
+  const leftSidebarContent = (
+      <div className="p-4 space-y-6 relative z-10">
+        {/* Banner Image inside sidebar */}
+        <div className="rounded-xl overflow-hidden shadow-lg border border-black/20">
+          <img src={bannerIndex === 1 ? valentinesBanner : bannerIndex === 2 ? orionBanner : bannerImage} alt="Tournament Banner" className="w-full h-auto object-cover aspect-video transition-all duration-500" />
+        </div>
+        
+        {/* Title & Info */}
+        <div className="text-center space-y-3">
+          <h2 className="text-xl font-bold leading-tight text-white flex items-center justify-center gap-2 transition-colors duration-500">
+            {bannerIndex === 1 ? (
+              <>Valentines Day<br/>Mixer</>
+            ) : bannerIndex === 2 ? (
+              <>Orion<br/>Tournament</>
+            ) : (
+              <>Road to Brawl Cup<br/>SESA</>
+            )}
+          </h2>
+          <div className="flex items-center justify-center gap-2 text-sm text-white/70">
+            by <Avatar className="h-6 w-6"><AvatarImage src="https://i.pravatar.cc/150?u=quantum" /><AvatarFallback>QS</AvatarFallback></Avatar> <span className="font-bold text-white hover:text-white/80 transition-colors cursor-pointer">Quantum Studios</span>
+            <button
+              onClick={() => setOrgLiked(!orgLiked)}
+              className={`h-6 w-6 flex items-center justify-center rounded-md transition-all duration-300 ${orgLiked ? 'text-red-500 scale-110' : 'text-muted-foreground hover:text-red-400 hover:bg-red-500/10'}`}
+              title={orgLiked ? 'Following' : 'Follow Organizer'}
+            >
+              <Heart className={`h-3.5 w-3.5 transition-all duration-300 ${orgLiked ? 'fill-current scale-125' : ''}`} />
+            </button>
+          </div>
+          <div className="flex justify-center mt-2">
+            <div className="w-10 h-10 rounded-full bg-[#5865F2] flex items-center justify-center text-white cursor-pointer hover:bg-[#4752C4] transition-colors shadow-lg">
+              <MessageSquare className="w-5 h-5 fill-current" />
+            </div>
+          </div>
+        </div>
+
+        {/* Navigation */}
+        <div className="space-y-1">
+          <button
+            onClick={() => {
+              setIsAdminMode(!isAdminMode);
+              setActiveTab(!isAdminMode ? "admin-overview" : "overview");
+              document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-semibold transition-all mb-4 ${
+              isAdminMode 
+                ? "bg-red-500/20 text-red-400 border-l-4 border-red-500" 
+                : "bg-white/5 text-white/80 hover:bg-white/10 hover:text-white border-l-4 border-transparent"
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <Settings className="w-5 h-5 opacity-70" />
+              {isAdminMode ? "Exit Admin Mode" : "Enter Admin Mode"}
+            </div>
+          </button>
+
+          {isAdminMode ? (
+            adminNavGroups.map((group, gi) => (
+              <div key={gi} className={gi > 0 ? 'mt-4 pt-3 border-t border-white/5' : ''}>
+                <div className="px-3 mb-2">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/30">{group.label}</span>
+                </div>
+                {group.items.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = activeTab === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => {
+                        setActiveTab(item.id);
+                        document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-all ${
+                        isActive
+                          ? 'bg-white/10 text-white border-l-4 border-primary'
+                          : 'text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <Icon className="w-4 h-4 opacity-70" />
+                        {item.label}
+                      </div>
+                      {'badge' in item && item.badge && (
+                        <Badge variant="secondary" className="bg-white/10 text-white/70 hover:bg-white/20 border-none px-1.5 py-0 text-[10px]">
+                          {item.badge}
+                        </Badge>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ))
+          ) : (
+            currentNavItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    if (item.id !== 'bracket') {
+                      const sectionId = item.id === 'overview' ? 'about'
+                                      : item.id === 'contributions' ? 'prize-pool'
+                                      : item.id === 'teams' ? 'participants'
+                                      : item.id;
+                      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-semibold transition-all ${
+                    isActive
+                      ? 'bg-white/10 text-white border-l-4 border-primary'
+                      : 'text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent'
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon className="w-5 h-5 opacity-70" />
+                    {item.label}
+                  </div>
+                  {item.badge && (
+                    <Badge variant="secondary" className="bg-white/10 text-white/70 hover:bg-white/20 border-none px-1.5 py-0">
+                      {item.badge}
+                    </Badge>
+                  )}
+                </button>
+              );
+            })
+          )}
+        </div>
+      </div>
+  );
+
+  const rightSidebarContent = (
+    <>
+      <div className={`flex items-center border-b border-white/5 backdrop-blur-sm sticky top-0 z-10 transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/50' : bannerIndex === 2 ? 'bg-cyan-950/50' : 'bg-background/50'}`}>
+        <button 
+          onClick={() => setRightTab("prize-pool")}
+          className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "prize-pool" ? "border-yellow-500 text-yellow-500 bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+        >
+          <CircleDollarSign className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={() => setRightTab("activity")}
+          className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "activity" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+        >
+          <Zap className="w-5 h-5" />
+        </button>
+        <button 
+          onClick={() => setRightTab("live")}
+          className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "live" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+        >
+          <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded ${rightTab === "live" ? "bg-primary/20 text-primary" : "bg-white/10 text-white/70"}`}>LIVE</span>
+        </button>
+      </div>
+
+      <div className="p-6 space-y-8 overflow-y-auto flex-1 no-scrollbar">
+        
+        {/* Prize Pool Summary Card */}
+        {rightTab === "prize-pool" && (
+        <div className="space-y-6">
+          <div className="p-5 rounded-2xl bg-gradient-to-br from-yellow-500/10 to-orange-500/5 border border-yellow-500/20 shadow-lg relative overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl" />
+          <div className="flex items-center justify-between mb-2 relative z-10">
+            <h3 className="font-display font-semibold text-lg text-yellow-500 flex items-center gap-2">
+              <Trophy className="w-5 h-5" /> Prize Pool
+            </h3>
+          </div>
+          <div className="space-y-4 relative z-10">
+            <div>
+              <div className="text-3xl font-display font-bold text-white">$4,250.00</div>
+              <div className="text-sm text-yellow-500/80 mt-1 flex justify-between">
+                <span>85% Funded</span>
+                <span>$5,000</span>
+              </div>
+            </div>
+            <Progress value={85} className="h-2 bg-black/40" indicatorClassName="bg-gradient-to-r from-yellow-500 to-yellow-400" />
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="w-full font-bold shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:shadow-[0_0_25px_rgba(250,204,21,0.4)] transition-all bg-yellow-400 hover:bg-yellow-300 text-black">
+                  Contribute to Prize Pool
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-md bg-background border border-white/10">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-display text-center mb-2">Contribute to Road to Brawl Cup</DialogTitle>
+                  <DialogDescription className="text-center text-muted-foreground">
+                    Select the pins you want below and then click <strong className="text-foreground">CONTRIBUTE</strong> to complete your payment.
+                    <br/><br/>
+                    Pins will be sent to this Brawl Stars Player Tag within 2 weeks:
+                    <br/>
+                    <strong className="text-foreground font-mono mt-1 block text-lg">#JV0JL22Y</strong>
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <div className="space-y-4 mt-6">
+                  <div className="flex bg-card/50 border border-white/10 rounded-xl p-4 gap-4 hover:border-yellow-500/50 transition-colors cursor-pointer relative overflow-hidden">
+                    <div className="w-16 h-16 bg-black/30 rounded-lg flex items-center justify-center flex-shrink-0 relative">
+                       <div className="absolute -top-2 -right-2 text-2xl">🔥</div>
+                       <img src="https://images.unsplash.com/photo-1614680376593-902f74cf0d41?auto=format&fit=crop&w=64&h=64&q=80" alt="Pin" className="w-12 h-12 rounded object-cover" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-foreground">Spike Contributor's Pin</h4>
+                      <div className="text-2xl font-bold text-yellow-500 my-1">$5.00</div>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <div className="flex items-center gap-1"><Trophy className="w-3 h-3 text-yellow-500"/> $3.75 Prize Pool</div>
+                        <div className="flex items-center gap-1"><Users className="w-3 h-3 text-blue-400"/> $0.50 LOKI</div>
+                        <div className="flex items-center gap-1"><Heart className="w-3 h-3 text-red-400"/> $0.75 Matcherino</div>
+                      </div>
+                    </div>
+                    <Button className="absolute right-4 top-1/2 -translate-y-1/2 bg-yellow-500 hover:bg-yellow-400 text-black">Select</Button>
+                  </div>
+
+                  <div className="flex bg-card/50 border border-white/10 rounded-xl p-4 gap-4 hover:border-yellow-500/50 transition-colors cursor-pointer relative overflow-hidden">
+                    <div className="w-16 h-16 bg-black/30 rounded-lg flex items-center justify-center flex-shrink-0 relative">
+                       <div className="absolute -top-2 -right-2 text-2xl">✨</div>
+                       <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=64&h=64&q=80" alt="Pin" className="w-12 h-12 rounded object-cover" />
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-foreground">Mandy Contributor's Pin</h4>
+                      <div className="text-2xl font-bold text-yellow-500 my-1">$2.50</div>
+                      <div className="text-xs text-muted-foreground space-y-1">
+                        <div className="flex items-center gap-1"><Trophy className="w-3 h-3 text-yellow-500"/> $1.87 Prize Pool</div>
+                        <div className="flex items-center gap-1"><Users className="w-3 h-3 text-blue-400"/> $0.25 LOKI</div>
+                        <div className="flex items-center gap-1"><Heart className="w-3 h-3 text-red-400"/> $0.38 Matcherino</div>
+                      </div>
+                    </div>
+                    <Button className="absolute right-4 top-1/2 -translate-y-1/2 bg-yellow-500 hover:bg-yellow-400 text-black">Select</Button>
+                  </div>
+                </div>
+
+                <div className="text-center mt-6 text-sm text-muted-foreground">
+                  You can also make a direct contribution by clicking <a href="#" className="text-primary hover:underline">here</a>
+                </div>
+              </DialogContent>
+            </Dialog>
+          </div>
+        </div>
+
+        <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 delay-100">
+          {/* Contributor Pin */}
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-yellow-500/80 flex items-center justify-center bg-yellow-500/10">
+                <Check className="w-3 h-3 text-yellow-500" strokeWidth={3} />
+              </div>
+              <div>
+                <h4 className="font-display font-semibold text-lg text-white tracking-wide">Contributor Pin</h4>
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                  Contribute to this event to receive the in-game pins below! Contribute $2.50 to receive the Mandy Contributor Pin or $5.00 to receive the Contributor Pin, to receive both pins contribute $7.50.
+                </p>
+              </div>
+            </div>
+            <div className="ml-8 relative h-[140px] rounded-xl overflow-hidden border border-white/5 bg-black/20 flex items-center justify-center p-4">
+               <img src={mandyPinImage} alt="Mandy Contributor Pin" className="h-full object-contain drop-shadow-2xl" />
+               <img src={spikePinImage} alt="Spike Contributor Pin" className="h-full object-contain drop-shadow-2xl -ml-4" />
+            </div>
+          </div>
+
+          {/* Winner Pin */}
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-yellow-500/80 flex items-center justify-center bg-yellow-500/10">
+                <Check className="w-3 h-3 text-yellow-500" strokeWidth={3} />
+              </div>
+              <div>
+                <h4 className="font-display font-semibold text-lg text-white tracking-wide">Winner Pin</h4>
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                  Place first in this event and earn the in-game pin below! Good luck!
+                </p>
+              </div>
+            </div>
+            <div className="ml-8 relative h-[140px] rounded-xl overflow-hidden border border-white/5 bg-black/20 flex items-center justify-center p-4">
+               <img src={winnerPinImage} alt="Winner Pin" className="h-full object-contain drop-shadow-2xl" />
+            </div>
+          </div>
+        </div>
+        </div>
+        )}
+
+        {/* Live Streams */}
+        {rightTab === "live" && (
+        <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              <Twitch className="w-4 h-4 text-purple-400" />
+              Live Streams
+            </div>
+            <Button variant="link" className="h-auto p-0 text-xs text-primary hover:text-primary/80">View All (14)</Button>
+          </div>
+          <div className="space-y-3 pr-2 max-h-[340px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="group relative rounded-xl overflow-hidden cursor-pointer">
+                <img src={`https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80`} alt="Stream" className="w-full h-32 object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
+                <div className="absolute top-2 left-2 px-2 py-1 bg-red-600 text-white text-[10px] font-bold uppercase rounded flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" /> Live
+                </div>
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="h-6 w-6 border border-white/20">
+                      <AvatarImage src={`https://i.pravatar.cc/150?u=s${i}`} />
+                      <AvatarFallback>S{i}</AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium text-sm text-white drop-shadow-md">ProPlayer_{i}</span>
+                  </div>
+                  <div className="text-xs text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
+                    {Math.floor(1 + Math.random() * 4)}.{Math.floor(1 + Math.random() * 9)}k views
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+        )}
+
+        {/* Recent Activity */}
+        {rightTab === "activity" && (
+        <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+           <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            <Zap className="w-4 h-4 text-yellow-500" />
+            Recent Activity
+          </div>
+          <div className="space-y-4 border-l-2 border-white/5 pl-4 ml-2">
+            {[
+              { user: "AlexM", action: "contributed $50 to prize pool", time: "10m ago" },
+              { user: "Team Vortex", action: "registered for tournament", time: "1h ago" },
+              { user: "SarahJ", action: "completed sponsor quests", time: "2h ago" },
+            ].map((item, i) => (
+              <div key={i} className="relative">
+                <div className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-primary/50 ring-4 ring-background" />
+                <p className="text-sm"><span className="font-medium text-foreground">{item.user}</span> <span className="text-muted-foreground">{item.action}</span></p>
+                <p className="text-xs text-muted-foreground mt-1">{item.time}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        )}
+
+      </div>
+    </>
+  );
+
   return (
     <div 
       className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 transition-colors duration-500 overflow-hidden"
@@ -113,8 +457,8 @@ export default function TournamentPage() {
       <header className="sticky top-0 z-50 bg-[#2b2d31]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
           <div className="flex md:hidden">
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-              <Menu className="h-5 w-5" />
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
 
@@ -142,6 +486,20 @@ export default function TournamentPage() {
 
           <HeaderActions />
         </div>
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-white/5 bg-[#2b2d31] px-4 py-3 space-y-2">
+            <Link href="/events" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Events</Link>
+            <Link href="/partnership" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Partnership</Link>
+            <Link href="/create" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Create</Link>
+            <Link href="/profile" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Profile</Link>
+            <div className="pt-2 border-t border-white/5">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <input type="text" placeholder="Search..." className="w-full bg-white/5 border border-white/10 rounded-full h-10 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 placeholder:text-muted-foreground" />
+              </div>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* Main Layout */}
@@ -157,136 +515,11 @@ export default function TournamentPage() {
                }}
              />
           )}
-          <div className="p-4 space-y-6 relative z-10">
-            {/* Banner Image inside sidebar */}
-            <div className="rounded-xl overflow-hidden shadow-lg border border-black/20">
-              <img src={bannerIndex === 1 ? valentinesBanner : bannerIndex === 2 ? orionBanner : bannerImage} alt="Tournament Banner" className="w-full h-auto object-cover aspect-video transition-all duration-500" />
-            </div>
-            
-            {/* Title & Info */}
-            <div className="text-center space-y-3">
-              <h2 className="text-xl font-bold leading-tight text-white flex items-center justify-center gap-2 transition-colors duration-500">
-                {bannerIndex === 1 ? (
-                  <>Valentines Day<br/>Mixer</>
-                ) : bannerIndex === 2 ? (
-                  <>Orion<br/>Tournament</>
-                ) : (
-                  <>Road to Brawl Cup<br/>SESA</>
-                )}
-              </h2>
-              <div className="flex items-center justify-center gap-2 text-sm text-white/70">
-                by <Avatar className="h-6 w-6"><AvatarImage src="https://i.pravatar.cc/150?u=quantum" /><AvatarFallback>QS</AvatarFallback></Avatar> <span className="font-bold text-white hover:text-white/80 transition-colors cursor-pointer">Quantum Studios</span>
-                <button
-                  onClick={() => setOrgLiked(!orgLiked)}
-                  className={`h-6 w-6 flex items-center justify-center rounded-md transition-all duration-300 ${orgLiked ? 'text-red-500 scale-110' : 'text-muted-foreground hover:text-red-400 hover:bg-red-500/10'}`}
-                  title={orgLiked ? 'Following' : 'Follow Organizer'}
-                >
-                  <Heart className={`h-3.5 w-3.5 transition-all duration-300 ${orgLiked ? 'fill-current scale-125' : ''}`} />
-                </button>
-              </div>
-              <div className="flex justify-center mt-2">
-                <div className="w-10 h-10 rounded-full bg-[#5865F2] flex items-center justify-center text-white cursor-pointer hover:bg-[#4752C4] transition-colors shadow-lg">
-                  <MessageSquare className="w-5 h-5 fill-current" />
-                </div>
-              </div>
-            </div>
-
-            {/* Navigation */}
-            <div className="space-y-1">
-              <button
-                onClick={() => {
-                  setIsAdminMode(!isAdminMode);
-                  setActiveTab(!isAdminMode ? "admin-overview" : "overview");
-                  document.querySelector('main')?.scrollTo({ top: 0, behavior: 'smooth' });
-                }}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-semibold transition-all mb-4 ${
-                  isAdminMode 
-                    ? "bg-red-500/20 text-red-400 border-l-4 border-red-500" 
-                    : "bg-white/5 text-white/80 hover:bg-white/10 hover:text-white border-l-4 border-transparent"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <Settings className="w-5 h-5 opacity-70" />
-                  {isAdminMode ? "Exit Admin Mode" : "Enter Admin Mode"}
-                </div>
-              </button>
-
-              {isAdminMode ? (
-                adminNavGroups.map((group, gi) => (
-                  <div key={gi} className={gi > 0 ? 'mt-4 pt-3 border-t border-white/5' : ''}>
-                    <div className="px-3 mb-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-white/30">{group.label}</span>
-                    </div>
-                    {group.items.map((item) => {
-                      const Icon = item.icon;
-                      const isActive = activeTab === item.id;
-                      return (
-                        <button
-                          key={item.id}
-                          onClick={() => {
-                            setActiveTab(item.id);
-                            document.getElementById(item.id)?.scrollIntoView({ behavior: 'smooth' });
-                          }}
-                          className={`w-full flex items-center justify-between px-3 py-2 rounded-md text-sm font-medium transition-all ${
-                            isActive
-                              ? 'bg-white/10 text-white border-l-4 border-primary'
-                              : 'text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <Icon className="w-4 h-4 opacity-70" />
-                            {item.label}
-                          </div>
-                          {'badge' in item && item.badge && (
-                            <Badge variant="secondary" className="bg-white/10 text-white/70 hover:bg-white/20 border-none px-1.5 py-0 text-[10px]">
-                              {item.badge}
-                            </Badge>
-                          )}
-                        </button>
-                      );
-                    })}
-                  </div>
-                ))
-              ) : (
-                currentNavItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = activeTab === item.id;
-                  return (
-                    <button
-                      key={item.id}
-                      onClick={() => {
-                        setActiveTab(item.id);
-                        const sectionId = item.id === 'overview' ? 'about'
-                                        : item.id === 'contributions' ? 'prize-pool'
-                                        : item.id === 'teams' ? 'participants'
-                                        : item.id;
-                        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
-                      }}
-                      className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-semibold transition-all ${
-                        isActive
-                          ? 'bg-white/10 text-white border-l-4 border-primary'
-                          : 'text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <Icon className="w-5 h-5 opacity-70" />
-                        {item.label}
-                      </div>
-                      {item.badge && (
-                        <Badge variant="secondary" className="bg-white/10 text-white/70 hover:bg-white/20 border-none px-1.5 py-0">
-                          {item.badge}
-                        </Badge>
-                      )}
-                    </button>
-                  );
-                })
-              )}
-            </div>
-          </div>
+          {leftSidebarContent}
         </aside>
 
         {/* Center Content (Main) */}
-        <main className={`flex-1 relative scroll-smooth transition-colors duration-500 overflow-y-auto h-full ${
+        <main className={`flex-1 relative scroll-smooth pb-12 md:pb-0 transition-colors duration-500 overflow-y-auto h-full ${
           isAdminMode 
             ? 'bg-red-950/20' 
             : bannerIndex === 1 
@@ -295,6 +528,234 @@ export default function TournamentPage() {
                 ? 'bg-cyan-950/20'
                 : 'bg-[#313338]/50'
         }`}>
+
+          {activeTab === 'bracket' && !isAdminMode ? (
+            /* Full Bracket View */
+            <div className="flex flex-col h-full">
+              {/* Bracket Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 shrink-0">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => {
+                      setActiveTab('overview');
+                      document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <div className="p-2 rounded-lg bg-green-500/10 text-green-400">
+                    <GitMerge className="w-5 h-5" />
+                  </div>
+                  <h2 className="text-2xl font-display font-semibold text-white">Bracket</h2>
+                  <span className="text-sm text-muted-foreground ml-2">Single Elimination</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <div className="relative mr-3">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
+                    <input
+                      type="text"
+                      placeholder="Search by User or Match"
+                      className="bg-white/5 border border-white/10 rounded-lg h-8 pl-9 pr-3 text-xs focus:outline-none focus:border-primary/50 w-52 placeholder:text-muted-foreground"
+                    />
+                  </div>
+                  <button className="p-1.5 rounded-md hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Fit to Screen">
+                    <Crosshair className="w-4 h-4" />
+                  </button>
+                  <button className="p-1.5 rounded-md hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Toggle Labels">
+                    <Eye className="w-4 h-4" />
+                  </button>
+                  <button className="p-1.5 rounded-md hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Zoom In">
+                    <ZoomIn className="w-4 h-4" />
+                  </button>
+                  <button className="p-1.5 rounded-md hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Zoom Out">
+                    <ZoomOut className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Round Headers */}
+              <div className="grid grid-cols-3 border-b border-white/5 shrink-0">
+                <div className="px-6 py-2.5 text-center border-r border-white/5">
+                  <span className="text-sm font-semibold text-foreground">Quarterfinals</span>
+                  <span className="text-xs text-muted-foreground ml-1.5">(Best of 3)</span>
+                </div>
+                <div className="px-6 py-2.5 text-center border-r border-white/5">
+                  <span className="text-sm font-semibold text-foreground">Semifinals</span>
+                  <span className="text-xs text-muted-foreground ml-1.5">(Best of 3)</span>
+                </div>
+                <div className="px-6 py-2.5 text-center">
+                  <span className="text-sm font-semibold text-foreground">Finals</span>
+                  <span className="text-xs text-muted-foreground ml-1.5">(Best of 3)</span>
+                </div>
+              </div>
+
+              {/* Full Bracket Tree */}
+              <div className="flex-1 overflow-auto flex items-center justify-center relative p-8">
+                {/* Connector lines */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none" preserveAspectRatio="none">
+                  <line x1="232" y1="120" x2="280" y2="120" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="232" y1="220" x2="280" y2="220" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="280" y1="120" x2="280" y2="220" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="280" y1="170" x2="320" y2="170" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="232" y1="340" x2="280" y2="340" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="232" y1="440" x2="280" y2="440" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="280" y1="340" x2="280" y2="440" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="280" y1="390" x2="320" y2="390" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="540" y1="170" x2="580" y2="170" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="540" y1="390" x2="580" y2="390" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="580" y1="170" x2="580" y2="390" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                  <line x1="580" y1="280" x2="620" y2="280" stroke="currentColor" strokeWidth="1" className="text-white/10" />
+                </svg>
+
+                <div className="flex gap-24 min-w-max relative z-10">
+                  {/* Quarterfinals */}
+                  <div className="flex flex-col justify-around gap-16">
+                    {/* Match 1 */}
+                    <div className="relative">
+                      <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-indigo-500 text-[10px] font-bold text-white flex items-center justify-center">1</div>
+                      <div className="flex flex-col gap-px w-56 rounded-lg overflow-hidden border border-white/10">
+                        <div className="flex items-center justify-between bg-white/[0.08] px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 border border-white/10">
+                              <AvatarImage src="https://i.pravatar.cc/150?u=hotel" />
+                              <AvatarFallback className="text-[8px]">HM</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium">Hotel Moscow</span>
+                          </div>
+                          <span className="text-sm font-bold text-green-400">2</span>
+                        </div>
+                        <div className="flex items-center justify-between bg-black/30 px-3 py-2.5 opacity-60">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 border border-white/10">
+                              <AvatarImage src="https://i.pravatar.cc/150?u=golden" />
+                              <AvatarFallback className="text-[8px]">GR</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium">Golden Rush</span>
+                          </div>
+                          <span className="text-sm font-bold text-muted-foreground">0</span>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Match 2 */}
+                    <div className="relative">
+                      <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-indigo-500 text-[10px] font-bold text-white flex items-center justify-center">2</div>
+                      <div className="flex flex-col gap-px w-56 rounded-lg overflow-hidden border border-white/10">
+                        <div className="flex items-center justify-between bg-white/[0.08] px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 border border-white/10">
+                              <AvatarImage src="https://i.pravatar.cc/150?u=russians" />
+                              <AvatarFallback className="text-[8px]">RU</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium">Russians Unite</span>
+                          </div>
+                          <span className="text-sm font-bold text-green-400">2</span>
+                        </div>
+                        <div className="flex items-center justify-between bg-black/30 px-3 py-2.5 opacity-60">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 border border-white/10">
+                              <AvatarImage src="https://i.pravatar.cc/150?u=mnms" />
+                              <AvatarFallback className="text-[8px]">MM</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium">M&Ms</span>
+                          </div>
+                          <span className="text-sm font-bold text-muted-foreground">0</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Semifinals */}
+                  <div className="flex flex-col justify-around gap-16">
+                    {/* Match 3 */}
+                    <div className="relative">
+                      <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-indigo-500 text-[10px] font-bold text-white flex items-center justify-center">3</div>
+                      <div className="flex flex-col gap-px w-56 rounded-lg overflow-hidden border border-white/10">
+                        <div className="flex items-center justify-between bg-white/[0.08] px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 border border-white/10">
+                              <AvatarImage src="https://i.pravatar.cc/150?u=hotel" />
+                              <AvatarFallback className="text-[8px]">HM</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium">Hotel Moscow</span>
+                          </div>
+                          <span className="text-sm font-bold text-green-400">2</span>
+                        </div>
+                        <div className="flex items-center justify-between bg-black/30 px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 border border-white/10">
+                              <AvatarImage src="https://i.pravatar.cc/150?u=tempest" />
+                              <AvatarFallback className="text-[8px]">TR</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium opacity-60">Tempest Release</span>
+                          </div>
+                          <span className="text-sm font-bold text-muted-foreground">1</span>
+                        </div>
+                      </div>
+                    </div>
+                    {/* Match 4 */}
+                    <div className="relative">
+                      <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-indigo-500 text-[10px] font-bold text-white flex items-center justify-center">4</div>
+                      <div className="flex flex-col gap-px w-56 rounded-lg overflow-hidden border border-white/10">
+                        <div className="flex items-center justify-between bg-white/[0.08] px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 border border-white/10">
+                              <AvatarImage src="https://i.pravatar.cc/150?u=russians" />
+                              <AvatarFallback className="text-[8px]">RU</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium">Russians Unite</span>
+                          </div>
+                          <span className="text-sm font-bold text-green-400">2</span>
+                        </div>
+                        <div className="flex items-center justify-between bg-black/30 px-3 py-2.5 opacity-60">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 border border-white/10">
+                              <AvatarImage src="https://i.pravatar.cc/150?u=goldman" />
+                              <AvatarFallback className="text-[8px]">GS</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium">Goldman is the...</span>
+                          </div>
+                          <span className="text-sm font-bold text-muted-foreground">0</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Finals */}
+                  <div className="flex flex-col justify-center">
+                    {/* Match 5 - Grand Finals */}
+                    <div className="relative">
+                      <div className="absolute -left-6 top-1/2 -translate-y-1/2 w-5 h-5 rounded bg-yellow-500 text-[10px] font-bold text-black flex items-center justify-center">F</div>
+                      <div className="flex flex-col gap-px w-56 rounded-lg overflow-hidden border border-primary/30 ring-1 ring-primary/20">
+                        <div className="flex items-center justify-between bg-primary/10 px-3 py-2.5">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 border border-primary/30">
+                              <AvatarImage src="https://i.pravatar.cc/150?u=hotel" />
+                              <AvatarFallback className="text-[8px]">HM</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-semibold text-primary">Hotel Moscow</span>
+                            <Trophy className="w-3.5 h-3.5 text-primary" />
+                          </div>
+                          <span className="text-sm font-bold text-primary">3</span>
+                        </div>
+                        <div className="flex items-center justify-between bg-black/30 px-3 py-2.5 opacity-60">
+                          <div className="flex items-center gap-2">
+                            <Avatar className="h-6 w-6 border border-white/10">
+                              <AvatarImage src="https://i.pravatar.cc/150?u=russians" />
+                              <AvatarFallback className="text-[8px]">RU</AvatarFallback>
+                            </Avatar>
+                            <span className="text-sm font-medium">Russians Unite</span>
+                          </div>
+                          <span className="text-sm font-bold text-muted-foreground">1</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ) : (
+          <>
           {/* Header Info */}
           <div className="w-full max-w-5xl mx-auto px-4 md:px-10 pt-4 pb-0">
             <div className="flex flex-col xl:flex-row justify-between items-start gap-6 mb-2 md:mb-4">
@@ -2784,218 +3245,29 @@ export default function TournamentPage() {
             </section>
             )}
           </div>
+          </>
+          )}
+
+          {/* Floating Save All - Admin Mode */}
+          {isAdminMode && (
+            <div className="sticky bottom-0 z-30 pointer-events-none">
+              <div className="flex justify-end p-4 pointer-events-auto">
+                <button className="flex items-center gap-2 px-5 py-3 rounded-xl bg-primary hover:bg-primary/90 text-black font-bold text-sm shadow-lg shadow-primary/25 transition-all hover:scale-105 hover:shadow-primary/40">
+                  <Save className="w-4 h-4" />
+                  Save All Changes
+                </button>
+              </div>
+            </div>
+          )}
         </main>
 
         {/* Right Sidebar (Stats & Activity) */}
         <aside className={`w-[320px] border-l border-white/5 hidden xl:flex flex-col flex-shrink-0 h-full transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/30' : bannerIndex === 2 ? 'bg-cyan-950/30' : 'bg-card/30'}`}>
-          <div className={`flex items-center border-b border-white/5 backdrop-blur-sm sticky top-0 z-10 transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/50' : bannerIndex === 2 ? 'bg-cyan-950/50' : 'bg-background/50'}`}>
-            <button 
-              onClick={() => setRightTab("prize-pool")}
-              className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "prize-pool" ? "border-yellow-500 text-yellow-500 bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
-            >
-              <CircleDollarSign className="w-5 h-5" />
-            </button>
-            <button 
-              onClick={() => setRightTab("activity")}
-              className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "activity" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
-            >
-              <Zap className="w-5 h-5" />
-            </button>
-            <button 
-              onClick={() => setRightTab("live")}
-              className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "live" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
-            >
-              <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded ${rightTab === "live" ? "bg-primary/20 text-primary" : "bg-white/10 text-white/70"}`}>LIVE</span>
-            </button>
-          </div>
-
-          <div className="p-6 space-y-8 overflow-y-auto flex-1 no-scrollbar">
-            
-            {/* Prize Pool Summary Card */}
-            {rightTab === "prize-pool" && (
-            <div className="space-y-6">
-              <div className="p-5 rounded-2xl bg-gradient-to-br from-yellow-500/10 to-orange-500/5 border border-yellow-500/20 shadow-lg relative overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl" />
-              <div className="flex items-center justify-between mb-2 relative z-10">
-                <h3 className="font-display font-semibold text-lg text-yellow-500 flex items-center gap-2">
-                  <Trophy className="w-5 h-5" /> Prize Pool
-                </h3>
-              </div>
-              <div className="space-y-4 relative z-10">
-                <div>
-                  <div className="text-3xl font-display font-bold text-white">$4,250.00</div>
-                  <div className="text-sm text-yellow-500/80 mt-1 flex justify-between">
-                    <span>85% Funded</span>
-                    <span>$5,000</span>
-                  </div>
-                </div>
-                <Progress value={85} className="h-2 bg-black/40" indicatorClassName="bg-gradient-to-r from-yellow-500 to-yellow-400" />
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button className="w-full font-bold shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:shadow-[0_0_25px_rgba(250,204,21,0.4)] transition-all bg-yellow-400 hover:bg-yellow-300 text-black">
-                      Contribute to Prize Pool
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-md bg-background border border-white/10">
-                    <DialogHeader>
-                      <DialogTitle className="text-2xl font-display text-center mb-2">Contribute to Road to Brawl Cup</DialogTitle>
-                      <DialogDescription className="text-center text-muted-foreground">
-                        Select the pins you want below and then click <strong className="text-foreground">CONTRIBUTE</strong> to complete your payment.
-                        <br/><br/>
-                        Pins will be sent to this Brawl Stars Player Tag within 2 weeks:
-                        <br/>
-                        <strong className="text-foreground font-mono mt-1 block text-lg">#JV0JL22Y</strong>
-                      </DialogDescription>
-                    </DialogHeader>
-                    
-                    <div className="space-y-4 mt-6">
-                      <div className="flex bg-card/50 border border-white/10 rounded-xl p-4 gap-4 hover:border-yellow-500/50 transition-colors cursor-pointer relative overflow-hidden">
-                        <div className="w-16 h-16 bg-black/30 rounded-lg flex items-center justify-center flex-shrink-0 relative">
-                           <div className="absolute -top-2 -right-2 text-2xl">🔥</div>
-                           <img src="https://images.unsplash.com/photo-1614680376593-902f74cf0d41?auto=format&fit=crop&w=64&h=64&q=80" alt="Pin" className="w-12 h-12 rounded object-cover" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-foreground">Spike Contributor's Pin</h4>
-                          <div className="text-2xl font-bold text-yellow-500 my-1">$5.00</div>
-                          <div className="text-xs text-muted-foreground space-y-1">
-                            <div className="flex items-center gap-1"><Trophy className="w-3 h-3 text-yellow-500"/> $3.75 Prize Pool</div>
-                            <div className="flex items-center gap-1"><Users className="w-3 h-3 text-blue-400"/> $0.50 LOKI</div>
-                            <div className="flex items-center gap-1"><Heart className="w-3 h-3 text-red-400"/> $0.75 Matcherino</div>
-                          </div>
-                        </div>
-                        <Button className="absolute right-4 top-1/2 -translate-y-1/2 bg-yellow-500 hover:bg-yellow-400 text-black">Select</Button>
-                      </div>
-
-                      <div className="flex bg-card/50 border border-white/10 rounded-xl p-4 gap-4 hover:border-yellow-500/50 transition-colors cursor-pointer relative overflow-hidden">
-                        <div className="w-16 h-16 bg-black/30 rounded-lg flex items-center justify-center flex-shrink-0 relative">
-                           <div className="absolute -top-2 -right-2 text-2xl">✨</div>
-                           <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=64&h=64&q=80" alt="Pin" className="w-12 h-12 rounded object-cover" />
-                        </div>
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-foreground">Mandy Contributor's Pin</h4>
-                          <div className="text-2xl font-bold text-yellow-500 my-1">$2.50</div>
-                          <div className="text-xs text-muted-foreground space-y-1">
-                            <div className="flex items-center gap-1"><Trophy className="w-3 h-3 text-yellow-500"/> $1.87 Prize Pool</div>
-                            <div className="flex items-center gap-1"><Users className="w-3 h-3 text-blue-400"/> $0.25 LOKI</div>
-                            <div className="flex items-center gap-1"><Heart className="w-3 h-3 text-red-400"/> $0.38 Matcherino</div>
-                          </div>
-                        </div>
-                        <Button className="absolute right-4 top-1/2 -translate-y-1/2 bg-yellow-500 hover:bg-yellow-400 text-black">Select</Button>
-                      </div>
-                    </div>
-
-                    <div className="text-center mt-6 text-sm text-muted-foreground">
-                      You can also make a direct contribution by clicking <a href="#" className="text-primary hover:underline">here</a>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-              </div>
-            </div>
-
-            <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 delay-100">
-              {/* Contributor Pin */}
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-yellow-500/80 flex items-center justify-center bg-yellow-500/10">
-                    <Check className="w-3 h-3 text-yellow-500" strokeWidth={3} />
-                  </div>
-                  <div>
-                    <h4 className="font-display font-semibold text-lg text-white tracking-wide">Contributor Pin</h4>
-                    <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                      Contribute to this event to receive the in-game pins below! Contribute $2.50 to receive the Mandy Contributor Pin or $5.00 to receive the Contributor Pin, to receive both pins contribute $7.50.
-                    </p>
-                  </div>
-                </div>
-                <div className="ml-8 relative h-[140px] rounded-xl overflow-hidden border border-white/5 bg-black/20 flex items-center justify-center p-4">
-                   <img src={mandyPinImage} alt="Mandy Contributor Pin" className="h-full object-contain drop-shadow-2xl" />
-                   <img src={spikePinImage} alt="Spike Contributor Pin" className="h-full object-contain drop-shadow-2xl -ml-4" />
-                </div>
-              </div>
-
-              {/* Winner Pin */}
-              <div className="space-y-3">
-                <div className="flex items-start gap-3">
-                  <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-yellow-500/80 flex items-center justify-center bg-yellow-500/10">
-                    <Check className="w-3 h-3 text-yellow-500" strokeWidth={3} />
-                  </div>
-                  <div>
-                    <h4 className="font-display font-semibold text-lg text-white tracking-wide">Winner Pin</h4>
-                    <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
-                      Place first in this event and earn the in-game pin below! Good luck!
-                    </p>
-                  </div>
-                </div>
-                <div className="ml-8 relative h-[140px] rounded-xl overflow-hidden border border-white/5 bg-black/20 flex items-center justify-center p-4">
-                   <img src={winnerPinImage} alt="Winner Pin" className="h-full object-contain drop-shadow-2xl" />
-                </div>
-              </div>
-            </div>
-            </div>
-            )}
-
-            {/* Live Streams */}
-            {rightTab === "live" && (
-            <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                  <Twitch className="w-4 h-4 text-purple-400" />
-                  Live Streams
-                </div>
-                <Button variant="link" className="h-auto p-0 text-xs text-primary hover:text-primary/80">View All (14)</Button>
-              </div>
-              <div className="space-y-3 pr-2 max-h-[340px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20">
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="group relative rounded-xl overflow-hidden cursor-pointer">
-                    <img src={`https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=400&q=80`} alt="Stream" className="w-full h-32 object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
-                    <div className="absolute top-2 left-2 px-2 py-1 bg-red-600 text-white text-[10px] font-bold uppercase rounded flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" /> Live
-                    </div>
-                    <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Avatar className="h-6 w-6 border border-white/20">
-                          <AvatarImage src={`https://i.pravatar.cc/150?u=s${i}`} />
-                          <AvatarFallback>S{i}</AvatarFallback>
-                        </Avatar>
-                        <span className="font-medium text-sm text-white drop-shadow-md">ProPlayer_{i}</span>
-                      </div>
-                      <div className="text-xs text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
-                        {Math.floor(1 + Math.random() * 4)}.{Math.floor(1 + Math.random() * 9)}k views
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            )}
-
-            {/* Recent Activity */}
-            {rightTab === "activity" && (
-            <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
-               <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-                <Zap className="w-4 h-4 text-yellow-500" />
-                Recent Activity
-              </div>
-              <div className="space-y-4 border-l-2 border-white/5 pl-4 ml-2">
-                {[
-                  { user: "AlexM", action: "contributed $50 to prize pool", time: "10m ago" },
-                  { user: "Team Vortex", action: "registered for tournament", time: "1h ago" },
-                  { user: "SarahJ", action: "completed sponsor quests", time: "2h ago" },
-                ].map((item, i) => (
-                  <div key={i} className="relative">
-                    <div className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-primary/50 ring-4 ring-background" />
-                    <p className="text-sm"><span className="font-medium text-foreground">{item.user}</span> <span className="text-muted-foreground">{item.action}</span></p>
-                    <p className="text-xs text-muted-foreground mt-1">{item.time}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            )}
-
-          </div>
+          {rightSidebarContent}
         </aside>
 
       </div>
+      <MobileSidebarBar leftSidebar={leftSidebarContent} rightSidebar={rightSidebarContent} />
     </div>
   );
 }

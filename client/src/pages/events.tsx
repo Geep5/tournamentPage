@@ -223,7 +223,7 @@ export default function EventsPage() {
                       <Link
                         key={i}
                         href="/"
-                        className="absolute block w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#2b2d31]"
+                        className="absolute block w-[75%] md:w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#2b2d31]"
                         style={{
                           transform,
                           zIndex,
@@ -242,21 +242,21 @@ export default function EventsPage() {
                           />
                         </div>
                         {/* Info below image */}
-                        <div className="px-4 py-3 space-y-1.5">
-                          <h3 className="text-sm md:text-base font-bold text-white truncate">{ev.name}</h3>
+                        <div className="px-3 py-2 md:px-4 md:py-3">
                           <div className="flex items-center justify-between gap-2">
-                            <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-muted-foreground">
-                              <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{ev.date}</span>
-                              <span className="text-white/20">|</span>
-                              <span>{ev.game}</span>
-                              <span className="text-white/20">|</span>
-                              <span>{ev.format}</span>
-                              <span className="text-white/20">|</span>
-                              <span className="flex items-center gap-1"><Users className="w-3 h-3" />{ev.participants}</span>
-                            </div>
-                            <Badge className="bg-primary/20 text-primary border-primary/30 text-[11px] px-2 py-0 font-bold shrink-0">
+                            <h3 className="text-xs md:text-base font-bold text-white truncate">{ev.name}</h3>
+                            <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px] md:text-[11px] px-1.5 md:px-2 py-0 font-bold shrink-0">
                               {ev.prize}
                             </Badge>
+                          </div>
+                          <div className="hidden md:flex items-center gap-x-2 mt-1 text-[11px] text-muted-foreground">
+                            <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{ev.date}</span>
+                            <span className="text-white/20">|</span>
+                            <span>{ev.game}</span>
+                            <span className="text-white/20">|</span>
+                            <span>{ev.format}</span>
+                            <span className="text-white/20">|</span>
+                            <span className="flex items-center gap-1"><Users className="w-3 h-3" />{ev.participants}</span>
                           </div>
                         </div>
                       </Link>

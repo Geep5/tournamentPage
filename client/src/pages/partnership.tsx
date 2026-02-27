@@ -12,7 +12,7 @@ const benefits = [
   },
   {
     title: "Contribution Codes",
-    description: "Partner+ Organizers receive Contribution Codes to reward free community participation.",
+    description: "Partner+ Organizers receive Contribution Codes to reward free community participation. Apply below and our team will review within 3-5 business days.",
   },
   {
     title: "Sponsorship Access",
@@ -135,6 +135,7 @@ export default function PartnershipPage() {
               </div>
             </div>
 
+
             {/* Application Form */}
             <div>
               <h1 className="text-3xl font-bold text-white mb-1">Applications</h1>
@@ -166,19 +167,6 @@ export default function PartnershipPage() {
         {/* Right Side Panel */}
         <aside className="w-[320px] flex-col flex-shrink-0 hidden lg:flex border-l border-white/5 h-full bg-[#2b2d31]">
           <div className="p-5 space-y-4 flex-1">
-            {/* Contribution Codes Card */}
-            <div className="rounded-xl border border-white/5 bg-card/50 p-5 space-y-4">
-              <h3 className="text-base font-bold text-white leading-tight">
-                Apply For <span className="text-rose-400">Contribution Codes</span>
-              </h3>
-              <p className="text-sm text-white/90 leading-relaxed">
-                Welcome to the Matcherino <span className="text-primary font-semibold">Partnership</span> Program!
-              </p>
-              <p className="text-xs text-muted-foreground leading-relaxed">
-                Submit your application for your upcoming events. Our team will review and get back to you within 3-5 business days.
-              </p>
-            </div>
-
             {/* Activity Feed */}
             <div>
               <h3 className="text-lg font-bold text-white mb-1">Activity</h3>

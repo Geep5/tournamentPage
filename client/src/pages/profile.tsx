@@ -22,6 +22,9 @@ import {
   CreditCard,
   Banknote,
   Zap,
+  Star,
+  Eye,
+  Trash2,
 } from "lucide-react";
 import {
   Select,
@@ -167,183 +170,284 @@ export default function ProfilePage() {
       {/* Main Layout */}
       <div className="flex flex-1 relative min-h-0 overflow-hidden">
 
+        {/* Left Sidebar */}
+        <aside className="w-[280px] flex-col flex-shrink-0 hidden md:flex border-r border-white/5 h-full overflow-y-auto bg-[#2b2d31] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div className="p-4 space-y-6">
+            {/* Avatar */}
+            <div className="flex flex-col items-center">
+              <div className="relative">
+                <Avatar className="w-28 h-28 border-2 border-primary/50">
+                  <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" />
+                  <AvatarFallback className="text-2xl">GM</AvatarFallback>
+                </Avatar>
+                <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-blue-500 border-2 border-[#2b2d31] flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-colors">
+                  <Pencil className="w-3.5 h-3.5 text-white" />
+                </div>
+                <div className="absolute top-0 right-0 w-5 h-5 rounded-full bg-blue-500 border-2 border-[#2b2d31] flex items-center justify-center">
+                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Name + Tag */}
+            <div className="text-center space-y-1">
+              <div className="flex items-center justify-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
+                <h2 className="text-xl font-bold text-white">Grant Matcherino</h2>
+              </div>
+              <p className="text-sm text-white/70">#1004</p>
+              <p className="text-sm text-white/60 mt-2">Co-Founder of Matcherino</p>
+            </div>
+
+            {/* Social Links */}
+            <div className="flex items-center justify-center gap-2">
+              {socialLinks.map((s) => (
+                <a
+                  key={s.name}
+                  href={s.url}
+                  className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
+                  title={s.name}
+                >
+                  <span className="text-xs text-muted-foreground font-bold">{s.name[0]}</span>
+                </a>
+              ))}
+            </div>
+
+            {/* Following / Followers */}
+            <div className="flex items-center justify-center gap-4 text-sm">
+              <span><strong className="text-white">8</strong> <span className="text-muted-foreground">Following</span></span>
+              <span><strong className="text-white">1</strong> <span className="text-muted-foreground">Followers</span></span>
+            </div>
+
+            {/* Navigation */}
+            <div className="space-y-1">
+              {profileNav.map((item) => {
+                const isActive = activeTab === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => setActiveTab(item.id)}
+                    className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-semibold transition-all ${
+                      isActive
+                        ? 'bg-white/10 text-white border-l-4 border-primary'
+                        : 'text-white/60 hover:bg-white/5 hover:text-white border-l-4 border-transparent'
+                    }`}
+                  >
+                    <item.icon className="w-5 h-5 opacity-70" />
+                    {item.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </aside>
+
         {/* Center Content */}
         <main className="flex-1 overflow-y-auto h-full bg-[#313338]/50 scroll-smooth">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-8">
+          <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 space-y-6">
 
-            {/* Profile Header */}
-            <div className="flex flex-col md:flex-row gap-6">
-              {/* Left: Avatar + Info */}
-              <div className="flex flex-col items-center md:items-start gap-4 md:w-[260px] shrink-0">
-                <div className="relative">
-                  <Avatar className="w-28 h-28 border-2 border-primary/50">
-                    <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" />
-                    <AvatarFallback className="text-2xl">GM</AvatarFallback>
-                  </Avatar>
-                  <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-blue-500 border-2 border-[#313338] flex items-center justify-center">
-                    <Pencil className="w-3.5 h-3.5 text-white" />
-                  </div>
-                  <div className="absolute top-0 right-0 w-5 h-5 rounded-full bg-blue-500 border-2 border-[#313338] flex items-center justify-center">
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
-                  </div>
-                </div>
-
-                <div className="text-center md:text-left">
-                  <div className="flex items-center gap-2 justify-center md:justify-start">
-                    <span className="w-2.5 h-2.5 rounded-full bg-green-500" />
-                    <h2 className="text-lg font-bold text-white">Grant Matcherino</h2>
-                  </div>
-                  <p className="text-sm text-muted-foreground">#1004</p>
-                </div>
-
-                {/* Social Links */}
+            {/* Events Section */}
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  {socialLinks.map((s) => (
-                    <a
-                      key={s.name}
-                      href={s.url}
-                      className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
-                      title={s.name}
-                    >
-                      <span className="text-xs text-muted-foreground font-bold">{s.name[0]}</span>
-                    </a>
-                  ))}
+                  <Calendar className="w-5 h-5 text-primary" />
+                  <h3 className="text-xl font-bold text-white">Events</h3>
                 </div>
-
-                {/* Following / Followers */}
-                <div className="flex items-center gap-4 text-sm">
-                  <span><strong className="text-white">8</strong> <span className="text-muted-foreground">Following</span></span>
-                  <span><strong className="text-white">1</strong> <span className="text-muted-foreground">Followers</span></span>
-                </div>
-
-                {/* Profile Nav */}
-                <nav className="w-full space-y-1 pt-2 border-t border-white/5">
-                  {profileNav.map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => setActiveTab(item.id)}
-                      className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                        activeTab === item.id
-                          ? "bg-primary/10 text-primary"
-                          : "text-muted-foreground hover:text-white hover:bg-white/5"
-                      }`}
-                    >
-                      <item.icon className="w-4.5 h-4.5" />
-                      {item.label}
-                    </button>
-                  ))}
-                </nav>
               </div>
 
-              {/* Right: Bio + Content */}
-              <div className="flex-1 min-w-0 space-y-6">
-                {/* Name + Bio */}
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3">
-                    <h1 className="text-2xl md:text-3xl font-bold text-white">Grant Matcherino</h1>
-                    <span className="text-lg text-muted-foreground font-medium">#1004</span>
-                    <button className="p-1.5 rounded-lg bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition-colors">
-                      <Pencil className="w-4 h-4" />
-                    </button>
-                  </div>
-                  <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                    <p className="text-sm text-white/80">Co-Founder of Matcherino</p>
-                  </div>
+              {/* Filters */}
+              <div className="flex flex-wrap items-center gap-3">
+                <Select>
+                  <SelectTrigger className="w-[120px] bg-[#2b2d31] border-white/10 text-sm">
+                    <SelectValue placeholder="Both" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#2b2d31] border-white/10">
+                    <SelectItem value="both">Both</SelectItem>
+                    <SelectItem value="organizer">Organizer</SelectItem>
+                    <SelectItem value="participant">Participant</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Select>
+                  <SelectTrigger className="w-[160px] bg-[#2b2d31] border-white/10 text-sm">
+                    <SelectValue placeholder="Participant Of" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-[#2b2d31] border-white/10">
+                    <SelectItem value="participant">Participant Of</SelectItem>
+                    <SelectItem value="organizer">Organizer Of</SelectItem>
+                  </SelectContent>
+                </Select>
+                <div className="flex-1 min-w-[180px]">
+                  <input
+                    type="text"
+                    placeholder="Event Name..."
+                    className="w-full bg-[#2b2d31] border border-white/10 rounded-lg h-9 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
+                  />
                 </div>
+              </div>
 
-                {/* Events Section */}
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-5 h-5 text-primary" />
-                      <h3 className="text-xl font-bold text-white">Events</h3>
-                    </div>
-                    <Link href="/create">
-                      <Button size="sm" className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold">
-                        Create
-                      </Button>
-                    </Link>
-                  </div>
-
-                  {/* Filters */}
-                  <div className="flex flex-wrap items-center gap-3">
-                    <Select>
-                      <SelectTrigger className="w-[120px] bg-[#2b2d31] border-white/10 text-sm">
-                        <SelectValue placeholder="Both" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#2b2d31] border-white/10">
-                        <SelectItem value="both">Both</SelectItem>
-                        <SelectItem value="organizer">Organizer</SelectItem>
-                        <SelectItem value="participant">Participant</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <Select>
-                      <SelectTrigger className="w-[160px] bg-[#2b2d31] border-white/10 text-sm">
-                        <SelectValue placeholder="Participant Of" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-[#2b2d31] border-white/10">
-                        <SelectItem value="participant">Participant Of</SelectItem>
-                        <SelectItem value="organizer">Organizer Of</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <div className="flex-1 min-w-[180px]">
-                      <input
-                        type="text"
-                        placeholder="Event Name..."
-                        className="w-full bg-[#2b2d31] border border-white/10 rounded-lg h-9 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Events Grid */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {userEvents.map((evt, i) => (
-                      <Link key={i} href="/">
-                        <div className="rounded-xl overflow-hidden border border-white/5 hover:border-white/10 bg-[#2b2d31] transition-all cursor-pointer group">
-                          <div className="relative h-[140px] overflow-hidden">
-                            <img
-                              src={`https://images.unsplash.com/${evt.image}?auto=format&fit=crop&w=600&q=80`}
-                              alt={evt.title}
-                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#2b2d31] via-transparent to-transparent" />
-                            <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                              <Avatar className="w-6 h-6 border border-white/20">
-                                <AvatarImage src={evt.organizerAvatar} />
-                                <AvatarFallback className="text-[10px]">O</AvatarFallback>
-                              </Avatar>
-                              <h4 className="text-sm font-bold text-white drop-shadow-lg line-clamp-1">{evt.title}</h4>
-                            </div>
+              {/* Events Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {userEvents.map((evt, i) => (
+                  <Link key={i} href="/">
+                    <div className="rounded-xl overflow-hidden border border-white/5 hover:border-white/10 bg-[#2b2d31] transition-all cursor-pointer group">
+                      <div className="relative h-[140px] overflow-hidden">
+                        <img
+                          src={`https://images.unsplash.com/${evt.image}?auto=format&fit=crop&w=600&q=80`}
+                          alt={evt.title}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#2b2d31] via-transparent to-transparent" />
+                        <div className="absolute bottom-3 left-3 flex items-center gap-2">
+                          <Avatar className="w-6 h-6 border border-white/20">
+                            <AvatarImage src={evt.organizerAvatar} />
+                            <AvatarFallback className="text-[10px]">O</AvatarFallback>
+                          </Avatar>
+                          <h4 className="text-sm font-bold text-white drop-shadow-lg line-clamp-1">{evt.title}</h4>
+                        </div>
+                      </div>
+                      <div className="p-3 space-y-2">
+                        <div className="grid grid-cols-2 gap-y-1.5 text-xs text-muted-foreground">
+                          <div className="flex items-center gap-1.5">
+                            <Calendar className="w-3 h-3" />
+                            <span className="truncate">{evt.date}</span>
                           </div>
-                          <div className="p-3 space-y-2">
-                            <div className="grid grid-cols-2 gap-y-1.5 text-xs text-muted-foreground">
-                              <div className="flex items-center gap-1.5">
-                                <Calendar className="w-3 h-3" />
-                                <span className="truncate">{evt.date}</span>
-                              </div>
-                              <div className="flex items-center gap-1.5">
-                                <MapPin className="w-3 h-3" />
-                                <span>{evt.location}</span>
-                              </div>
-                              <div className="flex items-center gap-1.5">
-                                <Gamepad2 className="w-3 h-3" />
-                                <span className="truncate">{evt.game}</span>
-                              </div>
-                              <div className="flex items-center gap-1.5">
-                                <Users className="w-3 h-3" />
-                                <span>{evt.participants}</span>
-                              </div>
-                            </div>
-                            <div className="flex items-center justify-center py-1.5 rounded-lg bg-primary/10 text-primary text-sm font-bold">
-                              <Trophy className="w-3.5 h-3.5 mr-1.5" />
-                              {evt.prizePool}
-                            </div>
+                          <div className="flex items-center gap-1.5">
+                            <MapPin className="w-3 h-3" />
+                            <span>{evt.location}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Gamepad2 className="w-3 h-3" />
+                            <span>{evt.game}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Users className="w-3 h-3" />
+                            <span>{evt.participants} joined</span>
                           </div>
                         </div>
-                      </Link>
-                    ))}
+                        <div className="flex items-center justify-center py-1.5 rounded-lg bg-primary/10 text-primary text-sm font-bold">
+                          <Trophy className="w-3.5 h-3.5 mr-1.5" />
+                          {evt.prizePool}
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Connect Accounts Section */}
+            <div className="space-y-6" id="connect">
+              <div className="flex items-center gap-2">
+                <Link2 className="w-5 h-5 text-primary" />
+                <h3 className="text-xl font-bold text-white">Connect Accounts</h3>
+              </div>
+
+              {/* Stream Account URL Link */}
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-base font-semibold text-white">Stream Account URL Link</h4>
+                  <button className="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors">Add</button>
+                </div>
+                <div className="rounded-xl border border-white/5 bg-[#2b2d31] p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
+                      <span className="text-sm font-medium text-white">Twitch</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"><Eye className="w-4 h-4" /></button>
+                      <button className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"><Pencil className="w-4 h-4" /></button>
+                      <button className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                    </div>
                   </div>
                 </div>
+              </div>
+
+              {/* Link Social Accounts */}
+              <div className="space-y-3">
+                <h4 className="text-base font-semibold text-white">Link Social Accounts</h4>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3 flex-wrap">
+                    {[
+                      { name: "Battlenet", connected: false },
+                      { name: "Facebook", connected: false },
+                      { name: "Google", connected: false },
+                      { name: "YouTube", connected: false },
+                      { name: "Twitch", connected: true },
+                      { name: "X", connected: false },
+                      { name: "Discord", connected: false },
+                      { name: "Mixer", connected: false },
+                      { name: "Wasd", connected: false },
+                      { name: "Line", connected: false },
+                      { name: "Wargaming", connected: false },
+                    ].map((platform) => (
+                      <div
+                        key={platform.name}
+                        className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold cursor-pointer transition-all ${
+                          platform.connected
+                            ? "bg-[#9146FF] text-white"
+                            : "bg-white/10 text-muted-foreground hover:bg-white/20 hover:text-white"
+                        }`}
+                        title={platform.name}
+                      >
+                        {platform.name.slice(0, 2)}
+                      </div>
+                    ))}
+                  </div>
+                  <button className="px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors shrink-0 ml-4">Connect</button>
+                </div>
+              </div>
+            </div>
+
+            {/* Settings Section */}
+            <div className="space-y-6" id="settings">
+              <div className="flex items-center gap-2">
+                <Settings className="w-5 h-5 text-primary" />
+                <h3 className="text-xl font-bold text-white">Settings</h3>
+              </div>
+
+              {/* Charity Contribution Receipt Information */}
+              <div className="space-y-3 pb-6 border-b border-white/5">
+                <div className="flex items-center gap-2">
+                  <h4 className="text-base font-semibold text-white">Charity Contribution Receipt Information</h4>
+                  <span className="text-xs text-muted-foreground">This information is only visible to you.</span>
+                </div>
+                <div className="space-y-1.5 max-w-lg">
+                  <label className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">Full Legal Name</label>
+                  <input
+                    type="text"
+                    defaultValue="Grant Farwell"
+                    className="w-full bg-[#2b2d31] border border-white/10 rounded-lg h-10 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Notification Email */}
+              <div className="space-y-3 pb-6 border-b border-white/5">
+                <h4 className="text-base font-semibold text-primary">Notification Email</h4>
+                <div className="max-w-lg">
+                  <input
+                    type="email"
+                    defaultValue="grantgfarwell@gmail.com"
+                    className="w-full bg-[#2b2d31] border border-white/10 rounded-lg h-10 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                  />
+                </div>
+              </div>
+
+              {/* Send email notifications */}
+              <div className="flex items-center justify-between py-4 border-b border-white/5">
+                <span className="text-sm font-semibold text-white">Send email notifications</span>
+                <button className="w-11 h-6 rounded-full bg-green-500 relative transition-colors">
+                  <span className="absolute right-0.5 top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform" />
+                </button>
+              </div>
+
+              {/* Discord Rich Presence */}
+              <div className="flex items-center justify-between py-4 border-b border-white/5">
+                <span className="text-sm font-semibold text-white">Discord Rich Presence Enabled by Default</span>
+                <button className="w-11 h-6 rounded-full bg-green-500 relative transition-colors">
+                  <span className="absolute right-0.5 top-0.5 w-5 h-5 rounded-full bg-white shadow-sm transition-transform" />
+                </button>
               </div>
             </div>
           </div>

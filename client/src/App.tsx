@@ -8,6 +8,7 @@ import TournamentPage from "@/pages/tournament";
 import EventsPage from "@/pages/events";
 import PartnershipPage from "@/pages/partnership";
 import CreatePage from "@/pages/create";
+import ProfilePage from "@/pages/profile";
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/events" component={EventsPage} />
       <Route path="/partnership" component={PartnershipPage} />
       <Route path="/create" component={CreatePage} />
+      <Route path="/profile" component={ProfilePage} />
       <Route component={NotFound} />
     </Switch>
   );

@@ -10,10 +10,8 @@ import {
   Trophy,
   BarChart3,
   MapPin,
-  HeartHandshake,
   ShoppingBag,
   Users,
-  Building2,
   Zap,
   FileText,
   Trash2,
@@ -53,38 +51,18 @@ const createOptions = [
     badge: "Verified",
   },
   {
-    title: "Create a Charity Event",
-    description: "Choose from our partner charities and support them through your choice of prize pool options.",
-    icon: HeartHandshake,
-    color: "text-pink-400",
-    bgColor: "bg-pink-500/10",
-  },
-];
-
-const bottomCards = [
-  {
     title: "Create Merchandise",
     description: "Merchandise can be sold on your tournament's very own marketplace.",
     icon: ShoppingBag,
     color: "text-orange-400",
     bgColor: "bg-orange-500/10",
-    img: "photo-1556306535-0f09a537f0a3",
   },
   {
     title: "Create a Team",
-    description: "Team up with your friends and make it easier to join tournaments together. Keep track of your teams match history.",
+    description: "Team up with your friends and make it easier to join tournaments together. Keep track of your team's match history.",
     icon: Users,
     color: "text-emerald-400",
     bgColor: "bg-emerald-500/10",
-    img: "photo-1542751371-adc38448a05e",
-  },
-  {
-    title: "Create a Community",
-    description: "Behind every organizer is a strong community. We can help you bring it all together. Coming Soon.",
-    icon: Building2,
-    color: "text-violet-400",
-    bgColor: "bg-violet-500/10",
-    img: "photo-1511512578047-dfb367046420",
   },
 ];
 
@@ -154,32 +132,7 @@ export default function CreatePage() {
               <h2 className="text-2xl font-bold text-white">Create</h2>
             </div>
 
-            {/* Hero: Create an Event */}
-            <div className="relative rounded-2xl overflow-hidden border border-white/5">
-              <img
-                src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1200&q=80"
-                alt="Create an Event"
-                className="w-full h-[240px] object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
-              <div className="absolute inset-0 flex items-center px-8">
-                <div className="flex items-start gap-5">
-                  <div className="p-3 rounded-xl bg-amber-500/20 text-amber-400 mt-1">
-                    <Pencil className="w-8 h-8" />
-                  </div>
-                  <div className="space-y-2">
-                    <h2 className="text-2xl md:text-3xl font-bold text-white">Create an Event</h2>
-                    <p className="text-sm md:text-base text-white/70 max-w-lg leading-relaxed">
-                      First time organizers can create a tournament or charity event.
-                      Unlock other create options, contribution codes, and SponsorQuests&trade;
-                      by heading to the Partnership tab and filling out an application!
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Create Options 2x2 Grid */}
+            {/* Create Options Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {createOptions.map((opt) => (
                 <button
@@ -199,34 +152,6 @@ export default function CreatePage() {
                       )}
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">{opt.description}</p>
-                  </div>
-                </button>
-              ))}
-            </div>
-
-            {/* Bottom Cards: Merchandise, Team, Community */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {bottomCards.map((card) => (
-                <button
-                  key={card.title}
-                  className="rounded-xl overflow-hidden border border-white/5 hover:border-white/10 bg-[#2b2d31] transition-all text-left group"
-                >
-                  <div className="relative h-[140px] overflow-hidden">
-                    <img
-                      src={`https://images.unsplash.com/${card.img}?auto=format&fit=crop&w=600&q=80`}
-                      alt={card.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#2b2d31] via-transparent to-transparent" />
-                  </div>
-                  <div className="p-4 space-y-2">
-                    <div className="flex items-center gap-3">
-                      <div className={`p-2 rounded-lg ${card.bgColor} ${card.color}`}>
-                        <card.icon className="w-5 h-5" />
-                      </div>
-                      <h3 className="text-base font-bold text-white group-hover:text-primary transition-colors">{card.title}</h3>
-                    </div>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{card.description}</p>
                   </div>
                 </button>
               ))}

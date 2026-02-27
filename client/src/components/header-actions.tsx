@@ -1,3 +1,4 @@
+import { Link } from "wouter";
 import { useState } from "react";
 import { Heart, Bell, ChevronDown, X, Trophy, Star, Gift, CheckCircle2, Gamepad2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -259,7 +260,7 @@ export function HeaderActions() {
         <DropdownMenuContent align="end" className="w-48 bg-[#2b2d31] border-white/10">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator className="bg-white/5" />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem asChild><Link href="/profile" className="w-full">Profile</Link></DropdownMenuItem>
           <DropdownMenuItem>Settings</DropdownMenuItem>
           <DropdownMenuSeparator className="bg-white/5" />
           <DropdownMenuItem>Log out</DropdownMenuItem>

@@ -33,6 +33,10 @@ const featuredEvents = [
   { name: "Tekken 8 World Tour \u2014 Grand Finals", date: "Sat, Mar 15, 2026", game: "Tekken 8", format: "Double Elimination", participants: 256, prize: "$25,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/header.jpg" },
   { name: "Street Fighter 6 Open Qualifier", date: "Mon, Feb 16, 2026", game: "Street Fighter 6", format: "Single Elim", participants: 75, prize: "$303.48", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1326470/header.jpg" },
   { name: "2v2 Circuit 2026 \u2014 Season Opener", date: "Sat, Jan 6, 2026", game: "Starcraft II", format: "Double Elim", participants: 590, prize: "$62,200", img: "https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg" },
+  { name: "Guilty Gear Strive: Celestial Clash", date: "Fri, Mar 20, 2026", game: "Guilty Gear Strive", format: "Double Elim", participants: 128, prize: "$8,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1384160/header.jpg" },
+  { name: "Fatal Fury: Wolves Invitational", date: "Sun, Apr 5, 2026", game: "Fatal Fury", format: "Single Elim", participants: 64, prize: "$5,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2725020/header.jpg" },
+  { name: "2XKO Pro Series \u2014 Launch Event", date: "Sat, Apr 12, 2026", game: "2XKO", format: "Double Elim", participants: 512, prize: "$15,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2147950/header.jpg" },
+  { name: "KOF XV: Global Championship 2026", date: "Sat, May 3, 2026", game: "King of Fighters XV", format: "Double Elim", participants: 96, prize: "$7,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1498570/header.jpg" },
 ];
 
 const recommendedEvents = [

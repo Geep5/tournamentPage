@@ -211,7 +211,7 @@ export function HeaderActions() {
                         : "bg-white/[0.03] border-white/10"
                     }`}
                   >
-                    <div className="flex items-start gap-3">
+                    <div className="flex items-center gap-3">
                       <div
                         className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                           notif.type === "prize"
@@ -225,13 +225,13 @@ export function HeaderActions() {
                           <CheckCircle2 className="w-4 h-4 text-green-400" />
                         )}
                       </div>
-                      <div className="flex-1 min-w-0 pr-6">
+                      <div className="flex-1 min-w-0">
                         <p className="text-sm font-semibold text-white leading-snug">{notif.message}</p>
                         <p className="text-xs text-muted-foreground mt-1">{notif.time}</p>
                       </div>
                       <button
                         onClick={() => dismissNotification(notif.id)}
-                        className="absolute top-3 right-4 text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+                        className="text-muted-foreground/40 hover:text-muted-foreground transition-colors shrink-0 ml-auto"
                       >
                         <X className="w-4 h-4" />
                       </button>

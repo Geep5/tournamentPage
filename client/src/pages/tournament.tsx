@@ -3262,7 +3262,7 @@ export default function TournamentPage() {
         </main>
 
         {/* Right Sidebar (Stats & Activity) */}
-        <aside className={`w-[320px] border-l border-white/5 hidden xl:flex flex-col flex-shrink-0 h-full transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/30' : bannerIndex === 2 ? 'bg-cyan-950/30' : 'bg-card/30'}`}>
+        <aside className={`w-[320px] border-l border-white/5 hidden xl:flex flex-col flex-shrink-0 h-full overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/30' : bannerIndex === 2 ? 'bg-cyan-950/30' : 'bg-card/30'}`}>
           {rightSidebarContent}
         </aside>
 

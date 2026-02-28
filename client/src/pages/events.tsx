@@ -431,7 +431,7 @@ export default function EventsPage() {
         </main>
 
         {/* Right Sidebar */}
-        <aside className="w-[320px] flex-col flex-shrink-0 hidden lg:flex border-l border-white/5 h-full bg-[#2b2d31]">
+        <aside className="w-[320px] flex-col flex-shrink-0 hidden lg:flex border-l border-white/5 h-full overflow-y-auto bg-[#2b2d31] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {rightSidebarContent}
         </aside>
         <MobileSidebarBar rightSidebar={rightSidebarContent} />

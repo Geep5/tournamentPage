@@ -978,7 +978,10 @@ export default function TournamentPage() {
                           </div>
                         </AccordionTrigger>
                         <AccordionContent className="px-4 pb-4 pt-1 text-muted-foreground text-sm leading-relaxed pl-13">
-                          Initial prize pool target to kick off the tournament and guarantee the base payout structure for all participating teams!
+                          <p>Initial prize pool target to kick off the tournament and guarantee the base payout structure for all participating teams!</p>
+                          <Button className="mt-3 w-full font-bold shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:shadow-[0_0_25px_rgba(250,204,21,0.4)] transition-all bg-yellow-400 hover:bg-yellow-300 text-black">
+                            Contribute to Prize Pool
+                          </Button>
                         </AccordionContent>
                       </AccordionItem>
                       <AccordionItem value="goal-2" className="border-b border-white/10 last:border-0">

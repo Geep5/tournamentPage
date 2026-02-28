@@ -41,6 +41,20 @@ const recommendedEvents = [
   { name: "Fatal Fury: City of Wolves Invitational", date: "Mar 12, 2026", game: "Fatal Fury", format: "Double Elim", participants: 64, prize: "$5,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2725020/header.jpg" },
   { name: "2XKO Launch Tournament", date: "Mar 14, 2026", game: "2XKO", format: "Single Elim", participants: 512, prize: "$10,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2147950/header.jpg" },
   { name: "Skullgirls Encore: Revival Series", date: "Mar 16, 2026", game: "Skullgirls Encore", format: "Double Elim", participants: 48, prize: "$1,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/245170/header.jpg" },
+  { name: "KOF XV: Global Championship", date: "Mar 20, 2026", game: "King of Fighters XV", format: "Double Elim", participants: 96, prize: "$4,800", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1498570/header.jpg" },
+  { name: "Granblue Rising: Spring Clash", date: "Mar 22, 2026", game: "GBVSR", format: "Single Elim", participants: 64, prize: "$2,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2157560/header.jpg" },
+  { name: "UMvC3 Legends Revival", date: "Mar 24, 2026", game: "UMvC3", format: "Double Elim", participants: 32, prize: "$1,800", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/357190/header.jpg" },
+  { name: "Tetris Effect: Connected Cup", date: "Mar 26, 2026", game: "Tetris Effect", format: "Round Robin", participants: 256, prize: "$6,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1003590/header.jpg" },
+  { name: "Tekken 8: Iron Fist Open", date: "Mar 28, 2026", game: "Tekken 8", format: "Double Elim", participants: 512, prize: "$15,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/header.jpg" },
+  { name: "Street Fighter 6: World Warrior", date: "Apr 2, 2026", game: "Street Fighter 6", format: "Double Elim", participants: 256, prize: "$8,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1326470/header.jpg" },
+  { name: "Guilty Gear Strive: Midnight Carnival", date: "Apr 5, 2026", game: "Guilty Gear Strive", format: "Single Elim", participants: 64, prize: "$2,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1384160/header.jpg" },
+  { name: "Fatal Fury: Wolves Unleashed", date: "Apr 8, 2026", game: "Fatal Fury", format: "Double Elim", participants: 128, prize: "$7,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2725020/header.jpg" },
+  { name: "2XKO Pro Circuit: Week 3", date: "Apr 10, 2026", game: "2XKO", format: "Round Robin", participants: 32, prize: "$3,600", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2147950/header.jpg" },
+  { name: "Skullgirls: Parasite Weave Open", date: "Apr 12, 2026", game: "Skullgirls Encore", format: "Double Elim", participants: 48, prize: "$1,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/245170/header.jpg" },
+  { name: "KOF XV: Rising Stars", date: "Apr 15, 2026", game: "King of Fighters XV", format: "Single Elim", participants: 64, prize: "$3,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1498570/header.jpg" },
+  { name: "GBVSR: Skybound Showdown", date: "Apr 18, 2026", game: "GBVSR", format: "Double Elim", participants: 96, prize: "$4,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2157560/header.jpg" },
+  { name: "UMvC3: Infinite Reborn", date: "Apr 20, 2026", game: "UMvC3", format: "Double Elim", participants: 48, prize: "$2,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/357190/header.jpg" },
+  { name: "Tekken 8: King of Iron Fist", date: "Apr 22, 2026", game: "Tekken 8", format: "Double Elim", participants: 1024, prize: "$50,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/header.jpg" },
 ];
 
 const browseGames = [
@@ -76,6 +90,7 @@ export default function EventsPage() {
   const [carouselIdx, setCarouselIdx] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [recommendedCount, setRecommendedCount] = useState(5);
 
   const goToSlide = useCallback((idx: number) => {
     if (isTransitioning) return;
@@ -304,17 +319,22 @@ export default function EventsPage() {
                   </div>
                   <h2 className="text-2xl font-bold text-white">Recommended Events</h2>
                 </div>
-                <button className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1 transition-colors">
-                  Show More <ChevronRight className="w-4 h-4" />
-                </button>
+                {recommendedCount < recommendedEvents.length && (
+                  <button
+                    onClick={() => setRecommendedCount((c) => Math.min(c + 5, recommendedEvents.length))}
+                    className="text-sm text-primary hover:text-primary/80 font-medium flex items-center gap-1 transition-colors"
+                  >
+                    Show More <ChevronRight className="w-4 h-4" />
+                  </button>
+                )}
               </div>
 
-              <div className="flex gap-4 overflow-x-auto pb-2 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                {recommendedEvents.map((ev, i) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {recommendedEvents.slice(0, recommendedCount).map((ev, i) => (
                   <Link
                     href="/"
                     key={i}
-                    className="flex-shrink-0 w-[220px] rounded-2xl bg-card border border-white/5 overflow-hidden hover:border-white/10 transition-colors cursor-pointer group"
+                    className="rounded-xl bg-card border border-white/5 overflow-hidden hover:border-white/10 transition-colors cursor-pointer group"
                   >
                     <div className="aspect-video overflow-hidden">
                       <img
@@ -323,18 +343,10 @@ export default function EventsPage() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
-                    <div className="p-3 space-y-2">
+                    <div className="p-3 space-y-1.5">
                       <h4 className="text-sm font-semibold text-white truncate">{ev.name}</h4>
-                      <p className="text-xs text-muted-foreground">{ev.date}</p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>{ev.game}</span>
-                        <span className="text-white/20">·</span>
-                        <span>{ev.format}</span>
-                      </div>
-                      <div className="flex items-center justify-between pt-1">
-                        <span className="text-xs text-muted-foreground flex items-center gap-1">
-                          <Users className="w-3 h-3" /> {ev.participants}
-                        </span>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] text-muted-foreground">{ev.game}</span>
                         <Badge className="bg-primary/20 text-primary border-none text-[10px] px-1.5 py-0 font-bold">
                           {ev.prize}
                         </Badge>

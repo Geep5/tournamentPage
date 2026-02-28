@@ -142,7 +142,7 @@ export default function EventsPage() {
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#2b2d31]/95 backdrop-blur-md border-b border-white/5">
+      <header className="sticky top-0 z-50 bg-[#1a1a2e]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
           <div className="flex md:hidden">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -175,7 +175,7 @@ export default function EventsPage() {
           <HeaderActions />
         </div>
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-white/5 bg-[#2b2d31] px-4 py-3 space-y-2">
+        <div className="md:hidden border-t border-white/5 bg-[#1a1a2e] px-4 py-3 space-y-2">
           <Link href="/events" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Events</Link>
           <Link href="/partnership" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Partnership</Link>
           <Link href="/create" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Create</Link>
@@ -193,7 +193,7 @@ export default function EventsPage() {
       {/* Main Layout */}
       <div className="flex flex-1 relative h-[calc(100vh-4rem)] min-h-0 overflow-hidden">
         {/* Center Content */}
-        <main className="flex-1 overflow-y-auto h-full bg-[#313338]/50 scroll-smooth pb-12 lg:pb-0">
+        <main className="flex-1 overflow-y-auto h-full bg-[#1f1f3a]/50 scroll-smooth pb-12 lg:pb-0">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-6">
 
             {/* Featured Events */}
@@ -238,7 +238,7 @@ export default function EventsPage() {
                       <Link
                         key={i}
                         href="/"
-                        className="absolute block w-[75%] md:w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#2b2d31]"
+                        className="absolute block w-[75%] md:w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#1a1a2e]"
                         style={{
                           transform,
                           zIndex,
@@ -431,7 +431,7 @@ export default function EventsPage() {
         </main>
 
         {/* Right Sidebar */}
-        <aside className="w-[320px] flex-col flex-shrink-0 hidden lg:flex border-l border-white/5 h-full overflow-y-auto bg-[#2b2d31] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <aside className="w-[320px] flex-col flex-shrink-0 hidden lg:flex border-l border-white/5 h-full overflow-y-auto bg-[#1a1a2e] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {rightSidebarContent}
         </aside>
         <MobileSidebarBar rightSidebar={rightSidebarContent} />

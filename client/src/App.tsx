@@ -9,7 +9,6 @@ import EventsPage from "@/pages/events";
 import PartnershipPage from "@/pages/partnership";
 import CreatePage from "@/pages/create";
 import ProfilePage from "@/pages/profile";
-import MatcherinoTournamentPage from "@/pages/matcherino-tournament";
 
 function Router() {
   return (
@@ -19,7 +18,6 @@ function Router() {
       <Route path="/partnership" component={PartnershipPage} />
       <Route path="/create" component={CreatePage} />
       <Route path="/profile" component={ProfilePage} />
-      <Route path="/matcherino" component={MatcherinoTournamentPage} />
       <Route component={NotFound} />
     </Switch>
   );

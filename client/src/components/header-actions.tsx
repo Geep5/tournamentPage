@@ -259,7 +259,7 @@ export function HeaderActions() {
             <ChevronDown className="h-3 w-3 text-muted-foreground" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48 bg-[#2b2d31] border-white/10">
+        <DropdownMenuContent align="end" className="w-48 bg-[#1a1a2e] border-white/10">
           <DropdownMenuLabel className="text-muted-foreground">Balance: <span className="text-white font-bold">$218.36</span></DropdownMenuLabel>
           <DropdownMenuSeparator className="bg-white/5" />
           <DropdownMenuItem asChild><Link href="/profile" className="w-full">Profile</Link></DropdownMenuItem>

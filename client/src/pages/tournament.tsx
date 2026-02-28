@@ -454,7 +454,7 @@ export default function TournamentPage() {
       } as React.CSSProperties}
     >
       {/* Top Navbar */}
-      <header className="sticky top-0 z-50 bg-[#2b2d31]/95 backdrop-blur-md border-b border-white/5">
+      <header className="sticky top-0 z-50 bg-[#1a1a2e]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
           <div className="flex md:hidden">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -487,7 +487,7 @@ export default function TournamentPage() {
           <HeaderActions />
         </div>
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-white/5 bg-[#2b2d31] px-4 py-3 space-y-2">
+          <div className="md:hidden border-t border-white/5 bg-[#1a1a2e] px-4 py-3 space-y-2">
             <Link href="/events" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Events</Link>
             <Link href="/partnership" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Partnership</Link>
             <Link href="/create" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Create</Link>
@@ -506,7 +506,7 @@ export default function TournamentPage() {
       <div className="flex flex-1 relative h-[calc(100vh-4rem)] min-h-0 overflow-hidden">
         
         {/* Left Sidebar Nav */}
-        <aside className={`w-[280px] flex-col flex-shrink-0 hidden md:flex border-r border-white/5 no-scrollbar h-full overflow-y-auto transition-all duration-500 relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isAdminMode ? 'bg-[#312020]' : 'bg-[#2b2d31]'}`}>
+        <aside className={`w-[280px] flex-col flex-shrink-0 hidden md:flex border-r border-white/5 no-scrollbar h-full overflow-y-auto transition-all duration-500 relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isAdminMode ? 'bg-[#2a1525]' : 'bg-[#1a1a2e]'}`}>
           {isAdminMode && (
              <div 
                className="absolute inset-0 z-0 opacity-[0.08] pointer-events-none"
@@ -526,7 +526,7 @@ export default function TournamentPage() {
               ? 'bg-pink-950/20' 
               : bannerIndex === 2
                 ? 'bg-cyan-950/20'
-                : 'bg-[#313338]/50'
+                : 'bg-[#1f1f3a]/50'
         }`}>
 
           {activeTab === 'bracket' && !isAdminMode ? (

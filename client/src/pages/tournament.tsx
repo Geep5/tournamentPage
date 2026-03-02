@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { HeaderActions } from "@/components/header-actions";
-import { Search, Bell, Trophy, Calendar, Users, Map, Heart, ScrollText, Twitch, MessageSquare, ChevronRight, ChevronDown, ChevronLeft, Menu, BookOpen, Settings, Check, LayoutGrid, ClipboardList, Coins, GitMerge, Radio, Flag, Wallet, Zap, CircleDollarSign, X, Upload, Image, Store, MapPin, Copy, ExternalLink, Paperclip, Tv, Shield, Crown, Clock, ArrowUpDown, Maximize2, ZoomIn, ZoomOut, Eye, Crosshair, Save } from "lucide-react";
+import { Search, Bell, Trophy, Calendar, Users, Map, Heart, ScrollText, Twitch, MessageSquare, ChevronRight, ChevronDown, ChevronLeft, Menu, BookOpen, Settings, Check, LayoutGrid, ClipboardList, Coins, GitMerge, Radio, Flag, Wallet, Zap, CircleDollarSign, X, Upload, Image, Store, MapPin, Copy, ExternalLink, Paperclip, Tv, Shield, Crown, Clock, ArrowUpDown, Maximize2, ZoomIn, ZoomOut, Eye, Crosshair, Save, Gamepad2 } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -204,12 +204,16 @@ export default function TournamentPage() {
                   key={item.id}
                   onClick={() => {
                     setActiveTab(item.id);
-                    if (item.id !== 'bracket') {
+                    if (item.id !== 'bracket' && item.id !== 'stream') {
                       const sectionId = item.id === 'overview' ? 'about'
                                       : item.id === 'contributions' ? 'prize-pool'
                                       : item.id === 'teams' ? 'participants'
+                                      : item.id === 'goals' ? 'stretch-goals'
+                                      : item.id === 'payouts' ? 'prize-payouts'
                                       : item.id;
-                      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+                      setTimeout(() => {
+                        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+                      }, 50);
                     }
                   }}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-md text-sm font-semibold transition-all ${
@@ -235,7 +239,51 @@ export default function TournamentPage() {
       </div>
   );
 
-  const rightSidebarContent = (
+  const streamSidebarContent = (
+    <div className="flex flex-col h-full">
+      <div className="p-5 border-b border-white/5">
+        <h3 className="text-lg font-bold text-white">Stream</h3>
+        <div className="flex items-center gap-2 mt-3">
+          <button className="text-xs font-medium px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-colors">Filter Streams</button>
+          <button className="text-xs font-medium px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-white/70 hover:bg-white/10 transition-colors">Sorted: Organizer</button>
+        </div>
+      </div>
+      <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        {[
+          { name: "ikobs", handle: "@ikobs16", role: "Player", avatar: "ikobs16", hasChat: true },
+          { name: "Zeider", handle: "@zeiderbs", role: "Player", avatar: "zeiderbs", hasChat: true },
+          { name: "dummypotato", handle: "@dummypotato", role: "Organizer", avatar: "dummypotato", hasChat: false },
+          { name: "ProCaster", handle: "@procaster", role: "Caster", avatar: "procaster", hasChat: true },
+          { name: "BrawlFan99", handle: "@brawlfan99", role: "Player", avatar: "brawlfan99", hasChat: true },
+        ].map((s, idx) => (
+          <div key={idx} className="flex items-center gap-3 px-5 py-3.5 border-b border-white/5 hover:bg-white/[0.03] transition-colors">
+            <Avatar className="h-10 w-10 border border-white/10 flex-shrink-0">
+              <AvatarImage src={`https://i.pravatar.cc/150?u=${s.avatar}`} />
+              <AvatarFallback>{s.name.slice(0,2)}</AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-white truncate">{s.name}</span>
+              </div>
+              <span className="text-xs text-muted-foreground">{s.handle}</span>
+              <div className="flex items-center gap-1.5 mt-1">
+                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${ s.role === 'Organizer' ? 'bg-purple-500/20 text-purple-400' : s.role === 'Caster' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400' }`}>{s.role}</span>
+                <Twitch className="w-3.5 h-3.5 text-purple-400/60" />
+                <Gamepad2 className="w-3.5 h-3.5 text-white/30" />
+              </div>
+            </div>
+            {s.hasChat && (
+              <button className="p-2 rounded-lg hover:bg-white/5 text-muted-foreground hover:text-white transition-colors">
+                <MessageSquare className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  const rightSidebarContent = activeTab === 'stream' && !isAdminMode ? streamSidebarContent : (
     <>
       <div className={`flex items-center border-b border-white/5 backdrop-blur-sm sticky top-0 z-10 transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/50' : bannerIndex === 2 ? 'bg-cyan-950/50' : 'bg-background/50'}`}>
         <button 
@@ -529,7 +577,74 @@ export default function TournamentPage() {
                 : 'bg-[#1f1f3a]/50'
         }`}>
 
-          {activeTab === 'bracket' && !isAdminMode ? (
+          {activeTab === 'stream' && !isAdminMode ? (
+            /* Full Stream View */
+            <div className="flex flex-col h-full">
+              {/* Stream Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 shrink-0">
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => {
+                      setActiveTab('overview');
+                    }}
+                    className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400">
+                    <Twitch className="w-5 h-5" />
+                  </div>
+                  <h2 className="text-2xl font-display font-semibold text-white">Stream</h2>
+                  <span className="text-xs font-bold tracking-wider px-2 py-0.5 rounded bg-red-600 text-white flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" /> LIVE
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-muted-foreground">Filter Streams</span>
+                  <select className="bg-white/5 border border-white/10 rounded-md h-8 px-2 text-xs text-white/70 focus:outline-none focus:border-primary/50">
+                    <option>Sorted: Organizer</option>
+                    <option>Sorted: Viewers</option>
+                    <option>Sorted: Recent</option>
+                  </select>
+                </div>
+              </div>
+
+              {/* Stream Embeds */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                {[
+                  { channel: "ZeiderBs", handle: "@zeiderbs", role: "Player", viewers: "2.1k" },
+                  { channel: "Ikobs16", handle: "@ikobs16", role: "Player", viewers: "1.8k" },
+                  { channel: "dummypotato", handle: "@dummypotato", role: "Organizer", viewers: "4.3k" },
+                ].map((stream, idx) => (
+                  <div key={idx} className="rounded-xl overflow-hidden border border-white/5 bg-black/20">
+                    {/* Twitch embed placeholder - 16:9 ratio */}
+                    <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+                      <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 to-black flex items-center justify-center">
+                        <div className="text-center space-y-3">
+                          <div className="w-16 h-16 rounded-full bg-white/10 flex items-center justify-center mx-auto">
+                            <Twitch className="w-8 h-8 text-purple-400" />
+                          </div>
+                          <div>
+                            <p className="text-white font-bold text-lg">{stream.channel}</p>
+                            <p className="text-white/50 text-sm">is offline.</p>
+                          </div>
+                          <p className="text-white/40 text-sm">Learn more about them<br/>on their channel!</p>
+                          <a href={`https://twitch.tv/${stream.channel.toLowerCase()}`} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-purple-400 hover:text-purple-300 text-sm font-medium transition-colors">
+                            <ChevronRight className="w-3 h-3" /> Visit {stream.channel}
+                          </a>
+                        </div>
+                      </div>
+                      {/* Twitch branding */}
+                      <div className="absolute bottom-3 right-3 flex items-center gap-2 text-white/40">
+                        <Settings className="w-4 h-4" />
+                        <Twitch className="w-5 h-5" />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : activeTab === 'bracket' && !isAdminMode ? (
             /* Full Bracket View */
             <div className="flex flex-col h-full">
               {/* Bracket Header */}
@@ -948,7 +1063,7 @@ export default function TournamentPage() {
                 </div>
               </div>
               
-              <div className="bg-card border border-white/5 rounded-2xl p-6 space-y-6">
+              <div id="stretch-goals" className="bg-card border border-white/5 rounded-2xl p-6 space-y-6 scroll-mt-24">
                 <div className="space-y-4">
                   <div className="flex items-center justify-between border-b border-white/5 pb-2">
                     <h3 className="text-lg font-semibold">Stretch Goals</h3>
@@ -1045,7 +1160,7 @@ export default function TournamentPage() {
                   </div>
                 </div>
                 
-                <Accordion type="single" collapsible className="w-full space-y-3">
+                <Accordion type="single" collapsible className="w-full space-y-3" id="prize-payouts">
                   <AccordionItem value="bucket-1" className="bg-card border border-white/5 border-l-4 border-l-yellow-500 rounded-xl overflow-hidden">
                     <AccordionTrigger className="hover:no-underline py-0">
                       <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-500/10 to-transparent w-full transition-all">

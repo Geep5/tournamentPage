@@ -16,7 +16,7 @@ import {
   ChevronRight,
   CircleDollarSign,
 } from "lucide-react";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   Select,
   SelectContent,
@@ -95,20 +95,32 @@ export default function EventsPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [recommendedCount, setRecommendedCount] = useState(5);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  const resetAutoAdvance = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setIsTransitioning((t) => {
+        if (t) return t;
+        setCarouselIdx((prev) => (prev + 1) % featuredEvents.length);
+        setTimeout(() => setIsTransitioning(false), 600);
+        return true;
+      });
+    }, 6000);
+  }, []);
 
   const goToSlide = useCallback((idx: number) => {
     if (isTransitioning) return;
     setIsTransitioning(true);
     setCarouselIdx(idx);
     setTimeout(() => setIsTransitioning(false), 600);
-  }, [isTransitioning]);
+    resetAutoAdvance();
+  }, [isTransitioning, resetAutoAdvance]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCarouselIdx((prev) => (prev + 1) % featuredEvents.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, []);
+    resetAutoAdvance();
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [resetAutoAdvance]);
   const rightSidebarContent = (
     <div className="p-5 space-y-4 flex-1">
       <div>

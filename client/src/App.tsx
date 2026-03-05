@@ -9,6 +9,7 @@ import EventsPage from "@/pages/events";
 import PartnershipPage from "@/pages/partnership";
 import CreatePage from "@/pages/create";
 import ProfilePage from "@/pages/profile";
+import { DiscordSupportBubble } from "@/components/discord-support-bubble";
 
 function Router() {
   return (
@@ -29,6 +30,7 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Router />
+        <DiscordSupportBubble />
       </TooltipProvider>
     </QueryClientProvider>
   );

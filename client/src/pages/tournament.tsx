@@ -288,7 +288,7 @@ export default function TournamentPage() {
       <div className={`flex items-center border-b border-white/5 backdrop-blur-sm sticky top-0 z-10 transition-colors duration-500 ${bannerIndex === 1 ? 'bg-pink-950/50' : bannerIndex === 2 ? 'bg-cyan-950/50' : 'bg-background/50'}`}>
         <button 
           onClick={() => setRightTab("prize-pool")}
-          className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "prize-pool" ? "border-red-500 text-red-500 bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+          className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "prize-pool" ? "border-yellow-500 text-yellow-500 bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
         >
           <CircleDollarSign className="w-5 h-5" />
         </button>
@@ -311,25 +311,25 @@ export default function TournamentPage() {
         {/* Prize Pool Summary Card */}
         {rightTab === "prize-pool" && (
         <div className="space-y-6">
-          <div className="p-5 rounded-2xl bg-gradient-to-br from-red-500/10 to-red-900/5 border border-red-500/20 shadow-lg relative overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300">
-          <div className="absolute top-0 right-0 w-32 h-32 bg-red-500/10 rounded-full blur-3xl" />
+          <div className="p-5 rounded-2xl bg-gradient-to-br from-yellow-500/10 to-orange-500/5 border border-yellow-500/20 shadow-lg relative overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl" />
           <div className="flex items-center justify-between mb-2 relative z-10">
-            <h3 className="font-display font-semibold text-lg text-red-500 flex items-center gap-2">
+            <h3 className="font-display font-semibold text-lg text-yellow-500 flex items-center gap-2">
               <Trophy className="w-5 h-5" /> Prize Pool
             </h3>
           </div>
           <div className="space-y-4 relative z-10">
             <div>
               <div className="text-3xl font-display font-bold text-white">$4,250.00</div>
-              <div className="text-sm text-red-500/80 mt-1 flex justify-between">
+              <div className="text-sm text-yellow-500/80 mt-1 flex justify-between">
                 <span>85% Funded</span>
                 <span>$5,000</span>
               </div>
             </div>
-            <Progress value={85} className="h-2 bg-black/40" indicatorClassName="bg-gradient-to-r from-red-500 to-red-400" />
+            <Progress value={85} className="h-2 bg-black/40" indicatorClassName="bg-gradient-to-r from-yellow-500 to-yellow-400" />
             <Dialog>
               <DialogTrigger asChild>
-                <Button className="w-full font-bold shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:shadow-[0_0_25px_rgba(220,38,38,0.4)] transition-all bg-red-400 hover:bg-red-400 text-white">
+                <Button className="w-full font-bold shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:shadow-[0_0_25px_rgba(250,204,21,0.4)] transition-all bg-yellow-400 hover:bg-yellow-300 text-black">
                   Contribute to Prize Pool
                 </Button>
               </DialogTrigger>
@@ -346,38 +346,38 @@ export default function TournamentPage() {
                 </DialogHeader>
                 
                 <div className="space-y-4 mt-6">
-                  <div className="flex bg-card/50 border border-white/10 rounded-xl p-4 gap-4 hover:border-red-500/50 transition-colors cursor-pointer relative overflow-hidden">
+                  <div className="flex bg-card/50 border border-white/10 rounded-xl p-4 gap-4 hover:border-yellow-500/50 transition-colors cursor-pointer relative overflow-hidden">
                     <div className="w-16 h-16 bg-black/30 rounded-lg flex items-center justify-center flex-shrink-0 relative">
                        <div className="absolute -top-2 -right-2 text-2xl">🔥</div>
                        <img src="https://images.unsplash.com/photo-1614680376593-902f74cf0d41?auto=format&fit=crop&w=64&h=64&q=80" alt="Pin" className="w-12 h-12 rounded object-cover" />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-foreground">Spike Contributor's Pin</h4>
-                      <div className="text-2xl font-bold text-red-500 my-1">$5.00</div>
+                      <div className="text-2xl font-bold text-yellow-500 my-1">$5.00</div>
                       <div className="text-xs text-muted-foreground space-y-1">
-                        <div className="flex items-center gap-1"><Trophy className="w-3 h-3 text-red-500"/> $3.75 Prize Pool</div>
+                        <div className="flex items-center gap-1"><Trophy className="w-3 h-3 text-yellow-500"/> $3.75 Prize Pool</div>
                         <div className="flex items-center gap-1"><Users className="w-3 h-3 text-blue-400"/> $0.50 LOKI</div>
-                        <div className="flex items-center gap-1"><Heart className="w-3 h-3 text-red-400"/> $0.75 Matcherino</div>
+                        <div className="flex items-center gap-1"><Heart className="w-3 h-3 text-yellow-400"/> $0.75 Matcherino</div>
                       </div>
                     </div>
-                    <Button className="absolute right-4 top-1/2 -translate-y-1/2 bg-red-500 hover:bg-red-400 text-white">Select</Button>
+                    <Button className="absolute right-4 top-1/2 -translate-y-1/2 bg-yellow-400 hover:bg-yellow-300 text-black">Select</Button>
                   </div>
 
-                  <div className="flex bg-card/50 border border-white/10 rounded-xl p-4 gap-4 hover:border-red-500/50 transition-colors cursor-pointer relative overflow-hidden">
+                  <div className="flex bg-card/50 border border-white/10 rounded-xl p-4 gap-4 hover:border-yellow-500/50 transition-colors cursor-pointer relative overflow-hidden">
                     <div className="w-16 h-16 bg-black/30 rounded-lg flex items-center justify-center flex-shrink-0 relative">
                        <div className="absolute -top-2 -right-2 text-2xl">✨</div>
                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=64&h=64&q=80" alt="Pin" className="w-12 h-12 rounded object-cover" />
                     </div>
                     <div className="flex-1">
                       <h4 className="font-semibold text-foreground">Mandy Contributor's Pin</h4>
-                      <div className="text-2xl font-bold text-red-500 my-1">$2.50</div>
+                      <div className="text-2xl font-bold text-yellow-500 my-1">$2.50</div>
                       <div className="text-xs text-muted-foreground space-y-1">
-                        <div className="flex items-center gap-1"><Trophy className="w-3 h-3 text-red-500"/> $1.87 Prize Pool</div>
+                        <div className="flex items-center gap-1"><Trophy className="w-3 h-3 text-yellow-500"/> $1.87 Prize Pool</div>
                         <div className="flex items-center gap-1"><Users className="w-3 h-3 text-blue-400"/> $0.25 LOKI</div>
-                        <div className="flex items-center gap-1"><Heart className="w-3 h-3 text-red-400"/> $0.38 Matcherino</div>
+                        <div className="flex items-center gap-1"><Heart className="w-3 h-3 text-yellow-400"/> $0.38 Matcherino</div>
                       </div>
                     </div>
-                    <Button className="absolute right-4 top-1/2 -translate-y-1/2 bg-red-500 hover:bg-red-400 text-white">Select</Button>
+                    <Button className="absolute right-4 top-1/2 -translate-y-1/2 bg-yellow-400 hover:bg-yellow-300 text-black">Select</Button>
                   </div>
                 </div>
 
@@ -393,8 +393,8 @@ export default function TournamentPage() {
           {/* Contributor Pin */}
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-500/80 flex items-center justify-center bg-red-500/10">
-                <Check className="w-3 h-3 text-red-500" strokeWidth={3} />
+              <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-yellow-500/80 flex items-center justify-center bg-yellow-500/10">
+                <Check className="w-3 h-3 text-yellow-500" strokeWidth={3} />
               </div>
               <div>
                 <h4 className="font-display font-semibold text-lg text-white tracking-wide">Contributor Pin</h4>
@@ -412,8 +412,8 @@ export default function TournamentPage() {
           {/* Winner Pin */}
           <div className="space-y-3">
             <div className="flex items-start gap-3">
-              <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-red-500/80 flex items-center justify-center bg-red-500/10">
-                <Check className="w-3 h-3 text-red-500" strokeWidth={3} />
+              <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-yellow-500/80 flex items-center justify-center bg-yellow-500/10">
+                <Check className="w-3 h-3 text-yellow-500" strokeWidth={3} />
               </div>
               <div>
                 <h4 className="font-display font-semibold text-lg text-white tracking-wide">Winner Pin</h4>
@@ -470,7 +470,7 @@ export default function TournamentPage() {
         {rightTab === "activity" && (
         <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
            <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-            <Zap className="w-4 h-4 text-red-500" />
+            <Zap className="w-4 h-4 text-yellow-500" />
             Recent Activity
           </div>
           <div className="space-y-4 border-l-2 border-white/5 pl-4 ml-2">
@@ -497,12 +497,12 @@ export default function TournamentPage() {
     <div 
       className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 transition-colors duration-500 overflow-hidden"
       style={{
-        '--primary': bannerIndex === 1 ? '330 81% 60%' : bannerIndex === 2 ? '190 90% 50%' : '0 72% 55%',
-        '--ring': bannerIndex === 1 ? '330 81% 60%' : bannerIndex === 2 ? '190 90% 50%' : '0 72% 55%'
+        '--primary': bannerIndex === 1 ? '330 81% 60%' : bannerIndex === 2 ? '190 90% 50%' : '217 91% 60%',
+        '--ring': bannerIndex === 1 ? '330 81% 60%' : bannerIndex === 2 ? '190 90% 50%' : '217 91% 60%'
       } as React.CSSProperties}
     >
       {/* Top Navbar */}
-      <header className="sticky top-0 z-50 bg-[#131620]/95 backdrop-blur-md border-b border-white/5">
+      <header className="sticky top-0 z-50 bg-[#1e2a3d]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
           <div className="flex md:hidden">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -535,7 +535,7 @@ export default function TournamentPage() {
           <HeaderActions />
         </div>
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-white/5 bg-[#131620] px-4 py-3 space-y-2">
+          <div className="md:hidden border-t border-white/5 bg-[#1e2a3d] px-4 py-3 space-y-2">
             <Link href="/events" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Events</Link>
             <Link href="/partnership" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Partnership</Link>
             <Link href="/create" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Create</Link>
@@ -554,7 +554,7 @@ export default function TournamentPage() {
       <div className="flex flex-1 relative h-[calc(100vh-4rem)] min-h-0 overflow-hidden">
         
         {/* Left Sidebar Nav */}
-        <aside className={`w-[280px] flex-col flex-shrink-0 hidden md:flex border-r border-white/5 no-scrollbar h-full overflow-y-auto transition-all duration-500 relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isAdminMode ? 'bg-[#1a1220]' : 'bg-[#131620]'}`}>
+        <aside className={`w-[280px] flex-col flex-shrink-0 hidden md:flex border-r border-white/5 no-scrollbar h-full overflow-y-auto transition-all duration-500 relative [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] ${isAdminMode ? 'bg-[#1c2230]' : 'bg-[#1e2a3d]'}`}>
           {isAdminMode && (
              <div 
                className="absolute inset-0 z-0 opacity-[0.08] pointer-events-none"
@@ -574,7 +574,7 @@ export default function TournamentPage() {
               ? 'bg-pink-950/20' 
               : bannerIndex === 2
                 ? 'bg-cyan-950/20'
-                : 'bg-[#171b27]/50'
+                : 'bg-[#172130]/50'
         }`}>
 
           {activeTab === 'stream' && !isAdminMode ? (
@@ -949,7 +949,7 @@ export default function TournamentPage() {
                     </div>
                     <div className="flex items-center gap-4 w-full sm:w-auto">
                       <span className="text-sm text-muted-foreground hidden sm:block">Registration closes in 4 days</span>
-                      <Button size="lg" className="w-full sm:w-auto font-bold shadow-[0_0_20px_rgba(220,38,38,0.2)] hover:shadow-[0_0_30px_rgba(220,38,38,0.4)] transition-all bg-red-400 hover:bg-red-400 text-white">
+                      <Button size="lg" className="w-full sm:w-auto font-bold shadow-[0_0_20px_rgba(250,204,21,0.2)] hover:shadow-[0_0_30px_rgba(250,204,21,0.4)] transition-all bg-yellow-400 hover:bg-yellow-300 text-black">
                         Join Tournament
                       </Button>
                     </div>
@@ -987,7 +987,7 @@ export default function TournamentPage() {
                 {/* Rules Section */}
                 <section id="rules" className="space-y-6 scroll-mt-24">
                   <div className="flex items-center gap-3 border-b border-white/5 pb-4">
-                    <div className="p-2 rounded-lg bg-red-500/10 text-red-500">
+                    <div className="p-2 rounded-lg bg-yellow-500/10 text-yellow-500">
                       <BookOpen className="w-5 h-5" />
                     </div>
                     <h2 className="text-2xl font-display font-semibold">Rules & Information</h2>
@@ -1052,13 +1052,13 @@ export default function TournamentPage() {
             <section id="prize-pool" className="space-y-6 scroll-mt-24">
               <div className="flex items-center justify-between border-b border-white/5 pb-4">
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-red-500/10 text-red-500">
+                  <div className="p-2 rounded-lg bg-yellow-500/10 text-yellow-500">
                     <Trophy className="w-5 h-5" />
                   </div>
                   <h2 className="text-2xl font-display font-semibold">Prize Pool</h2>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-display font-bold text-red-500">$4,250.00</div>
+                  <div className="text-3xl font-display font-bold text-yellow-500">$4,250.00</div>
                   <div className="text-sm text-muted-foreground">Current Total</div>
                 </div>
               </div>
@@ -1094,7 +1094,7 @@ export default function TournamentPage() {
                         </AccordionTrigger>
                         <AccordionContent className="px-4 pb-4 pt-1 text-muted-foreground text-sm leading-relaxed pl-13">
                           <p>Initial prize pool target to kick off the tournament and guarantee the base payout structure for all participating teams!</p>
-                          <Button className="mt-3 w-full font-bold shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:shadow-[0_0_25px_rgba(220,38,38,0.4)] transition-all bg-red-400 hover:bg-red-400 text-white">
+                          <Button className="mt-3 w-full font-bold shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:shadow-[0_0_25px_rgba(250,204,21,0.4)] transition-all bg-yellow-400 hover:bg-yellow-300 text-black">
                             Contribute to Prize Pool
                           </Button>
                         </AccordionContent>
@@ -1161,12 +1161,12 @@ export default function TournamentPage() {
                 </div>
                 
                 <Accordion type="single" collapsible className="w-full space-y-3" id="prize-payouts">
-                  <AccordionItem value="bucket-1" className="bg-card border border-white/5 border-l-4 border-l-red-500 rounded-xl overflow-hidden">
+                  <AccordionItem value="bucket-1" className="bg-card border border-white/5 border-l-4 border-l-yellow-500 rounded-xl overflow-hidden">
                     <AccordionTrigger className="hover:no-underline py-0">
-                      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-red-500/10 to-transparent w-full transition-all">
+                      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-500/10 to-transparent w-full transition-all">
                         <div className="flex items-center gap-4">
-                          <div className="w-10 h-10 rounded-full bg-red-500/20 flex items-center justify-center">
-                            <Trophy className="w-5 h-5 text-red-500" />
+                          <div className="w-10 h-10 rounded-full bg-yellow-500/20 flex items-center justify-center">
+                            <Trophy className="w-5 h-5 text-yellow-500" />
                           </div>
                           <div className="text-left">
                             <h4 className="font-semibold text-foreground text-lg">Bucket 1</h4>
@@ -1174,8 +1174,8 @@ export default function TournamentPage() {
                           </div>
                         </div>
                         <div className="text-right mr-4">
-                          <div className="text-2xl font-bold text-red-500">$2,500</div>
-                          <div className="text-xs text-red-500/80 uppercase tracking-wider font-normal">Payout</div>
+                          <div className="text-2xl font-bold text-yellow-500">$2,500</div>
+                          <div className="text-xs text-yellow-500/80 uppercase tracking-wider font-normal">Payout</div>
                         </div>
                       </div>
                     </AccordionTrigger>
@@ -1197,7 +1197,7 @@ export default function TournamentPage() {
                                     <div className="text-sm font-medium text-foreground">ProPlayer_{i}</div>
                                   </div>
                                 </div>
-                                <span className="font-semibold text-red-500">$833.33</span>
+                                <span className="font-semibold text-yellow-500">$833.33</span>
                               </div>
                             ))}
                           </div>
@@ -1345,22 +1345,22 @@ export default function TournamentPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <Crown className="w-5 h-5 text-red-500" />
+                    <Crown className="w-5 h-5 text-yellow-500" />
                     Top Donors
                   </h3>
                   <span className="text-sm text-muted-foreground">42 total contributors</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {/* 1st */}
-                  <div className="relative p-4 rounded-xl bg-gradient-to-br from-red-500/15 to-red-600/5 border border-red-500/30 flex flex-col items-center gap-3 text-center">
-                    <div className="absolute top-2 right-2 text-red-500 font-bold text-xs bg-red-500/15 px-2 py-0.5 rounded-full">#1</div>
-                    <Avatar className="h-14 w-14 border-2 border-red-500/60 shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+                  <div className="relative p-4 rounded-xl bg-gradient-to-br from-yellow-500/15 to-yellow-600/5 border border-yellow-500/30 flex flex-col items-center gap-3 text-center">
+                    <div className="absolute top-2 right-2 text-yellow-500 font-bold text-xs bg-yellow-500/15 px-2 py-0.5 rounded-full">#1</div>
+                    <Avatar className="h-14 w-14 border-2 border-yellow-500/60 shadow-[0_0_15px_rgba(250,204,21,0.2)]">
                       <AvatarImage src="https://i.pravatar.cc/150?u=topdonor1" />
                       <AvatarFallback>JM</AvatarFallback>
                     </Avatar>
                     <div>
                       <p className="font-semibold text-foreground">JackMaster</p>
-                      <p className="text-xl font-bold text-red-500 mt-1">$850.00</p>
+                      <p className="text-xl font-bold text-yellow-500 mt-1">$850.00</p>
                       <p className="text-[10px] text-muted-foreground mt-0.5">2h ago</p>
                     </div>
                   </div>
@@ -1397,7 +1397,7 @@ export default function TournamentPage() {
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-lg font-semibold flex items-center gap-2">
-                    <Heart className="w-5 h-5 text-red-400" />
+                    <Heart className="w-5 h-5 text-yellow-400" />
                     All Contributions
                   </h3>
                   <div className="flex items-center gap-1 bg-white/5 border border-white/10 rounded-lg p-0.5">
@@ -1463,7 +1463,7 @@ export default function TournamentPage() {
                               <p className="text-[10px] text-muted-foreground">{donor.time}</p>
                             </div>
                           </div>
-                          <span className={`font-semibold text-sm ${ idx === 0 ? "text-red-500" : idx === 1 ? "text-zinc-300" : idx === 2 ? "text-orange-500" : "text-foreground" }`}>
+                          <span className={`font-semibold text-sm ${ idx === 0 ? "text-yellow-500" : idx === 1 ? "text-zinc-300" : idx === 2 ? "text-orange-500" : "text-foreground" }`}>
                             ${donor.amount.toFixed(2)}
                           </span>
                         </div>
@@ -1732,7 +1732,7 @@ export default function TournamentPage() {
                     key={i} 
                     className={`flex flex-col p-4 rounded-xl bg-card border transition-all duration-200 group cursor-pointer ${
                       isExpanded 
-                        ? 'border-primary/50 shadow-[0_0_15px_rgba(220,38,38,0.1)]' 
+                        ? 'border-primary/50 shadow-[0_0_15px_rgba(250,204,21,0.1)]' 
                         : 'border-white/5 hover:border-white/10'
                     }`}
                     onClick={() => {
@@ -2912,11 +2912,11 @@ export default function TournamentPage() {
                         <AccordionTrigger className="hover:no-underline py-4">
                           <div className="flex items-center justify-between w-full pr-4">
                             <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 rounded-full bg-red-500/20 text-red-500 flex items-center justify-center font-bold">1st</div>
+                              <div className="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-500 flex items-center justify-center font-bold">1st</div>
                               <span className="font-semibold text-lg">First Place (60%)</span>
                             </div>
                             <div className="text-right flex flex-col items-end">
-                              <div className="font-bold text-red-500 text-lg">$3,000.00</div>
+                              <div className="font-bold text-yellow-500 text-lg">$3,000.00</div>
                               <div className="text-xs text-muted-foreground bg-black/20 px-2 py-0.5 rounded mt-1">3 players assigned</div>
                             </div>
                           </div>
@@ -2954,7 +2954,7 @@ export default function TournamentPage() {
                                       </div>
                                     </div>
                                     <div className="flex items-center gap-4">
-                                      <span className="font-semibold text-red-500">$1,000.00</span>
+                                      <span className="font-semibold text-yellow-500">$1,000.00</span>
                                       <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-red-400 hover:bg-red-400/10 opacity-0 group-hover:opacity-100 transition-all" title="Remove Player">
                                         <X className="w-4 h-4" />
                                       </Button>
@@ -3390,10 +3390,10 @@ export default function TournamentPage() {
         rightSidebar={rightSidebarContent}
         centerActions={
           <>
-            <button className="h-8 px-4 rounded-md bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:shadow-[0_0_25px_rgba(220,38,38,0.4)] transition-all">
+            <button className="h-8 px-4 rounded-md bg-yellow-500 hover:bg-yellow-400 text-black text-xs font-bold shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:shadow-[0_0_25px_rgba(250,204,21,0.4)] transition-all">
               Join
             </button>
-            <button className="h-8 px-4 rounded-md bg-red-400 hover:bg-red-400 text-white text-xs font-bold shadow-[0_0_15px_rgba(220,38,38,0.2)] hover:shadow-[0_0_25px_rgba(220,38,38,0.4)] transition-all">
+            <button className="h-8 px-4 rounded-md bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-bold shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:shadow-[0_0_25px_rgba(250,204,21,0.4)] transition-all">
               Contribute
             </button>
           </>

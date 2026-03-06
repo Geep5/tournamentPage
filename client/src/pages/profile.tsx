@@ -141,10 +141,10 @@ export default function ProfilePage() {
             <AvatarImage src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200" />
             <AvatarFallback className="text-2xl">GM</AvatarFallback>
           </Avatar>
-          <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-blue-500 border-2 border-[#131620] flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-colors">
+          <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-blue-500 border-2 border-[#1e2a3d] flex items-center justify-center cursor-pointer hover:bg-blue-600 transition-colors">
             <Pencil className="w-3.5 h-3.5 text-white" />
           </div>
-          <div className="absolute top-0 right-0 w-5 h-5 rounded-full bg-blue-500 border-2 border-[#131620] flex items-center justify-center">
+          <div className="absolute top-0 right-0 w-5 h-5 rounded-full bg-blue-500 border-2 border-[#1e2a3d] flex items-center justify-center">
             <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" /></svg>
           </div>
         </div>
@@ -331,7 +331,7 @@ export default function ProfilePage() {
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#131620]/95 backdrop-blur-md border-b border-white/5">
+      <header className="sticky top-0 z-50 bg-[#1e2a3d]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
           <div className="flex md:hidden">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
@@ -369,12 +369,12 @@ export default function ProfilePage() {
       <div className="flex flex-1 relative min-h-0 overflow-hidden">
 
         {/* Left Sidebar */}
-        <aside className="w-[280px] flex-col flex-shrink-0 hidden md:flex border-r border-white/5 h-full overflow-y-auto bg-[#131620] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <aside className="w-[280px] flex-col flex-shrink-0 hidden md:flex border-r border-white/5 h-full overflow-y-auto bg-[#1e2a3d] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {leftSidebarContent}
         </aside>
 
         {/* Center Content */}
-        <main className="flex-1 overflow-y-auto h-full bg-[#171b27]/50 scroll-smooth pb-12 md:pb-0">
+        <main className="flex-1 overflow-y-auto h-full bg-[#172130]/50 scroll-smooth pb-12 md:pb-0">
           <div className="max-w-5xl mx-auto px-4 md:px-8 py-6 space-y-6">
 
             {/* Events Section */}
@@ -389,20 +389,20 @@ export default function ProfilePage() {
               {/* Filters */}
               <div className="flex flex-wrap items-center gap-3">
                 <Select>
-                  <SelectTrigger className="w-[120px] bg-[#131620] border-white/10 text-sm">
+                  <SelectTrigger className="w-[120px] bg-[#1e2a3d] border-white/10 text-sm">
                     <SelectValue placeholder="Both" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#131620] border-white/10">
+                  <SelectContent className="bg-[#1e2a3d] border-white/10">
                     <SelectItem value="both">Both</SelectItem>
                     <SelectItem value="organizer">Organizer</SelectItem>
                     <SelectItem value="participant">Participant</SelectItem>
                   </SelectContent>
                 </Select>
                 <Select>
-                  <SelectTrigger className="w-[160px] bg-[#131620] border-white/10 text-sm">
+                  <SelectTrigger className="w-[160px] bg-[#1e2a3d] border-white/10 text-sm">
                     <SelectValue placeholder="Participant Of" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#131620] border-white/10">
+                  <SelectContent className="bg-[#1e2a3d] border-white/10">
                     <SelectItem value="participant">Participant Of</SelectItem>
                     <SelectItem value="organizer">Organizer Of</SelectItem>
                   </SelectContent>
@@ -411,7 +411,7 @@ export default function ProfilePage() {
                   <input
                     type="text"
                     placeholder="Event Name..."
-                    className="w-full bg-[#131620] border border-white/10 rounded-lg h-9 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
+                    className="w-full bg-[#1e2a3d] border border-white/10 rounded-lg h-9 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
                   />
                 </div>
               </div>
@@ -420,14 +420,14 @@ export default function ProfilePage() {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {userEvents.map((evt, i) => (
                   <Link key={i} href="/">
-                    <div className="rounded-xl overflow-hidden border border-white/5 hover:border-white/10 bg-[#131620] transition-all cursor-pointer group">
+                    <div className="rounded-xl overflow-hidden border border-white/5 hover:border-white/10 bg-[#1e2a3d] transition-all cursor-pointer group">
                       <div className="relative h-[140px] overflow-hidden">
                         <img
                           src={`https://images.unsplash.com/${evt.image}?auto=format&fit=crop&w=600&q=80`}
                           alt={evt.title}
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#131620] via-transparent to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#1e2a3d] via-transparent to-transparent" />
                         <div className="absolute bottom-3 left-3 flex items-center gap-2">
                           <Avatar className="w-6 h-6 border border-white/20">
                             <AvatarImage src={evt.organizerAvatar} />
@@ -479,7 +479,7 @@ export default function ProfilePage() {
                   <h4 className="text-base font-semibold text-white">Stream Account URL Link</h4>
                   <button className="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors">Add</button>
                 </div>
-                <div className="rounded-xl border border-white/5 bg-[#131620] p-4">
+                <div className="rounded-xl border border-white/5 bg-[#1e2a3d] p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
@@ -548,7 +548,7 @@ export default function ProfilePage() {
                   <input
                     type="text"
                     defaultValue="Grant Farwell"
-                    className="w-full bg-[#131620] border border-white/10 rounded-lg h-10 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                    className="w-full bg-[#1e2a3d] border border-white/10 rounded-lg h-10 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                   />
                 </div>
               </div>
@@ -560,7 +560,7 @@ export default function ProfilePage() {
                   <input
                     type="email"
                     defaultValue="grantgfarwell@gmail.com"
-                    className="w-full bg-[#131620] border border-white/10 rounded-lg h-10 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
+                    className="w-full bg-[#1e2a3d] border border-white/10 rounded-lg h-10 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all"
                   />
                 </div>
               </div>
@@ -585,7 +585,7 @@ export default function ProfilePage() {
         </main>
 
         {/* Right Sidebar: Wallet + Activity */}
-        <aside className="w-[320px] flex-col flex-shrink-0 hidden xl:flex border-l border-white/5 h-full overflow-y-auto bg-[#131620] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <aside className="w-[320px] flex-col flex-shrink-0 hidden xl:flex border-l border-white/5 h-full overflow-y-auto bg-[#1e2a3d] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {rightSidebarContent}
         </aside>
       </div>

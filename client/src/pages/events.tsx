@@ -77,11 +77,11 @@ const browseGames = [
 const activityItems = [
   { user: "xBladeRunner", avatar: "blade1", amount: "$25.00", color: "text-green-400", event: "Tekken 8 World Tour Finals", time: "2 min ago" },
   { user: "StarLord_SC", avatar: "star2", amount: "$10.00", color: "text-blue-400", event: "Korean Starcraft League: Week 86", time: "5 min ago" },
-  { user: "GuiltyGearFan", avatar: "gg3", amount: "$50.00", color: "text-red-400", event: "Guilty Gear Strive Showdown", time: "8 min ago" },
+  { user: "GuiltyGearFan", avatar: "gg3", amount: "$50.00", color: "text-yellow-400", event: "Guilty Gear Strive Showdown", time: "8 min ago" },
   { user: "FGC_Veteran", avatar: "fgc4", amount: "$5.00", color: "text-green-400", event: "Fatal Fury City of Wolves Open", time: "12 min ago" },
   { user: "ComboBreaker", avatar: "combo5", amount: "$100.00", color: "text-purple-400", event: "2XKO Beta Bash", time: "15 min ago" },
   { user: "PixelPerfect", avatar: "pixel6", amount: "$15.00", color: "text-blue-400", event: "Granblue Fantasy Rising Cup", time: "20 min ago" },
-  { user: "TetrisGod99", avatar: "tet7", amount: "$30.00", color: "text-red-400", event: "Tetris Championship Series", time: "28 min ago" },
+  { user: "TetrisGod99", avatar: "tet7", amount: "$30.00", color: "text-yellow-400", event: "Tetris Championship Series", time: "28 min ago" },
   { user: "RisingStar_", avatar: "rise8", amount: "$20.00", color: "text-green-400", event: "King of Fighters XV Regionals", time: "35 min ago" },
   { user: "SkullHeart", avatar: "skull9", amount: "$8.00", color: "text-pink-400", event: "Skullgirls Encore Revival", time: "42 min ago" },
   { user: "MvC_Legend", avatar: "mvc10", amount: "$75.00", color: "text-purple-400", event: "Ultimate Marvel vs Capcom 3 Throwback", time: "1 hr ago" },
@@ -158,7 +158,7 @@ export default function EventsPage() {
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#131620]/95 backdrop-blur-md border-b border-white/5">
+      <header className="sticky top-0 z-50 bg-[#1e2a3d]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
           <div className="flex md:hidden">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -191,7 +191,7 @@ export default function EventsPage() {
           <HeaderActions />
         </div>
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-white/5 bg-[#131620] px-4 py-3 space-y-2">
+        <div className="md:hidden border-t border-white/5 bg-[#1e2a3d] px-4 py-3 space-y-2">
           <Link href="/events" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Events</Link>
           <Link href="/partnership" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Partnership</Link>
           <Link href="/create" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Create</Link>
@@ -209,7 +209,7 @@ export default function EventsPage() {
       {/* Main Layout */}
       <div className="flex flex-1 relative h-[calc(100vh-4rem)] min-h-0 overflow-hidden">
         {/* Center Content */}
-        <main className="flex-1 overflow-y-auto h-full bg-[#171b27]/50 scroll-smooth pb-12 lg:pb-0">
+        <main className="flex-1 overflow-y-auto h-full bg-[#172130]/50 scroll-smooth pb-12 lg:pb-0">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-6">
 
             {/* Featured Events */}
@@ -254,7 +254,7 @@ export default function EventsPage() {
                       <Link
                         key={i}
                         href="/"
-                        className="absolute block w-[75%] md:w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#131620]"
+                        className="absolute block w-[75%] md:w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#1e2a3d]"
                         style={{
                           transform,
                           zIndex,
@@ -447,7 +447,7 @@ export default function EventsPage() {
         </main>
 
         {/* Right Sidebar */}
-        <aside className="w-[320px] flex-col flex-shrink-0 hidden lg:flex border-l border-white/5 h-full overflow-y-auto bg-[#131620] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <aside className="w-[320px] flex-col flex-shrink-0 hidden lg:flex border-l border-white/5 h-full overflow-y-auto bg-[#1e2a3d] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {rightSidebarContent}
         </aside>
         <MobileSidebarBar rightSidebar={rightSidebarContent} />

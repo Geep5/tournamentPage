@@ -270,7 +270,7 @@ export default function EventsPage() {
                         <div className="px-3 py-2 md:px-4 md:py-3">
                           <div className="flex items-center justify-between gap-2">
                             <h3 className="text-xs md:text-base font-bold text-white truncate">{ev.name}</h3>
-                            <Badge className="bg-primary/20 text-primary border-primary/30 text-[10px] md:text-[11px] px-1.5 md:px-2 py-0 font-bold shrink-0">
+                            <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px] md:text-[11px] px-1.5 md:px-2 py-0 font-bold shrink-0">
                               {ev.prize}
                             </Badge>
                           </div>

@@ -331,7 +331,7 @@ export default function ProfilePage() {
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#0D1117]/95 backdrop-blur-md border-b border-white/5">
+      <header className="sticky top-0 z-50 bg-[#1B213A]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
           <div className="flex md:hidden">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">

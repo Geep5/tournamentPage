@@ -95,7 +95,7 @@ export default function PartnershipPage() {
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       {/* Top Navbar */}
-      <header className="sticky top-0 z-50 bg-[#0D1117]/95 backdrop-blur-md border-b border-white/5">
+      <header className="sticky top-0 z-50 bg-[#1B213A]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
           <div className="flex md:hidden">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -128,7 +128,7 @@ export default function PartnershipPage() {
           <HeaderActions />
         </div>
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-white/5 bg-[#0D1117] px-4 py-3 space-y-2">
+          <div className="md:hidden border-t border-white/5 bg-[#1B213A] px-4 py-3 space-y-2">
             <Link href="/events" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Events</Link>
             <Link href="/partnership" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Partnership</Link>
             <Link href="/create" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Create</Link>

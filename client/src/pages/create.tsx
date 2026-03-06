@@ -116,7 +116,7 @@ export default function CreatePage() {
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-[#1a1a2e]/95 backdrop-blur-md border-b border-white/5">
+      <header className="sticky top-0 z-50 bg-[#131620]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
           <div className="flex md:hidden">
             <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
@@ -149,7 +149,7 @@ export default function CreatePage() {
           <HeaderActions />
         </div>
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-white/5 bg-[#1a1a2e] px-4 py-3 space-y-2">
+          <div className="md:hidden border-t border-white/5 bg-[#131620] px-4 py-3 space-y-2">
             <Link href="/events" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Events</Link>
             <Link href="/partnership" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Partnership</Link>
             <Link href="/create" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-muted-foreground hover:text-white hover:bg-white/5 transition-colors" onClick={() => setMobileMenuOpen(false)}>Create</Link>
@@ -166,7 +166,7 @@ export default function CreatePage() {
 
       {/* Main Content */}
       <div className="flex flex-1 relative min-h-0 overflow-hidden">
-        <main className="flex-1 min-w-0 overflow-y-auto h-full bg-[#1f1f3a]/50 scroll-smooth pb-12 xl:pb-0">
+        <main className="flex-1 min-w-0 overflow-y-auto h-full bg-[#171b27]/50 scroll-smooth pb-12 xl:pb-0">
           <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-10">
 
             {/* Page Title */}
@@ -182,7 +182,7 @@ export default function CreatePage() {
               {createOptions.map((opt) => (
                 <button
                   key={opt.title}
-                  className="flex items-start gap-4 p-5 rounded-xl bg-[#1a1a2e] border border-white/5 hover:border-white/10 hover:bg-[#22223a] transition-all text-left group"
+                  className="flex items-start gap-4 p-5 rounded-xl bg-[#131620] border border-white/5 hover:border-white/10 hover:bg-[#1c2030] transition-all text-left group"
                 >
                   <div className={`p-3 rounded-xl ${opt.bgColor} ${opt.color} shrink-0 group-hover:scale-110 transition-transform`}>
                     <opt.icon className="w-6 h-6" />
@@ -214,10 +214,10 @@ export default function CreatePage() {
               {/* Filters */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <Select>
-                  <SelectTrigger className="bg-[#1a1a2e] border-white/10 text-sm">
+                  <SelectTrigger className="bg-[#131620] border-white/10 text-sm">
                     <SelectValue placeholder="All Games..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a2e] border-white/10">
+                  <SelectContent className="bg-[#131620] border-white/10">
                     <SelectItem value="all">All Games</SelectItem>
                     <SelectItem value="tekken8">Tekken 8</SelectItem>
                     <SelectItem value="sf6">Street Fighter 6</SelectItem>
@@ -225,10 +225,10 @@ export default function CreatePage() {
                   </SelectContent>
                 </Select>
                 <Select>
-                  <SelectTrigger className="bg-[#1a1a2e] border-white/10 text-sm">
+                  <SelectTrigger className="bg-[#131620] border-white/10 text-sm">
                     <SelectValue placeholder="All Consoles..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a2e] border-white/10">
+                  <SelectContent className="bg-[#131620] border-white/10">
                     <SelectItem value="all">All Consoles</SelectItem>
                     <SelectItem value="pc">PC</SelectItem>
                     <SelectItem value="ps5">PS5</SelectItem>
@@ -236,10 +236,10 @@ export default function CreatePage() {
                   </SelectContent>
                 </Select>
                 <Select>
-                  <SelectTrigger className="bg-[#1a1a2e] border-white/10 text-sm">
+                  <SelectTrigger className="bg-[#131620] border-white/10 text-sm">
                     <SelectValue placeholder="Any Status..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a2e] border-white/10">
+                  <SelectContent className="bg-[#131620] border-white/10">
                     <SelectItem value="all">Any Status</SelectItem>
                     <SelectItem value="created">Created</SelectItem>
                     <SelectItem value="published">Published</SelectItem>
@@ -247,10 +247,10 @@ export default function CreatePage() {
                   </SelectContent>
                 </Select>
                 <Select>
-                  <SelectTrigger className="bg-[#1a1a2e] border-white/10 text-sm">
+                  <SelectTrigger className="bg-[#131620] border-white/10 text-sm">
                     <SelectValue placeholder="All Events..." />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a2e] border-white/10">
+                  <SelectContent className="bg-[#131620] border-white/10">
                     <SelectItem value="all">All Events</SelectItem>
                     <SelectItem value="tournament">Tournaments</SelectItem>
                     <SelectItem value="series">Series</SelectItem>
@@ -265,7 +265,7 @@ export default function CreatePage() {
                 <div className="rounded-xl border border-white/5 overflow-hidden">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="bg-[#1a1a2e] border-b border-white/5">
+                      <tr className="bg-[#131620] border-b border-white/5">
                         <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Event Name</th>
                         <th className="text-left py-3 px-4 font-semibold text-muted-foreground">Type</th>
                         <th className="text-left py-3 px-4 font-semibold text-muted-foreground hidden md:table-cell">Game</th>
@@ -317,7 +317,7 @@ export default function CreatePage() {
         </main>
 
         {/* Right Sidebar: Activity */}
-        <aside className="w-[320px] flex-col flex-shrink-0 hidden xl:flex border-l border-white/5 h-full overflow-y-auto bg-[#1a1a2e] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+        <aside className="w-[320px] flex-col flex-shrink-0 hidden xl:flex border-l border-white/5 h-full overflow-y-auto bg-[#131620] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {rightSidebarContent}
         </aside>
       </div>

@@ -24,7 +24,7 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: M
           />
           {/* Panel */}
           <div
-            className={`absolute top-0 bottom-0 w-[85%] max-w-[340px] bg-[#1a1a2e] border-white/5 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] flex flex-col ${
+            className={`absolute top-0 bottom-0 w-[85%] max-w-[340px] bg-[#131620] border-white/5 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] flex flex-col ${
               openPanel === "left"
                 ? "left-0 border-r"
                 : "right-0 border-l"
@@ -52,7 +52,7 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: M
 
       {/* Bottom bar */}
       <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
-        <div className="flex items-center justify-between h-12 bg-[#1a1a2e]/95 backdrop-blur-md border-t border-white/5 px-2">
+        <div className="flex items-center justify-between h-12 bg-[#131620]/95 backdrop-blur-md border-t border-white/5 px-2">
           {/* Left button */}
           <div className="flex justify-start">
             {leftSidebar && (

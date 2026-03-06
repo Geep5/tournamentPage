@@ -16,7 +16,7 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: M
     <>
       {/* Overlay panel */}
       {openPanel && (
-        <div className="fixed inset-0 z-[60] md:hidden">
+        <div className="fixed inset-0 z-[60] xl:hidden">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -51,10 +51,10 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: M
       )}
 
       {/* Bottom bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden">
+      <div className="fixed bottom-0 left-0 right-0 z-50 xl:hidden">
         <div className="flex items-center justify-between h-12 bg-[#1B213A]/95 backdrop-blur-md border-t border-white/5 px-2">
           {/* Left button */}
-          <div className="flex justify-start">
+          <div className="flex justify-start md:hidden">
             {leftSidebar && (
               <button
                 onClick={() => setOpenPanel(openPanel === "left" ? null : "left")}

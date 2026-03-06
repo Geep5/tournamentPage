@@ -68,7 +68,7 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: M
 
           {/* Center actions */}
           {centerActions && (
-            <div className="flex items-center gap-2">
+            <div className="flex-1 flex items-center justify-center gap-2">
               {centerActions}
             </div>
           )}

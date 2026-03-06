@@ -3384,7 +3384,7 @@ export default function TournamentPage() {
         rightSidebar={rightSidebarContent}
         centerActions={
           <>
-            <button className="h-8 px-4 rounded-md bg-yellow-500 hover:bg-yellow-400 text-black text-xs font-bold shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:shadow-[0_0_25px_rgba(250,204,21,0.4)] transition-all">
+            <button className="h-8 px-4 rounded-md bg-red-600 hover:bg-red-500 text-white text-xs font-bold shadow-[0_0_15px_rgba(220,38,38,0.3)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)] transition-all">
               Join
             </button>
             <button className="h-8 px-4 rounded-md bg-yellow-400 hover:bg-yellow-300 text-black text-xs font-bold shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:shadow-[0_0_25px_rgba(250,204,21,0.4)] transition-all">

@@ -31,10 +31,7 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: M
             }`}
           >
             {/* Close button */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-white/5 shrink-0">
-              <span className="text-sm font-semibold text-white">
-                {openPanel === "left" ? "Navigation" : "Sidebar"}
-              </span>
+            <div className="flex items-center justify-end px-4 py-2 shrink-0">
               <button
                 onClick={() => setOpenPanel(null)}
                 className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"

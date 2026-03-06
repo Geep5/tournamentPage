@@ -74,7 +74,7 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: M
           )}
 
           {/* Right button */}
-          <div className="flex justify-end">
+          <div className="flex justify-end ml-auto">
             {rightSidebar && (
               <button
                 onClick={() => setOpenPanel(openPanel === "right" ? null : "right")}

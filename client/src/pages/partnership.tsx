@@ -200,9 +200,9 @@ export default function PartnershipPage() {
               ))}
 
               <div className="pt-4">
-                <Button className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-400 hover:to-indigo-500 text-white font-bold shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)] transition-all h-11 px-8">
+                <button className="px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors">
                   Submit Application
-                </Button>
+                </button>
               </div>
             </div>
           </div>

@@ -97,12 +97,6 @@ export default function PartnershipPage() {
       {/* Top Navbar */}
       <header className="sticky top-0 z-50 bg-[#1B213A]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
-          <div className="flex md:hidden">
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
-          </div>
-
           <div className="flex items-center gap-6 shrink-0">
             <Link href="/events">
               <img src={helmetLogo} alt="Matcherino" className="w-8 h-8 object-contain brightness-0 invert cursor-pointer" />
@@ -112,6 +106,12 @@ export default function PartnershipPage() {
               <a href="/partnership" className="px-3 py-1.5 text-sm font-semibold text-white border-b-2 border-primary">Partnership</a>
               <a href="/create" className="px-3 py-1.5 text-sm font-medium text-muted-foreground hover:text-white transition-colors border-b-2 border-transparent">Create</a>
             </nav>
+          </div>
+
+          <div className="flex md:hidden">
+            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
           </div>
 
           <div className="flex-1 flex justify-center mx-4">

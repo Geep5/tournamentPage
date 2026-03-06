@@ -115,7 +115,7 @@ export function HeaderActions() {
         <PopoverContent
           align="end"
           sideOffset={8}
-          className="w-[360px] p-0 bg-[#1f2b3c] border-white/10 rounded-xl shadow-2xl"
+          className="w-[360px] p-0 bg-[#1C2230] border-white/10 rounded-xl shadow-2xl"
         >
           <div className="p-4 border-b border-white/5">
             <div className="flex items-center justify-between">
@@ -175,7 +175,7 @@ export function HeaderActions() {
         <PopoverContent
           align="end"
           sideOffset={8}
-          className="w-[380px] p-0 bg-[#1f2b3c] border-white/10 rounded-xl shadow-2xl"
+          className="w-[380px] p-0 bg-[#1C2230] border-white/10 rounded-xl shadow-2xl"
         >
           <div className="p-4 border-b border-white/5">
             <div className="flex items-center justify-between">
@@ -259,7 +259,7 @@ export function HeaderActions() {
             <ChevronDown className="h-3 w-3 text-muted-foreground" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-48 bg-[#1e2a3d] border-white/10">
+        <DropdownMenuContent align="end" className="w-48 bg-[#1C2230] border-white/10">
           <DropdownMenuLabel className="text-muted-foreground">Balance: <span className="text-white font-bold">$218.36</span></DropdownMenuLabel>
           <DropdownMenuSeparator className="bg-white/5" />
           <DropdownMenuItem asChild><Link href="/profile" className="w-full">Profile</Link></DropdownMenuItem>

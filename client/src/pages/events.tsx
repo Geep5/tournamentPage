@@ -357,7 +357,7 @@ export default function EventsPage() {
                       <h4 className="text-sm font-semibold text-white truncate">{ev.name}</h4>
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] text-muted-foreground">{ev.game}</span>
-                        <Badge className="bg-primary/20 text-primary border-none text-[10px] px-1.5 py-0 font-bold">
+                        <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] px-1.5 py-0 font-bold">
                           {ev.prize}
                         </Badge>
                       </div>

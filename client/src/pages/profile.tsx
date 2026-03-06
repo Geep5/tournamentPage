@@ -16,7 +16,6 @@ import {
   Wallet,
   Calendar,
   MapPin,
-  Gamepad2,
   ArrowDownToLine,
   ArrowUpFromLine,
   CreditCard,
@@ -417,48 +416,27 @@ export default function ProfilePage() {
               </div>
 
               {/* Events Grid */}
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {userEvents.map((evt, i) => (
-                  <Link key={i} href="/">
-                    <div className="rounded-xl overflow-hidden border border-white/5 hover:border-white/10 bg-[#1C2230] transition-all cursor-pointer group">
-                      <div className="relative h-[140px] overflow-hidden">
-                        <img
-                          src={`https://images.unsplash.com/${evt.image}?auto=format&fit=crop&w=600&q=80`}
-                          alt={evt.title}
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#1C2230] via-transparent to-transparent" />
-                        <div className="absolute bottom-3 left-3 flex items-center gap-2">
-                          <Avatar className="w-6 h-6 border border-white/20">
-                            <AvatarImage src={evt.organizerAvatar} />
-                            <AvatarFallback className="text-[10px]">O</AvatarFallback>
-                          </Avatar>
-                          <h4 className="text-sm font-bold text-white drop-shadow-lg line-clamp-1">{evt.title}</h4>
-                        </div>
-                      </div>
-                      <div className="p-3 space-y-2">
-                        <div className="grid grid-cols-2 gap-y-1.5 text-xs text-muted-foreground">
-                          <div className="flex items-center gap-1.5">
-                            <Calendar className="w-3 h-3" />
-                            <span className="truncate">{evt.date}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <MapPin className="w-3 h-3" />
-                            <span>{evt.location}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <Gamepad2 className="w-3 h-3" />
-                            <span>{evt.game}</span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <Users className="w-3 h-3" />
-                            <span>{evt.participants} joined</span>
-                          </div>
-                        </div>
-                        <div className="flex items-center justify-center py-1.5 rounded-lg bg-primary/10 text-primary text-sm font-bold">
-                          <Trophy className="w-3.5 h-3.5 mr-1.5" />
+                  <Link
+                    href="/"
+                    key={i}
+                    className="rounded-xl bg-card border border-white/5 overflow-hidden hover:border-white/10 transition-colors cursor-pointer group"
+                  >
+                    <div className="aspect-video overflow-hidden">
+                      <img
+                        src={`https://images.unsplash.com/${evt.image}?auto=format&fit=crop&w=600&q=80`}
+                        alt={evt.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="p-3 space-y-1.5">
+                      <h4 className="text-sm font-semibold text-white truncate">{evt.title}</h4>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[11px] text-muted-foreground">{evt.game}</span>
+                        <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] px-1.5 py-0 font-bold">
                           {evt.prizePool}
-                        </div>
+                        </Badge>
                       </div>
                     </div>
                   </Link>

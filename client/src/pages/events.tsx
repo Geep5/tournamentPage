@@ -428,7 +428,7 @@ export default function EventsPage() {
                               <Users className="w-3 h-3" /> {game.participants.toLocaleString()}
                             </span>
                           </div>
-                          <Badge className="bg-primary/20 text-primary border-none text-[10px] px-1.5 py-0 font-bold">
+                          <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] px-1.5 py-0 font-bold">
                             {game.crowdfunded}
                           </Badge>
                         </div>

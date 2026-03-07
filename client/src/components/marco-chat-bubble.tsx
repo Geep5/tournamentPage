@@ -171,6 +171,8 @@ export function MarcoChatBubble() {
   useEffect(() => {
     if (!open) return;
     function handleClick(e: MouseEvent) {
+      // Only close on real user clicks, not Marco's programmatic ones
+      if (!e.isTrusted) return;
       if (
         panelRef.current &&
         !panelRef.current.contains(e.target as Node) &&

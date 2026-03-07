@@ -115,6 +115,50 @@ export default function CreatePage() {
 
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
+      <div data-agent-context hidden>
+{`PAGE: Tournament Creation
+PURPOSE: Create a new tournament event on Matcherino.
+
+REQUIRED FIELDS:
+- Tournament Name: Text input, must be unique
+- Game: Dropdown selector, choose the game title
+- Start Date: Date picker, must be in the future
+- Format: Dropdown (Single Elimination, Double Elimination, Round Robin, Swiss)
+
+OPTIONAL FIELDS:
+- Entry Fee: Currency input, leave blank for free entry
+- Max Participants: Number input, leave blank for unlimited
+- Description: Rich text editor for tournament details
+- Rules: Rich text editor for tournament rules
+- Banner Image: Image upload for the tournament page header
+
+ADVANCED SETTINGS (collapsed by default -- click to expand):
+- Check-in Window: Set how long before match start players must check in
+- Team Size: Number of players per team
+- Region Lock: Restrict to specific regions
+- Series Format: Best of 1, 3, or 5
+
+GOTCHAS:
+- Game must be selected before Format options populate
+- Start Date must be in the future
+- Advanced Settings is collapsed by default -- users often miss it
+
+ACTIONS ON THIS PAGE:
+- "Create Tournament" button: Publishes the tournament. This is DESTRUCTIVE -- confirm with user first.
+- "Save Draft" button: Saves without publishing. Safe to click without confirmation.
+- "Cancel" button: Returns to previous page. Unsaved changes will be lost.
+
+NEXT STEPS AFTER CREATION:
+- Configure bracket settings and seedings
+- Open registration for participants
+- Add marketplace items for crowdfunding
+- Share the tournament link
+
+MATCHERINO SUPPORT INFO:
+- Tax interview required before any payouts: Profile icon > Retake Interview
+- For tournament setup help, ask Marco
+- Organizer Program tiers affect available features: contact Dwai for tier questions`}
+      </div>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#1B213A]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">

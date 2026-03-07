@@ -1,187 +1,101 @@
-import { useState, useRef, useEffect, type FormEvent } from "react";
+import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
-import { X, Send, Bot, Loader2 } from "lucide-react";
+import { X, Send, Loader2 } from "lucide-react";
+import {
+  scanInteractiveElements,
+  callMarco,
+  executeAction,
+  type AgentMessage,
+  type AgentAction,
+} from "@/lib/marco-agent";
 
 // ---------------------------------------------------------------------------
-// Mock responses -- simulates Marco reading the page and acting on it.
-// In production this would be the LLM observe-think-act loop.
-// ---------------------------------------------------------------------------
-
-interface MockResponse {
-  text: string;
-  delay: number;          // ms before this message appears
-  action?: string;        // optional "action" narration shown in accent color
-}
-
-function getGreeting(ctx: string | null): MockResponse[] {
-  if (!ctx) {
-    return [
-      { text: "Hey! I'm Marco, your Matcherino assistant. I can help you navigate the platform, find tournaments, manage your account, and more.", delay: 600 },
-      { text: "What can I help you with?", delay: 1000 },
-    ];
-  }
-
-  const pageMatch = ctx.match(/^PAGE:\s*(.+)$/m);
-  const pageName = pageMatch?.[1] || 'this page';
-
-  const tournMatch = ctx.match(/^TOURNAMENT:\s*(.+)$/m);
-  const tournament = tournMatch?.[1];
-
-  const gameMatch = ctx.match(/^GAME:\s*(.+)$/m);
-  const game = gameMatch?.[1];
-
-  const prizeMatch = ctx.match(/^PRIZE POOL:\s*(.+)$/m);
-  const prize = prizeMatch?.[1];
-
-  if (tournament) {
-    return [
-      { text: `Hey! I'm Marco, your Matcherino assistant. I can see you're viewing ${tournament}${game ? ` (${game})` : ''}.${prize ? ` Prize pool: ${prize}.` : ''}`, delay: 600 },
-      { text: "I can help you register, view the bracket, contribute to the prize pool, check teams, or answer any questions about this tournament. What do you need?", delay: 1200 },
-    ];
-  }
-
-  if (pageName.includes('Events')) {
-    return [
-      { text: "Hey! I'm Marco, your Matcherino assistant. I can see you're browsing events.", delay: 600 },
-      { text: "I can help you find tournaments for a specific game, check out what's popular, or navigate to tournament registration. What are you looking for?", delay: 1200 },
-    ];
-  }
-
-  return [
-    { text: `Hey! I'm Marco, your Matcherino assistant. I can see you're on the ${pageName} page.`, delay: 600 },
-    { text: "What can I help you with?", delay: 1000 },
-  ];
-}
-
-const KEYWORD_RESPONSES: Record<string, MockResponse[]> = {
-  register: [
-    { text: "I'll get you registered for this tournament.", delay: 500 },
-    {
-      text: "Scrolling to the registration section...",
-      delay: 1200,
-      action: "Navigating to Registration tab",
-    },
-    {
-      text: "Looks like registration is open. I need your team name and player tag. What are they?",
-      delay: 2000,
-    },
-  ],
-  bracket: [
-    { text: "Let me pull up the bracket for you.", delay: 500 },
-    {
-      text: "Opening bracket view...",
-      delay: 1000,
-      action: "Clicking Bracket tab",
-    },
-    {
-      text: "This is a Single Elimination bracket. Hotel Moscow and Russians Unite are in the finals. Want me to find a specific team?",
-      delay: 1800,
-    },
-  ],
-  contribute: [
-    { text: "Great, I'll help you contribute to the prize pool.", delay: 500 },
-    {
-      text: "Opening the contribution dialog...",
-      delay: 1200,
-      action: "Clicking 'Contribute to Prize Pool'",
-    },
-    {
-      text: "There are two pin options: Spike Contributor's Pin ($5.00) and Mandy Contributor's Pin ($2.50). You can also get both for $7.50. Which one would you like?",
-      delay: 2200,
-    },
-  ],
-  prize: [
-    { text: "The current prize pool is $4,250.00 -- that's 85% of the $5,000 goal.", delay: 600 },
-    {
-      text: "Contributors receive in-game pins. The Spike pin costs $5, the Mandy pin costs $2.50. Winners also receive a Winner Pin.",
-      delay: 1400,
-    },
-  ],
-  help: [
-    { text: "Here's what I can help you with on this page:", delay: 500 },
-    {
-      text: "- Register for the tournament\n- View and navigate the bracket\n- Contribute to the prize pool\n- Check prize pool status\n- Find team information\n- Open the stream view\n\nJust tell me what you need!",
-      delay: 1200,
-    },
-  ],
-  stream: [
-    { text: "Let me switch to the stream view for you.", delay: 500 },
-    {
-      text: "Opening streams...",
-      delay: 1000,
-      action: "Clicking Stream tab",
-    },
-    {
-      text: "There are a few streamers for this event: ikobs, Zeider, dummypotato, ProCaster, and BrawlFan99. Want me to open one of their streams?",
-      delay: 1800,
-    },
-  ],
-  team: [
-    { text: "This tournament has 207 registered teams.", delay: 500 },
-    {
-      text: "Scrolling to the participants section...",
-      delay: 1000,
-      action: "Clicking Teams tab",
-    },
-    {
-      text: "Looking for a specific team? Give me the name and I'll find them for you.",
-      delay: 1600,
-    },
-  ],
-};
-
-const FALLBACK: MockResponse[] = [
-  {
-    text: "I can help with that. Let me look at the page to figure out the best way forward.",
-    delay: 600,
-  },
-  {
-    text: "Could you tell me a bit more about what you're trying to do? I can register you, show the bracket, help with contributions, or answer questions about this tournament.",
-    delay: 1400,
-  },
-];
-
-function findResponse(input: string, ctx: string | null): MockResponse[] {
-  const lower = input.toLowerCase();
-  for (const [keyword, responses] of Object.entries(KEYWORD_RESPONSES)) {
-    if (lower.includes(keyword)) return responses;
-  }
-
-  if (ctx && (lower.includes('pin') || lower.includes('supercell'))) {
-    return [
-      { text: "For Brawl Stars PIN or Supercell ID issues, you'll need to open a ticket in the Brawl Stars Discord: https://discord.gg/AYna5z4RtF \u2014 that team handles all BS-related support.", delay: 800 },
-    ];
-  }
-  if (ctx && (lower.includes('payout') || lower.includes('cash out') || lower.includes('cashout'))) {
-    return [
-      { text: "For payouts, make sure you've completed your tax interview first (click your profile icon in the top right, then 'Retake Interview'). PayPal cashouts process automatically. For bank wire payouts, email brian@matcherino.com \u2014 those typically complete within one week.", delay: 800 },
-    ];
-  }
-  if (ctx && (lower.includes('tax') || lower.includes('w-8') || lower.includes('w8') || lower.includes('w-9') || lower.includes('w9'))) {
-    return [
-      { text: "You can retake your tax interview by clicking your profile icon in the top right and selecting 'Retake Interview.' If the submit button seems disabled, double-check that every single checkbox is checked \u2014 it stays disabled until all are confirmed.", delay: 800 },
-      { text: "If you're still stuck, email brian@matcherino.com with your account details and they'll reset it for you.", delay: 1400 },
-    ];
-  }
-  if (ctx && (lower.includes('account') || lower.includes('link') || lower.includes('discord'))) {
-    return [
-      { text: "For account linking issues (Discord showing 'already authorized to another account'), contact support via a Discord ticket and we can unlink it on our end. Note: de-authorizing from Discord's settings won't fix it \u2014 it has to be done from our side.", delay: 800 },
-    ];
-  }
-
-  return FALLBACK;
-}
-
-// ---------------------------------------------------------------------------
-// Component
+// Types
 // ---------------------------------------------------------------------------
 
 interface Message {
   id: number;
   role: "user" | "marco";
   text: string;
-  action?: string;
+  action?: string; // narration label shown in accent color
 }
+
+// ---------------------------------------------------------------------------
+// Fallback mock (used when no API key is configured)
+// ---------------------------------------------------------------------------
+
+function mockResponse(input: string, ctx: string | null): { text: string; actions: AgentAction[] } {
+  const lower = input.toLowerCase();
+
+  // Navigation
+  const navMatch = lower.match(/(?:go\s+to|take\s+me\s+to|navigate\s+to|open|switch\s+to|head\s+to)\s+(?:my\s+|the\s+)?(.+?)$/);
+  if (navMatch) {
+    const target = navMatch[1].trim();
+    const routes: Record<string, { path: string; label: string }> = {
+      profile: { path: '/profile', label: 'Profile' },
+      events: { path: '/events', label: 'Events' },
+      create: { path: '/create', label: 'Create Tournament' },
+      partnership: { path: '/partnership', label: 'Partnership' },
+      home: { path: '/', label: 'Home' },
+    };
+    for (const [name, route] of Object.entries(routes)) {
+      if (target.includes(name)) {
+        const cur = window.location.pathname;
+        if (cur === route.path || (route.path !== '/' && cur.startsWith(route.path))) {
+          return { text: `You're already on the ${route.label} page. What would you like to do here?`, actions: [] };
+        }
+        return {
+          text: `Navigating to ${route.label}...`,
+          actions: [{ type: 'navigate', path: route.path, narration: `Going to ${route.label}` }],
+        };
+      }
+    }
+  }
+
+  // Go back
+  if (/\b(go\s+back|previous\s+page|back\s+to)\b/.test(lower)) {
+    return {
+      text: "Going back to the previous page...",
+      actions: [{ type: 'go_back', narration: 'Navigating back' }],
+    };
+  }
+
+  return {
+    text: "I'm running in offline mode (no API key configured). I can still navigate pages — try 'go to profile' or 'go back'. For full capabilities, set ANTHROPIC_API_KEY in .env and restart.",
+    actions: [],
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Greeting (always local, no LLM call needed)
+// ---------------------------------------------------------------------------
+
+function getGreeting(ctx: string | null): string {
+  if (!ctx) {
+    return "Hey! I'm Marco, your Matcherino assistant. I can help you navigate the platform, find tournaments, manage your account, and more. What can I help you with?";
+  }
+
+  const pageMatch = ctx.match(/^PAGE:\s*(.+)$/m);
+  const pageName = pageMatch?.[1] || 'this page';
+  const tournMatch = ctx.match(/^TOURNAMENT:\s*(.+)$/m);
+  const tournament = tournMatch?.[1];
+  const gameMatch = ctx.match(/^GAME:\s*(.+)$/m);
+  const game = gameMatch?.[1];
+  const prizeMatch = ctx.match(/^PRIZE POOL:\s*(.+)$/m);
+  const prize = prizeMatch?.[1];
+
+  if (tournament) {
+    return `Hey! I'm Marco, your Matcherino assistant. I can see you're viewing ${tournament}${game ? ` (${game})` : ''}.${prize ? ` Prize pool: ${prize}.` : ''} I can help you register, view the bracket, contribute to the prize pool, check teams, or answer questions. What do you need?`;
+  }
+  if (pageName.includes('Events')) {
+    return "Hey! I'm Marco, your Matcherino assistant. I can see you're browsing events. I can help you find tournaments, check out what's popular, or navigate to registration. What are you looking for?";
+  }
+  return `Hey! I'm Marco, your Matcherino assistant. I can see you're on the ${pageName} page. What can I help you with?`;
+}
+
+// ---------------------------------------------------------------------------
+// Icon
+// ---------------------------------------------------------------------------
 
 function MarcoIcon({ className }: { className?: string }) {
   return (
@@ -195,7 +109,6 @@ function MarcoIcon({ className }: { className?: string }) {
       strokeLinejoin="round"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Simple robot/agent head */}
       <rect x="4" y="6" width="16" height="14" rx="3" />
       <circle cx="9" cy="13" r="1.5" fill="currentColor" stroke="none" />
       <circle cx="15" cy="13" r="1.5" fill="currentColor" stroke="none" />
@@ -206,8 +119,14 @@ function MarcoIcon({ className }: { className?: string }) {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
 export function MarcoChatBubble() {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(() => {
+    return sessionStorage.getItem('marco-chat-open') === 'true';
+  });
   const [messages, setMessages] = useState<Message[]>(() => {
     try {
       const raw = sessionStorage.getItem('marco-messages');
@@ -231,15 +150,21 @@ export function MarcoChatBubble() {
     } catch { /* corrupted */ }
     return 0;
   })());
-  const [pageContext, setPageContext] = useState<string | null>(null);
   const pageContextRef = useRef<string | null>(null);
+  /** Tracks whether the LLM API is available (false = no API key). */
+  const llmAvailable = useRef(true);
 
-  // Read page context hints from DOM
-  useEffect(() => {
+  // Read page context hints from DOM — re-read on every route change
+  function readPageContext(): string | null {
     const el = document.querySelector('[data-agent-context]');
     const ctx = el?.textContent?.trim() || null;
-    setPageContext(ctx);
     pageContextRef.current = ctx;
+    return ctx;
+  }
+
+  // Set initial page context
+  useEffect(() => {
+    readPageContext();
   }, []);
 
   // Close on outside click
@@ -276,69 +201,119 @@ export function MarcoChatBubble() {
     }
   }, [messages, typing]);
 
-  // Persist messages and nextId to sessionStorage
+  // Persist messages and nextId
   useEffect(() => {
     sessionStorage.setItem('marco-messages', JSON.stringify(messages));
     sessionStorage.setItem('marco-next-id', String(nextId.current));
   }, [messages]);
 
-  // Persist greeted flag to sessionStorage
+  // Persist open state
   useEffect(() => {
-    if (greeted) {
-      sessionStorage.setItem('marco-greeted', 'true');
-    }
+    sessionStorage.setItem('marco-chat-open', open ? 'true' : 'false');
+  }, [open]);
+
+  // Persist greeted flag
+  useEffect(() => {
+    if (greeted) sessionStorage.setItem('marco-greeted', 'true');
   }, [greeted]);
 
   // Send greeting on first open
   useEffect(() => {
     if (open && !greeted) {
       setGreeted(true);
-      streamResponses(getGreeting(pageContextRef.current));
+      const greeting = getGreeting(readPageContext());
+      addMarcoMessage(greeting);
     }
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 200);
     }
   }, [open, greeted]);
 
-  function streamResponses(responses: MockResponse[]) {
-    setTyping(true);
-    let cumulative = 0;
-    responses.forEach((r, i) => {
-      cumulative += r.delay;
-      setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: nextId.current++,
-            role: "marco",
-            text: r.text,
-            action: r.action,
-          },
-        ]);
-        if (i === responses.length - 1) {
-          setTyping(false);
-        }
-      }, cumulative);
-    });
+  // -----------------------------------------------------------------------
+  // Helpers
+  // -----------------------------------------------------------------------
+
+  function addMarcoMessage(text: string, action?: string) {
+    setMessages((prev) => [
+      ...prev,
+      { id: nextId.current++, role: "marco", text, action },
+    ]);
   }
 
-  function handleSubmit(e: FormEvent) {
+  /** Build the conversation history for the LLM from the Message[] state. */
+  function buildHistory(): AgentMessage[] {
+    return messages.map((m) => ({
+      role: m.role === "user" ? "user" as const : "assistant" as const,
+      content: m.text,
+    }));
+  }
+
+  // -----------------------------------------------------------------------
+  // Submit handler — async, calls LLM or falls back to mock
+  // -----------------------------------------------------------------------
+
+  const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
     const trimmed = input.trim();
     if (!trimmed || typing) return;
 
+    // Add user message
     setMessages((prev) => [
       ...prev,
       { id: nextId.current++, role: "user", text: trimmed },
     ]);
     setInput("");
+    setTyping(true);
 
-    const responses = findResponse(trimmed, pageContextRef.current);
-    streamResponses(responses);
-  }
+    try {
+      let response: { text: string; actions: AgentAction[] };
+
+      // Re-read page context fresh (it changes after navigation)
+      const freshContext = readPageContext();
+
+      if (llmAvailable.current) {
+        try {
+          const elements = scanInteractiveElements();
+          const history = buildHistory();
+          response = await callMarco(trimmed, history, freshContext, elements);
+        } catch (err: any) {
+          if (err.message === 'no_api_key') {
+            llmAvailable.current = false;
+            response = mockResponse(trimmed, freshContext);
+          } else {
+            throw err;
+          }
+        }
+      } else {
+        response = mockResponse(trimmed, freshContext);
+      }
+
+      // Add text response
+      if (response.text) {
+        addMarcoMessage(response.text);
+      }
+
+      // Execute actions with a slight delay for UX
+      for (let i = 0; i < response.actions.length; i++) {
+        const action = response.actions[i];
+        await new Promise((r) => setTimeout(r, 600));
+        const result = executeAction(action);
+        if (result && action.narration) {
+          addMarcoMessage(result, action.narration);
+        }
+      }
+    } catch (err: any) {
+      addMarcoMessage(`Something went wrong: ${err.message}. Try again?`);
+    } finally {
+      setTyping(false);
+    }
+  }, [input, typing, messages]);
 
   return (
-    <div className="fixed bottom-[68px] right-[84px] z-50 flex flex-col items-end gap-3 xl:bottom-6 xl:right-[88px]">
+    <div
+      data-marco-ui
+      className="fixed bottom-[68px] right-[84px] z-50 flex flex-col items-end gap-3 xl:bottom-6 xl:right-[88px]"
+    >
       {/* Chat panel */}
       <div
         ref={panelRef}
@@ -370,7 +345,7 @@ export function MarcoChatBubble() {
                 <div className="flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
                   <span className="text-[11px] text-white/70">
-                    Matcherino AI Assistant
+                    {llmAvailable.current ? 'Matcherino AI Assistant' : 'Offline Mode'}
                   </span>
                 </div>
               </div>
@@ -386,7 +361,7 @@ export function MarcoChatBubble() {
               <div key={msg.id}>
                 {msg.action && (
                   <div className="flex items-center gap-1.5 mb-1.5 ml-1">
-                    <Bot className="w-3 h-3 text-cyan-400" />
+                    <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
                     <span className="text-[11px] text-cyan-400 font-medium italic">
                       {msg.action}
                     </span>

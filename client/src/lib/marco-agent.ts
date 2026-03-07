@@ -126,8 +126,8 @@ export function scanInteractiveElements(): InteractiveElement[] {
       if (!label) label = ariaLabel;
     }
 
-    // Deduplicate — use label/placeholder for form elements since they often lack text
-    const key = isFormEl ? `${type}:${label || ''}:${placeholder || ''}` : `${type}:${text}:${href || ''}`;
+    // Deduplicate — use label/placeholder for form elements, text+ariaLabel for others
+    const key = isFormEl ? `${type}:${label || ''}:${placeholder || ''}` : `${type}:${text}:${ariaLabel || ''}:${href || ''}`;
     if (seen.has(key)) continue;
     seen.add(key);
 
@@ -203,7 +203,7 @@ function findElementByIndex(index: number): HTMLElement | null {
       if (!label) label = ariaLabel;
     }
 
-    const key = isFormEl ? `${type}:${label || ''}:${placeholder || ''}` : `${type}:${text}:${href || ''}`;
+    const key = isFormEl ? `${type}:${label || ''}:${placeholder || ''}` : `${type}:${text}:${ariaLabel || ''}:${href || ''}`;
     if (seen.has(key)) continue;
     seen.add(key);
 

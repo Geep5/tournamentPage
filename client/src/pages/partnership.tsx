@@ -138,6 +138,7 @@ function ProgramLogo({ program, size = "md" }: { program: PartnerProgram; size?:
 export default function PartnershipPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
+  const [showApplication, setShowApplication] = useState(false);
 
   const activeProgram = programs.find((p) => p.id === selectedProgram) ?? null;
 
@@ -268,7 +269,7 @@ export default function PartnershipPage() {
               <>
                 {/* Back button */}
                 <button
-                  onClick={() => setSelectedProgram(null)}
+                  onClick={() => { setSelectedProgram(null); setShowApplication(false); }}
                   className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-white transition-colors -mt-4"
                 >
                   <ChevronLeft className="w-4 h-4" />
@@ -304,30 +305,65 @@ export default function PartnershipPage() {
                   </div>
                 </div>
 
-                {/* Application Form */}
-                <div>
-                  <h3 className="text-xl font-bold text-white mb-1">Apply to {activeProgram.name}</h3>
-                  <p className="text-sm text-muted-foreground">Fill out and submit the application below for review.</p>
-                </div>
-
-                <div className="space-y-5">
-                  {activeProgram.formFields.map((field, i) => (
-                    <div key={i} className="space-y-1.5">
-                      <label className="text-sm font-medium text-white/80">{field.label}</label>
-                      <input
-                        type="text"
-                        placeholder={field.placeholder}
-                        className="w-full bg-white/5 border border-white/10 rounded-lg h-11 px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
-                      />
+                {/* Requirements + Apply Gate */}
+                {!showApplication ? (
+                  <div className="rounded-2xl border border-white/5 bg-[#1C2230] p-6 md:p-8 space-y-5">
+                    <h3 className="text-lg font-bold text-white">Requirements</h3>
+                    <ul className="space-y-3 text-sm text-muted-foreground">
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-muted-foreground/60 mt-0.5 shrink-0" />
+                        <span>You must be an <span className="text-white font-medium">event organizer</span> or <span className="text-white font-medium">content creator</span> — this program is not for players or general attendees.</span>
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-muted-foreground/60 mt-0.5 shrink-0" />
+                        <span>You should have experience running tournaments or community events (online or in-person).</span>
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-muted-foreground/60 mt-0.5 shrink-0" />
+                        <span>An active community presence (Discord server, social following, or streaming channel) is expected.</span>
+                      </li>
+                      <li className="flex items-start gap-2.5">
+                        <CheckCircle2 className="w-4 h-4 text-muted-foreground/60 mt-0.5 shrink-0" />
+                        <span>Applications are reviewed within <span className="text-white font-medium">3–5 business days</span>. You'll be contacted via Discord or email.</span>
+                      </li>
+                    </ul>
+                    <div className="pt-2">
+                      <button
+                        onClick={() => setShowApplication(true)}
+                        className="px-5 py-2.5 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors"
+                      >
+                        I'm an organizer — show me the application
+                      </button>
                     </div>
-                  ))}
-
-                  <div className="pt-4">
-                    <button className="px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors">
-                      Submit Application
-                    </button>
                   </div>
-                </div>
+                ) : (
+                  /* ── Application Form ── */
+                  <>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-1">Apply to {activeProgram.name}</h3>
+                      <p className="text-sm text-muted-foreground">Fill out and submit the application below for review.</p>
+                    </div>
+
+                    <div className="space-y-5">
+                      {activeProgram.formFields.map((field, i) => (
+                        <div key={i} className="space-y-1.5">
+                          <label className="text-sm font-medium text-white/80">{field.label}</label>
+                          <input
+                            type="text"
+                            placeholder={field.placeholder}
+                            className="w-full bg-white/5 border border-white/10 rounded-lg h-11 px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
+                          />
+                        </div>
+                      ))}
+
+                      <div className="pt-4">
+                        <button className="px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors">
+                          Submit Application
+                        </button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </>
             )}
           </div>

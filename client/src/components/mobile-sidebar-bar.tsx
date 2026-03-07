@@ -33,6 +33,7 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: M
             {/* Close button */}
             <div className="flex items-center justify-end px-4 py-2 shrink-0">
               <button
+                aria-label="Close panel"
                 onClick={() => setOpenPanel(null)}
                 className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"
               >
@@ -54,6 +55,7 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: M
           <div className="flex justify-start md:hidden">
             {leftSidebar && (
               <button
+                aria-label="Open left sidebar"
                 onClick={() => setOpenPanel(openPanel === "left" ? null : "left")}
                 className={`p-2.5 rounded-lg transition-all ${
                   openPanel === "left"
@@ -77,6 +79,7 @@ export function MobileSidebarBar({ leftSidebar, rightSidebar, centerActions }: M
           <div className="flex justify-end ml-auto">
             {rightSidebar && (
               <button
+                aria-label="Open right sidebar"
                 onClick={() => setOpenPanel(openPanel === "right" ? null : "right")}
                 className={`p-2.5 rounded-lg transition-all ${
                   openPanel === "right"

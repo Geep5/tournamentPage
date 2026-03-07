@@ -513,9 +513,9 @@ NAVIGATION:
                       <span className="text-sm font-medium text-white">Twitch</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <button className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"><Eye className="w-4 h-4" /></button>
-                      <button className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"><Pencil className="w-4 h-4" /></button>
-                      <button className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
+                      <button aria-label="View tournament" className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"><Eye className="w-4 h-4" /></button>
+                      <button aria-label="Edit tournament" className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"><Pencil className="w-4 h-4" /></button>
+                      <button aria-label="Delete tournament" className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-red-400 transition-colors"><Trash2 className="w-4 h-4" /></button>
                     </div>
                   </div>
                 </div>

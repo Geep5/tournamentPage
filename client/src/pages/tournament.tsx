@@ -128,12 +128,13 @@ export default function TournamentPage() {
               onClick={() => setOrgLiked(!orgLiked)}
               className={`h-6 w-6 flex items-center justify-center rounded-md transition-all duration-300 ${orgLiked ? 'text-red-500 scale-110' : 'text-muted-foreground hover:text-red-400 hover:bg-red-500/10'}`}
               title={orgLiked ? 'Following' : 'Follow Organizer'}
+              aria-label="Follow organizer"
             >
               <Heart className={`h-3.5 w-3.5 transition-all duration-300 ${orgLiked ? 'fill-current scale-125' : ''}`} />
             </button>
           </div>
           <div className="flex justify-center mt-2">
-            <div className="w-10 h-10 rounded-full bg-[#5865F2] flex items-center justify-center text-white cursor-pointer hover:bg-[#4752C4] transition-colors shadow-lg">
+            <div role="button" aria-label="Open chat" className="w-10 h-10 rounded-full bg-[#5865F2] flex items-center justify-center text-white cursor-pointer hover:bg-[#4752C4] transition-colors shadow-lg">
               <MessageSquare className="w-5 h-5 fill-current" />
             </div>
           </div>
@@ -273,7 +274,7 @@ export default function TournamentPage() {
               </div>
             </div>
             {s.hasChat && (
-              <button className="p-2 rounded-lg hover:bg-white/5 text-muted-foreground hover:text-white transition-colors">
+              <button aria-label="Open chat" className="p-2 rounded-lg hover:bg-white/5 text-muted-foreground hover:text-white transition-colors">
                 <MessageSquare className="w-4 h-4" />
               </button>
             )}
@@ -289,12 +290,14 @@ export default function TournamentPage() {
         <button 
           onClick={() => setRightTab("prize-pool")}
           className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "prize-pool" ? "border-yellow-500 text-yellow-500 bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+          aria-label="Prize pool"
         >
           <CircleDollarSign className="w-5 h-5" />
         </button>
         <button 
           onClick={() => setRightTab("activity")}
           className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "activity" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+          aria-label="Activity feed"
         >
           <Zap className="w-5 h-5" />
         </button>
@@ -636,6 +639,7 @@ NEXT STEPS FOR USERS:
                       setActiveTab('overview');
                     }}
                     className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"
+                    aria-label="Back from stream"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>
@@ -704,6 +708,7 @@ NEXT STEPS FOR USERS:
                       document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' });
                     }}
                     className="p-2 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"
+                    aria-label="Back from bracket"
                   >
                     <ChevronLeft className="w-5 h-5" />
                   </button>

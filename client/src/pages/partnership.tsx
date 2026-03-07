@@ -1,47 +1,108 @@
 import { Button } from "@/components/ui/button";
 import { HeaderActions } from "@/components/header-actions";
-import { Search, Menu, X, CheckCircle2, Globe, Users, Ticket, Sparkles, Calendar, Trophy } from "lucide-react";
+import { Search, Menu, X, CheckCircle2, Globe, Users, Ticket, Sparkles, Calendar, Trophy, ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
 import { MobileSidebarBar } from "@/components/mobile-sidebar-bar";
 import helmetLogo from "@assets/mhelmet_1771552283812.png";
 import partnerBadge from "@assets/partner-badge.png";
 
-const benefits = [
+// --- Partnership Programs ---
+
+interface PartnerProgram {
+  id: string;
+  name: string;
+  tagline: string;
+  description: string;
+  logo: string;
+  logoType: "asset" | "emoji";
+  accentColor: string;
+  benefits: { title: string; description: string }[];
+  formFields: { label: string; placeholder: string }[];
+}
+
+const programs: PartnerProgram[] = [
   {
-    title: "Enhanced Support",
-    description: "Be assigned a partner manager to support you and your events.",
+    id: "matcherino",
+    name: "Matcherino",
+    tagline: "Platform Partnership",
+    description: "Become an official Matcherino Partner and unlock contribution codes, sponsor access, custom event URLs, and a dedicated partner manager for all your events.",
+    logo: "matcherino",
+    logoType: "asset",
+    accentColor: "primary",
+    benefits: [
+      { title: "Enhanced Support", description: "Be assigned a partner manager to support you and your events." },
+      { title: "Contribution Codes", description: "Partner+ Organizers receive Contribution Codes to reward free community participation." },
+      { title: "Sponsorship Access", description: "SponsorQuests and SponsorOverlay boost prize pools at no cost to your community." },
+      { title: "Custom Event URL", description: "Set a custom website URL for your events." },
+      { title: "Venues, Series and Communities", description: "Gain access to more event types like Series and Venues and establish a Community." },
+    ],
+    formFields: [
+      { label: "Organization Name", placeholder: "Streamer name if no org" },
+      { label: "Organization Twitter Profile", placeholder: "@yourorg" },
+      { label: "Twitch Channel", placeholder: "twitch.tv/yourchannel" },
+      { label: "Email Address", placeholder: "you@example.com" },
+      { label: "Name of Matcherino Organizer referring you", placeholder: "If any" },
+      { label: "What Discord username should we contact you at?", placeholder: "username#0000" },
+      { label: "Other relevant social media links", placeholder: "YouTube, Instagram, etc." },
+      { label: "Link to the tournament/organization Discord server (Non-expiring)", placeholder: "https://discord.gg/..." },
+      { label: "What Country are you based in?", placeholder: "United States" },
+      { label: "Primary Region/State/Province", placeholder: "California" },
+    ],
   },
   {
-    title: "Contribution Codes",
-    description: "Partner+ Organizers receive Contribution Codes to reward free community participation. Apply below and our team will review within 3-5 business days.",
+    id: "brawlstars",
+    name: "Brawl Stars",
+    tagline: "Supercell Community Partner",
+    description: "Partner with the Brawl Stars esports program on Matcherino. Run officially supported Brawl Stars tournaments with in-game item drops, verified brackets, and Supercell community resources.",
+    logo: "⭐",
+    logoType: "emoji",
+    accentColor: "yellow-500",
+    benefits: [
+      { title: "In-Game Item Drops", description: "Reward participants with exclusive Brawl Stars in-game items and skins during your events." },
+      { title: "Verified Tournament Status", description: "Your events show a verified Brawl Stars badge, attracting more competitors." },
+      { title: "Supercell Promotion", description: "Get featured on Supercell's community channels and social media." },
+      { title: "Priority Support", description: "Direct line to the Brawl Stars esports team for event coordination." },
+    ],
+    formFields: [
+      { label: "Organization / Creator Name", placeholder: "Your org or creator name" },
+      { label: "Supercell Creator Code (if any)", placeholder: "e.g. MYCODE" },
+      { label: "Email Address", placeholder: "you@example.com" },
+      { label: "Discord Username", placeholder: "username#0000" },
+      { label: "Link to your community Discord server", placeholder: "https://discord.gg/..." },
+      { label: "How many Brawl Stars events have you organized?", placeholder: "Approximate number" },
+      { label: "Social media links (YouTube, Twitter, etc.)", placeholder: "Links to your channels" },
+      { label: "What region do you primarily organize in?", placeholder: "e.g. North America, EMEA, SEA" },
+    ],
   },
   {
-    title: "Sponsorship Access",
-    description: "SponsorQuests and SponsorOverlay boost prize pools at no cost to your community.",
-  },
-  {
-    title: "Custom Event URL",
-    description: "Set a custom website URL for your events.",
-  },
-  {
-    title: "Venues, Series and Communities",
-    description: "Gain access to more event types like Series and Venues and establish a Community.",
+    id: "bazaar",
+    name: "The Bazaar",
+    tagline: "Tempo Storm Community Partner",
+    description: "Partner with The Bazaar esports program on Matcherino. Organize official Bazaar community tournaments with exclusive card-back drops, leaderboard integration, and Tempo Storm support.",
+    logo: "🎴",
+    logoType: "emoji",
+    accentColor: "purple-500",
+    benefits: [
+      { title: "Exclusive Card-Back Drops", description: "Distribute limited-edition card backs to tournament participants and winners." },
+      { title: "Leaderboard Integration", description: "Your tournament results feed into the official Bazaar community leaderboard." },
+      { title: "Tempo Storm Promotion", description: "Featured placement on Tempo Storm community hub and social channels." },
+      { title: "Early Access Content", description: "Get access to new card sets and game modes before public release for tournament use." },
+    ],
+    formFields: [
+      { label: "Organization / Creator Name", placeholder: "Your org or creator name" },
+      { label: "Email Address", placeholder: "you@example.com" },
+      { label: "Discord Username", placeholder: "username#0000" },
+      { label: "Link to your community Discord server", placeholder: "https://discord.gg/..." },
+      { label: "How many card game / Bazaar events have you organized?", placeholder: "Approximate number" },
+      { label: "Social media links (YouTube, Twitter, Twitch, etc.)", placeholder: "Links to your channels" },
+      { label: "What region do you primarily organize in?", placeholder: "e.g. North America, EMEA, SEA" },
+      { label: "Why do you want to partner with The Bazaar program?", placeholder: "Tell us about your community" },
+    ],
   },
 ];
 
-const formFields = [
-  { label: "Organization Name", placeholder: "Streamer name if no org" },
-  { label: "Organization Twitter Profile", placeholder: "@yourorg" },
-  { label: "Twitch Channel", placeholder: "twitch.tv/yourchannel" },
-  { label: "Email Address", placeholder: "you@example.com" },
-  { label: "Name of Matcherino Organizer referring you", placeholder: "If any" },
-  { label: "What Discord username should we contact you at?", placeholder: "username#0000" },
-  { label: "Other relevant social media links", placeholder: "YouTube, Instagram, etc." },
-  { label: "Link to the tournament/organization Discord server (Non-expiring)", placeholder: "https://discord.gg/..." },
-  { label: "What Country are you based in?", placeholder: "United States" },
-  { label: "Primary Region/State/Province", placeholder: "California" },
-];
+// --- Activity sidebar data ---
 
 const activityItems = [
   { name: "Korean Starcraft League: Week 86", time: "2 hours ago" },
@@ -56,12 +117,32 @@ const activityItems = [
   { name: "Tetris Championship Circuit: Week 14", time: "3 days ago" },
 ];
 
+// --- Logo component ---
+
+function ProgramLogo({ program, size = "md" }: { program: PartnerProgram; size?: "sm" | "md" | "lg" }) {
+  const sizeMap = { sm: "w-8 h-8", md: "w-12 h-12", lg: "w-16 h-16" };
+  const textMap = { sm: "text-lg", md: "text-2xl", lg: "text-3xl" };
+
+  if (program.logoType === "asset" && program.logo === "matcherino") {
+    return <img src={partnerBadge} alt={program.name} className={`${sizeMap[size]} object-contain`} />;
+  }
+  return (
+    <div className={`${sizeMap[size]} rounded-xl bg-white/10 flex items-center justify-center`}>
+      <span className={textMap[size]}>{program.logo}</span>
+    </div>
+  );
+}
+
+// --- Main Component ---
+
 export default function PartnershipPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [selectedProgram, setSelectedProgram] = useState<string | null>(null);
+
+  const activeProgram = programs.find((p) => p.id === selectedProgram) ?? null;
 
   const rightSidebarContent = (
     <div className="p-5 space-y-4 flex-1">
-      {/* Activity Feed */}
       <div>
         <h3 className="text-lg font-bold text-white mb-1">Activity</h3>
         <span className="text-xs text-muted-foreground bg-white/5 px-2 py-0.5 rounded-full">All Partnership (Latest)</span>
@@ -142,7 +223,7 @@ export default function PartnershipPage() {
 
         {/* Center Content */}
         <main className="flex-1 overflow-y-auto h-full bg-[#111827]/50 scroll-smooth pb-12 lg:pb-0">
-          <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-10">
+          <div className="max-w-6xl mx-auto px-4 md:px-8 py-6 space-y-8">
 
             {/* Page Title */}
             <div className="flex items-center gap-3">
@@ -152,59 +233,103 @@ export default function PartnershipPage() {
               <h2 className="text-2xl font-bold text-white">Partnership</h2>
             </div>
 
-            {/* Partner Explainer */}
-            <div className="rounded-2xl border border-white/5 bg-[#1C2230] p-6 md:p-8 space-y-6">
-              <div className="flex items-center gap-4">
-                <img src={partnerBadge} alt="Matcherino Partner" className="w-16 h-16 object-contain shrink-0" />
-                <div>
-                  <h3 className="text-xl font-bold text-white">Why Apply to be a Matcherino Partner?</h3>
-                  <p className="text-sm text-muted-foreground mt-0.5">Get the most out of your events.</p>
-                </div>
-              </div>
+            {!activeProgram ? (
+              /* ── Program Selection ── */
+              <>
+                <p className="text-sm text-muted-foreground -mt-4">
+                  Choose a partnership program to learn more and apply.
+                </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {benefits.map((b, i) => (
-                  <div key={i} className="flex gap-3">
-                    <div className="flex-shrink-0 mt-0.5">
-                      <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {programs.map((prog) => (
+                    <button
+                      key={prog.id}
+                      onClick={() => setSelectedProgram(prog.id)}
+                      className="rounded-2xl border border-white/5 bg-[#1C2230] p-6 text-left hover:border-white/15 hover:bg-[#1C2230]/80 transition-all group cursor-pointer"
+                    >
+                      <div className="flex items-center gap-4 mb-4">
+                        <ProgramLogo program={prog} size="md" />
+                        <div>
+                          <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors">{prog.name}</h3>
+                          <p className="text-xs text-muted-foreground">{prog.tagline}</p>
+                        </div>
                       </div>
-                    </div>
+                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{prog.description}</p>
+                      <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-primary">
+                        Learn more & apply
+                        <ChevronLeft className="w-3.5 h-3.5 rotate-180" />
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </>
+            ) : (
+              /* ── Program Detail + Application ── */
+              <>
+                {/* Back button */}
+                <button
+                  onClick={() => setSelectedProgram(null)}
+                  className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-white transition-colors -mt-4"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  All Programs
+                </button>
+
+                {/* Program Preview */}
+                <div className="rounded-2xl border border-white/5 bg-[#1C2230] p-6 md:p-8 space-y-6">
+                  <div className="flex items-center gap-4">
+                    <ProgramLogo program={activeProgram} size="lg" />
                     <div>
-                      <h4 className="text-sm font-semibold text-white leading-tight">{b.title}</h4>
-                      <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{b.description}</p>
+                      <h3 className="text-xl font-bold text-white">{activeProgram.name} Partnership</h3>
+                      <p className="text-sm text-muted-foreground mt-0.5">{activeProgram.tagline}</p>
                     </div>
                   </div>
-                ))}
-              </div>
-            </div>
 
+                  <p className="text-sm text-muted-foreground leading-relaxed">{activeProgram.description}</p>
 
-            {/* Application Form */}
-            <div>
-              <h1 className="text-3xl font-bold text-white mb-1">Applications</h1>
-              <h2 className="text-xl font-semibold text-white/80 mb-2">Partnered Organizer</h2>
-              <p className="text-sm text-muted-foreground">Fill out and submit the application below for review.</p>
-            </div>
-
-            <div className="space-y-5">
-              {formFields.map((field, i) => (
-                <div key={i} className="space-y-1.5">
-                  <label className="text-sm font-medium text-white/80">{field.label}</label>
-                  <input
-                    type="text"
-                    placeholder={field.placeholder}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg h-11 px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
-                  />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {activeProgram.benefits.map((b, i) => (
+                      <div key={i} className="flex gap-3">
+                        <div className="flex-shrink-0 mt-0.5">
+                          <div className="w-5 h-5 rounded-full bg-green-500/20 flex items-center justify-center">
+                            <CheckCircle2 className="w-3.5 h-3.5 text-green-400" />
+                          </div>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-semibold text-white leading-tight">{b.title}</h4>
+                          <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{b.description}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              ))}
 
-              <div className="pt-4">
-                <button className="px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors">
-                  Submit Application
-                </button>
-              </div>
-            </div>
+                {/* Application Form */}
+                <div>
+                  <h3 className="text-xl font-bold text-white mb-1">Apply to {activeProgram.name}</h3>
+                  <p className="text-sm text-muted-foreground">Fill out and submit the application below for review.</p>
+                </div>
+
+                <div className="space-y-5">
+                  {activeProgram.formFields.map((field, i) => (
+                    <div key={i} className="space-y-1.5">
+                      <label className="text-sm font-medium text-white/80">{field.label}</label>
+                      <input
+                        type="text"
+                        placeholder={field.placeholder}
+                        className="w-full bg-white/5 border border-white/10 rounded-lg h-11 px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
+                      />
+                    </div>
+                  ))}
+
+                  <div className="pt-4">
+                    <button className="px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors">
+                      Submit Application
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </main>
 

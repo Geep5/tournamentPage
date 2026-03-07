@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback, type FormEvent } from "react";
 import { cn } from "@/lib/utils";
 import { X, Send, Loader2 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import {
   scanInteractiveElements,
   callMarco,
@@ -451,12 +452,35 @@ export function MarcoChatBubble() {
                       : "bg-white/[0.07] text-white/90 rounded-bl-md border border-white/5"
                   )}
                 >
-                  {msg.text.split("\n").map((line, i) => (
-                    <span key={i}>
-                      {line}
-                      {i < msg.text.split("\n").length - 1 && <br />}
-                    </span>
-                  ))}
+                  {msg.role === "user" ? (
+                    msg.text.split("\n").map((line, i) => (
+                      <span key={i}>
+                        {line}
+                        {i < msg.text.split("\n").length - 1 && <br />}
+                      </span>
+                    ))
+                  ) : (
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => <p className="mb-1.5 last:mb-0">{children}</p>,
+                        strong: ({ children }) => <strong className="font-semibold text-white">{children}</strong>,
+                        ul: ({ children }) => <ul className="list-disc pl-4 mb-1.5 space-y-0.5">{children}</ul>,
+                        ol: ({ children }) => <ol className="list-decimal pl-4 mb-1.5 space-y-0.5">{children}</ol>,
+                        li: ({ children }) => <li className="text-sm">{children}</li>,
+                        a: ({ href, children }) => (
+                          <a href={href} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline">{children}</a>
+                        ),
+                        code: ({ children }) => <code className="bg-white/10 px-1 py-0.5 rounded text-xs font-mono">{children}</code>,
+                        pre: ({ children }) => <pre className="bg-white/10 p-2 rounded-lg text-xs overflow-x-auto my-1.5">{children}</pre>,
+                        h1: ({ children }) => <h1 className="text-base font-bold mb-1">{children}</h1>,
+                        h2: ({ children }) => <h2 className="text-sm font-bold mb-1">{children}</h2>,
+                        h3: ({ children }) => <h3 className="text-sm font-semibold mb-0.5">{children}</h3>,
+                        hr: () => <hr className="border-white/10 my-2" />,
+                      }}
+                    >
+                      {msg.text}
+                    </ReactMarkdown>
+                  )}
                 </div>
               </div>
             ))}

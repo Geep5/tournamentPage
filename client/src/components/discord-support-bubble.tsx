@@ -94,7 +94,7 @@ export function DiscordSupportBubble() {
             </button>
             <div className="flex items-center gap-2.5 mb-2">
               <DiscordIcon className="h-6 w-6 text-white" />
-              <span className="font-display font-semibold text-white text-base tracking-tight">
+              <span className="font-sans font-semibold text-white text-base tracking-tight">
                 Matcherino Support
               </span>
             </div>

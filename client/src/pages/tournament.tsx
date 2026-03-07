@@ -314,13 +314,13 @@ export default function TournamentPage() {
           <div className="p-5 rounded-2xl bg-gradient-to-br from-yellow-500/10 to-orange-500/5 border border-yellow-500/20 shadow-lg relative overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300">
           <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl" />
           <div className="flex items-center justify-between mb-2 relative z-10">
-            <h3 className="font-display font-semibold text-lg text-yellow-500 flex items-center gap-2">
+            <h3 className="font-sans font-semibold text-lg text-yellow-500 flex items-center gap-2">
               <Trophy className="w-5 h-5" /> Prize Pool
             </h3>
           </div>
           <div className="space-y-4 relative z-10">
             <div>
-              <div className="text-3xl font-display font-bold text-white">$4,250.00</div>
+              <div className="text-3xl font-sans font-bold text-white">$4,250.00</div>
               <div className="text-sm text-yellow-500/80 mt-1 flex justify-between">
                 <span>85% Funded</span>
                 <span>$5,000</span>
@@ -335,7 +335,7 @@ export default function TournamentPage() {
               </DialogTrigger>
               <DialogContent className="sm:max-w-md bg-background border border-white/10">
                 <DialogHeader>
-                  <DialogTitle className="text-2xl font-display text-center mb-2">Contribute to Road to Brawl Cup</DialogTitle>
+                  <DialogTitle className="text-2xl font-sans text-center mb-2">Contribute to Road to Brawl Cup</DialogTitle>
                   <DialogDescription className="text-center text-muted-foreground">
                     Select the pins you want below and then click <strong className="text-foreground">CONTRIBUTE</strong> to complete your payment.
                     <br/><br/>
@@ -397,7 +397,7 @@ export default function TournamentPage() {
                 <Check className="w-3 h-3 text-yellow-500" strokeWidth={3} />
               </div>
               <div>
-                <h4 className="font-display font-semibold text-lg text-white tracking-wide">Contributor Pin</h4>
+                <h4 className="font-sans font-semibold text-lg text-white tracking-wide">Contributor Pin</h4>
                 <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
                   Contribute to this event to receive the in-game pins below! Contribute $2.50 to receive the Mandy Contributor Pin or $5.00 to receive the Contributor Pin, to receive both pins contribute $7.50.
                 </p>
@@ -416,7 +416,7 @@ export default function TournamentPage() {
                 <Check className="w-3 h-3 text-yellow-500" strokeWidth={3} />
               </div>
               <div>
-                <h4 className="font-display font-semibold text-lg text-white tracking-wide">Winner Pin</h4>
+                <h4 className="font-sans font-semibold text-lg text-white tracking-wide">Winner Pin</h4>
                 <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
                   Place first in this event and earn the in-game pin below! Good luck!
                 </p>
@@ -588,7 +588,7 @@ export default function TournamentPage() {
                   <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400">
                     <Twitch className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-display font-semibold text-white">Stream</h2>
+                  <h2 className="text-2xl font-sans font-semibold text-white">Stream</h2>
                   <span className="text-xs font-bold tracking-wider px-2 py-0.5 rounded bg-red-600 text-white flex items-center gap-1">
                     <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" /> LIVE
                   </span>
@@ -656,7 +656,7 @@ export default function TournamentPage() {
                   <div className="p-2 rounded-lg bg-green-500/10 text-green-400">
                     <GitMerge className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-display font-semibold text-white">Bracket</h2>
+                  <h2 className="text-2xl font-sans font-semibold text-white">Bracket</h2>
                   <span className="text-sm text-muted-foreground ml-2">Single Elimination</span>
                 </div>
                 <div className="flex items-center gap-1">
@@ -871,7 +871,7 @@ export default function TournamentPage() {
               {/* Header Info */}
               <div className="flex-1 w-full">
                 {/* Tournament Title */}
-                <h1 className="text-3xl md:text-4xl font-display font-bold text-white leading-tight drop-shadow-md mb-6 flex items-center gap-3 uppercase transition-all duration-500">
+                <h1 className="text-3xl md:text-4xl font-sans font-bold text-white leading-tight drop-shadow-md mb-6 flex items-center gap-3 uppercase transition-all duration-500">
                   <span className={bannerIndex === 1 ? "text-pink-500" : bannerIndex === 2 ? "text-cyan-500" : "text-red-500"}>
                     {bannerIndex === 1 ? "💖" : bannerIndex === 2 ? "🌌" : "⚔️"}
                   </span> 
@@ -939,7 +939,7 @@ export default function TournamentPage() {
                       <div className="p-2 rounded-lg bg-primary/10 text-primary">
                         <ScrollText className="w-5 h-5" />
                       </div>
-                      <h2 className="text-2xl font-display font-semibold">About</h2>
+                      <h2 className="text-2xl font-sans font-semibold">About</h2>
                     </div>
                     <div className="flex items-center gap-4 w-full sm:w-auto">
                       <span className="text-sm text-muted-foreground hidden sm:block">Registration closes in 4 days</span>
@@ -984,7 +984,7 @@ export default function TournamentPage() {
                     <div className="p-2 rounded-lg bg-yellow-500/10 text-yellow-500">
                       <BookOpen className="w-5 h-5" />
                     </div>
-                    <h2 className="text-2xl font-display font-semibold">Rules & Information</h2>
+                    <h2 className="text-2xl font-sans font-semibold">Rules & Information</h2>
                   </div>
                   <div className="bg-card border border-white/5 rounded-2xl p-2 md:p-4">
                     <Accordion type="single" collapsible className="w-full">
@@ -1049,10 +1049,10 @@ export default function TournamentPage() {
                   <div className="p-2 rounded-lg bg-yellow-500/10 text-yellow-500">
                     <Trophy className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-display font-semibold">Prize Pool</h2>
+                  <h2 className="text-2xl font-sans font-semibold">Prize Pool</h2>
                 </div>
                 <div className="text-right">
-                  <div className="text-3xl font-display font-bold text-yellow-500">$4,250.00</div>
+                  <div className="text-3xl font-sans font-bold text-yellow-500">$4,250.00</div>
                   <div className="text-sm text-muted-foreground">Current Total</div>
                 </div>
               </div>
@@ -1484,7 +1484,7 @@ export default function TournamentPage() {
                   <div className="p-2 rounded-lg bg-green-500/10 text-green-400">
                     <GitMerge className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-display font-semibold">Bracket</h2>
+                  <h2 className="text-2xl font-sans font-semibold">Bracket</h2>
                 </div>
               </div>
 
@@ -1702,7 +1702,7 @@ export default function TournamentPage() {
                   <div className="p-2 rounded-lg bg-blue-500/10 text-blue-400">
                     <Users className="w-5 h-5" />
                   </div>
-                  <h2 className="text-2xl font-display font-semibold">Participants <span className="text-muted-foreground text-lg ml-2 font-normal">(64/128)</span></h2>
+                  <h2 className="text-2xl font-sans font-semibold">Participants <span className="text-muted-foreground text-lg ml-2 font-normal">(64/128)</span></h2>
                 </div>
                 <Button
                   variant="outline"
@@ -1795,7 +1795,7 @@ export default function TournamentPage() {
                       <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400">
                         <Shield className="w-5 h-5" />
                       </div>
-                      <h2 className="text-2xl font-display font-semibold">Staff</h2>
+                      <h2 className="text-2xl font-sans font-semibold">Staff</h2>
                     </div>
                   </div>
 

@@ -17,6 +17,7 @@ interface PartnerProgram {
   logo: string;
   logoType: "asset" | "emoji";
   accentColor: string;
+  coverImg?: string;
   benefits: { title: string; description: string }[];
   formFields: { label: string; placeholder: string }[];
 }
@@ -58,6 +59,7 @@ const programs: PartnerProgram[] = [
     logo: "⭐",
     logoType: "emoji",
     accentColor: "yellow-500",
+    coverImg: "https://supercell.com/images/brawlstars/og/og-image-brawlstars-c5e941fd47.jpg",
     benefits: [
       { title: "In-Game Item Drops", description: "Reward participants with exclusive Brawl Stars in-game items and skins during your events." },
       { title: "Verified Tournament Status", description: "Your events show a verified Brawl Stars badge, attracting more competitors." },
@@ -80,9 +82,10 @@ const programs: PartnerProgram[] = [
     name: "The Bazaar",
     tagline: "Tempo Storm Community Partner",
     description: "Partner with The Bazaar esports program on Matcherino. Organize official Bazaar community tournaments with exclusive card-back drops, leaderboard integration, and Tempo Storm support.",
-    logo: "🎴",
+    logo: "🃏",
     logoType: "emoji",
     accentColor: "purple-500",
+    coverImg: "https://cdn.cloudflare.steamstatic.com/steam/apps/2232680/header.jpg",
     benefits: [
       { title: "Exclusive Card-Back Drops", description: "Distribute limited-edition card backs to tournament participants and winners." },
       { title: "Leaderboard Integration", description: "Your tournament results feed into the official Bazaar community leaderboard." },
@@ -246,19 +249,35 @@ export default function PartnershipPage() {
                     <button
                       key={prog.id}
                       onClick={() => setSelectedProgram(prog.id)}
-                      className="rounded-2xl border border-white/5 bg-[#1C2230] p-6 text-left hover:border-white/15 hover:bg-[#1C2230]/80 transition-all group cursor-pointer"
+                      className="rounded-2xl border border-white/5 bg-[#1C2230] overflow-hidden text-left hover:border-white/15 hover:bg-[#1C2230]/80 transition-all group cursor-pointer"
                     >
-                      <div className="flex items-center gap-4 mb-4">
-                        <ProgramLogo program={prog} size="md" />
-                        <div>
-                          <h3 className="text-lg font-bold text-white group-hover:text-primary transition-colors">{prog.name}</h3>
-                          <p className="text-xs text-muted-foreground">{prog.tagline}</p>
+                      {/* Cover image or fallback */}
+                      {prog.coverImg ? (
+                        <div className="aspect-[16/7] overflow-hidden">
+                          <img
+                            src={prog.coverImg}
+                            alt={prog.name}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
                         </div>
-                      </div>
-                      <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3">{prog.description}</p>
-                      <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-primary">
-                        Learn more & apply
-                        <ChevronLeft className="w-3.5 h-3.5 rotate-180" />
+                      ) : (
+                        <div className="aspect-[16/7] bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
+                          <ProgramLogo program={prog} size="lg" />
+                        </div>
+                      )}
+                      <div className="p-5 space-y-3">
+                        <div className="flex items-center gap-3">
+                          <ProgramLogo program={prog} size="sm" />
+                          <div>
+                            <h3 className="text-base font-bold text-white group-hover:text-primary transition-colors">{prog.name}</h3>
+                            <p className="text-[11px] text-muted-foreground">{prog.tagline}</p>
+                          </div>
+                        </div>
+                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{prog.description}</p>
+                        <div className="flex items-center gap-2 text-xs font-semibold text-primary">
+                          Learn more & apply
+                          <ChevronLeft className="w-3.5 h-3.5 rotate-180" />
+                        </div>
                       </div>
                     </button>
                   ))}

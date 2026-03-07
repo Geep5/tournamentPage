@@ -74,8 +74,12 @@ export function scanInteractiveElements(): InteractiveElement[] {
   const seen = new Set<string>();
 
   for (const el of els) {
-    // Skip invisible
-    if (el.offsetParent === null && el.tagName !== 'BODY') continue;
+    // Skip invisible — use getComputedStyle + bounding rect instead of offsetParent
+    // (offsetParent is null for position:fixed elements and their children in some browsers)
+    const style = getComputedStyle(el);
+    if (style.display === 'none' || style.visibility === 'hidden') continue;
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) continue;
     // Skip Marco's own UI
     if (el.closest('[data-marco-ui]')) continue;
 
@@ -162,7 +166,10 @@ function findElementByIndex(index: number): HTMLElement | null {
   let currentIndex = 0;
 
   for (const el of els) {
-    if (el.offsetParent === null && el.tagName !== 'BODY') continue;
+    const style = getComputedStyle(el);
+    if (style.display === 'none' || style.visibility === 'hidden') continue;
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0 && rect.height === 0) continue;
     if (el.closest('[data-marco-ui]')) continue;
 
     const tag = el.tagName.toLowerCase();

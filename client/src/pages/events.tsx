@@ -264,8 +264,8 @@ MATCHERINO SUPPORT INFO:
                 <h2 className="text-2xl font-bold text-white">Featured Events</h2>
               </div>
 
-              <div className="relative" style={{ perspective: '1200px' }}>
-                <div className="relative h-[380px] w-full flex items-center justify-center overflow-visible">
+              <div className="relative">
+                <div className="relative z-0 h-[380px] w-full flex items-center justify-center overflow-visible" style={{ perspective: '1200px' }}>
                   {featuredEvents.map((ev, i) => {
                     const total = featuredEvents.length;
                     const diff = ((i - carouselIdx) % total + total) % total;

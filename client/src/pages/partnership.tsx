@@ -298,6 +298,7 @@ export default function PartnershipPage() {
                         </div>
                       </div>
                     </button>
+                  ))}
                 </div>
               </>
             ) : (

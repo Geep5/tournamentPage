@@ -97,7 +97,6 @@ export default function EventsPage() {
   const [browseSearch, setBrowseSearch] = useState("");
   const [carouselIdx, setCarouselIdx] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [bounceOffset, setBounceOffset] = useState(0); // -1 = overshoot left, 1 = overshoot right
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [recommendedCount, setRecommendedCount] = useState(5);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -108,7 +107,7 @@ export default function EventsPage() {
       setIsTransitioning((t) => {
         if (t) return t;
         setCarouselIdx((prev) => (prev + 1) % featuredEvents.length);
-        setTimeout(() => setIsTransitioning(false), 600);
+        setTimeout(() => setIsTransitioning(false), 700);
         return true;
       });
     }, 6000);
@@ -117,18 +116,10 @@ export default function EventsPage() {
   const goToSlide = useCallback((idx: number) => {
     if (isTransitioning) return;
     setIsTransitioning(true);
-    // Determine direction for overshoot
-    const total = featuredEvents.length;
-    const rawDiff = idx - carouselIdx;
-    const dir = rawDiff > 0 || rawDiff < -(total / 2) ? 1 : -1;
-    // Overshoot phase
-    setBounceOffset(dir * 12);
     setCarouselIdx(idx);
-    // Settle phase
-    setTimeout(() => setBounceOffset(0), 350);
-    setTimeout(() => setIsTransitioning(false), 600);
+    setTimeout(() => setIsTransitioning(false), 700);
     resetAutoAdvance();
-  }, [isTransitioning, carouselIdx, resetAutoAdvance]);
+  }, [isTransitioning, resetAutoAdvance]);
 
   useEffect(() => {
     resetAutoAdvance();
@@ -272,93 +263,92 @@ MATCHERINO SUPPORT INFO:
                     const isRight = offset === 1 || (offset === -(total - 1) && total > 2);
                     const isVisible = isCenter || isLeft || isRight;
 
-                    let transform = 'translateX(0) rotateY(0deg) scale(0.7)';
+                    let x = '0%';
+                    let rotateY = 0;
+                    let scale = 0.7;
                     let zIndex = 0;
-                    let opacity = 0;
+                    let cardOpacity = 0;
 
                     if (isCenter) {
-                      transform = 'translateX(0) rotateY(0deg) scale(1)';
-                      zIndex = 30;
-                      opacity = 1;
-                    } else if (isLeft || (offset < 0 && isVisible)) {
-                      transform = 'translateX(-60%) rotateY(40deg) scale(0.55)';
-                      zIndex = 20;
-                      opacity = 0.5;
-                    } else if (isRight || (offset > 0 && isVisible)) {
-                      transform = 'translateX(60%) rotateY(-40deg) scale(0.55)';
-                      zIndex = 20;
-                      opacity = 0.5;
+                      x = '0%'; rotateY = 0; scale = 1; zIndex = 30; cardOpacity = 1;
+                    } else if (isLeft) {
+                      x = '-60%'; rotateY = 40; scale = 0.55; zIndex = 20; cardOpacity = 0.5;
+                    } else if (isRight) {
+                      x = '60%'; rotateY = -40; scale = 0.55; zIndex = 20; cardOpacity = 0.5;
                     }
 
-                    // Click handler for side cards
-                    const handleCardClick = () => {
-                      if (isCenter) return; // center card navigates via Link
-                      if (isLeft) goToSlide((carouselIdx - 1 + total) % total);
-                      if (isRight) goToSlide((carouselIdx + 1) % total);
+                    const handleClick = (e: React.MouseEvent) => {
+                      if (isLeft) { e.preventDefault(); goToSlide((carouselIdx - 1 + total) % total); }
+                      if (isRight) { e.preventDefault(); goToSlide((carouselIdx + 1) % total); }
                     };
 
-                    // Compute bounce-adjusted transforms
-                    const bounceX = isCenter ? bounceOffset : isLeft ? bounceOffset * 0.5 : isRight ? bounceOffset * 0.5 : 0;
-
-                    let finalTransform = transform;
-                    if (bounceX !== 0) {
-                      finalTransform = transform.replace(
-                        /translateX\([^)]+\)/,
-                        (match) => {
-                          const cur = parseFloat(match.replace('translateX(', '').replace('%)', '').replace(')', ''));
-                          return `translateX(${cur + bounceX}%)`;
-                        }
-                      );
-                    }
-
-                    const CardWrapper = isCenter ? Link : 'div';
-                    const cardProps = isCenter
-                      ? { href: '/' as const }
-                      : { onClick: handleCardClick };
-
                     return (
-                      <CardWrapper
+                      <motion.div
                         key={i}
-                        {...cardProps}
-                        className={`absolute block w-[75%] md:w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#1C2230] ${!isCenter && isVisible ? 'cursor-pointer hover:opacity-70' : ''}`}
+                        animate={{
+                          x,
+                          rotateY,
+                          scale,
+                          opacity: isVisible ? cardOpacity : 0,
+                        }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 200,
+                          damping: 22,
+                          mass: 1,
+                        }}
+                        onClick={handleClick}
+                        className={`absolute w-[75%] md:w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#1C2230] ${!isCenter && isVisible ? 'cursor-pointer' : ''}`}
                         style={{
-                          transform: finalTransform,
                           zIndex,
-                          opacity: isVisible ? opacity : 0,
-                          transition: bounceOffset !== 0
-                            ? 'all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)'
-                            : 'all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                           transformStyle: 'preserve-3d',
                           pointerEvents: isVisible ? 'auto' : 'none',
                         }}
                       >
-                        {/* Clean image — no overlay */}
-                        <div className="aspect-video overflow-hidden">
-                          <img
-                            src={ev.img}
-                            alt={ev.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                        {/* Info below image */}
-                        <div className="px-3 py-2 md:px-4 md:py-3">
-                          <div className="flex items-center justify-between gap-2">
-                            <h3 className="text-xs md:text-base font-bold text-white truncate">{ev.name}</h3>
-                            <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px] md:text-[11px] px-1.5 md:px-2 py-0 font-bold shrink-0">
-                              {ev.prize}
-                            </Badge>
-                          </div>
-                          <div className="hidden md:flex items-center gap-x-2 mt-1 text-[11px] text-muted-foreground">
-                            <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{ev.date}</span>
-                            <span className="text-white/20">|</span>
-                            <span>{ev.game}</span>
-                            <span className="text-white/20">|</span>
-                            <span>{ev.format}</span>
-                            <span className="text-white/20">|</span>
-                            <span className="flex items-center gap-1"><Users className="w-3 h-3" />{ev.participants}</span>
-                          </div>
-                        </div>
-                      </CardWrapper>
+                        {isCenter ? (
+                          <Link href="/" className="block">
+                            <div className="aspect-video overflow-hidden">
+                              <img src={ev.img} alt={ev.name} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="px-3 py-2 md:px-4 md:py-3">
+                              <div className="flex items-center justify-between gap-2">
+                                <h3 className="text-xs md:text-base font-bold text-white truncate">{ev.name}</h3>
+                                <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px] md:text-[11px] px-1.5 md:px-2 py-0 font-bold shrink-0">{ev.prize}</Badge>
+                              </div>
+                              <div className="hidden md:flex items-center gap-x-2 mt-1 text-[11px] text-muted-foreground">
+                                <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{ev.date}</span>
+                                <span className="text-white/20">|</span>
+                                <span>{ev.game}</span>
+                                <span className="text-white/20">|</span>
+                                <span>{ev.format}</span>
+                                <span className="text-white/20">|</span>
+                                <span className="flex items-center gap-1"><Users className="w-3 h-3" />{ev.participants}</span>
+                              </div>
+                            </div>
+                          </Link>
+                        ) : (
+                          <>
+                            <div className="aspect-video overflow-hidden">
+                              <img src={ev.img} alt={ev.name} className="w-full h-full object-cover" />
+                            </div>
+                            <div className="px-3 py-2 md:px-4 md:py-3">
+                              <div className="flex items-center justify-between gap-2">
+                                <h3 className="text-xs md:text-base font-bold text-white truncate">{ev.name}</h3>
+                                <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px] md:text-[11px] px-1.5 md:px-2 py-0 font-bold shrink-0">{ev.prize}</Badge>
+                              </div>
+                              <div className="hidden md:flex items-center gap-x-2 mt-1 text-[11px] text-muted-foreground">
+                                <span className="flex items-center gap-1"><Calendar className="w-3 h-3" />{ev.date}</span>
+                                <span className="text-white/20">|</span>
+                                <span>{ev.game}</span>
+                                <span className="text-white/20">|</span>
+                                <span>{ev.format}</span>
+                                <span className="text-white/20">|</span>
+                                <span className="flex items-center gap-1"><Users className="w-3 h-3" />{ev.participants}</span>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                      </motion.div>
                     );
                   })}
                 </div>

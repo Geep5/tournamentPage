@@ -329,6 +329,43 @@ export default function ProfilePage() {
 
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
+      <div data-agent-context hidden>
+{`PAGE: User Profile
+PURPOSE: Manage account settings, linked accounts, cashout, and tax information.
+
+SECTIONS ON THIS PAGE:
+- Account Info: Display name, email, avatar
+- Linked Accounts: Connect or disconnect Discord, Supercell ID, and other game accounts
+- Payment Settings: PayPal email for cashouts, bank wire details
+- Tax Interview: Required before receiving any payouts (W-8BEN for international, W-9 for US)
+- Tournament History: Past tournaments participated in or organized
+- Organizer Settings: Organizer Program tier status and features
+
+ACTIONS ON THIS PAGE:
+- "Edit Profile" button: Modify display name, avatar, bio
+- "Link Account" buttons: Connect Discord, Supercell ID, etc.
+- "Retake Interview" button: Redo tax form (W-8BEN/W-9)
+- "Cash Out" button: Withdraw available balance via PayPal
+- "Request Bank Wire" section: For large payouts, email brian@matcherino.com
+
+COMMON USER ISSUES:
+- Tax interview submit button disabled: All checkboxes must be checked before submit becomes active
+- Discord showing "already authorized to another account": Contact support via Discord ticket, we unlink on backend
+- Supercell ID cannot be unlinked. If linked to deleted account, restore the account.
+- "No Session Token" error: Try a different login method, contact support if locked out
+- "Account Restricted": Provide username and ID to support for review
+- Region change for Brawl Stars: Support can fix on backend
+
+PAYOUT INFO:
+- PayPal cashouts process automatically
+- Bank wire payouts: email brian@matcherino.com, typically within one week
+- ESL/FACEIT prizes: visit https://matcherino.com/esl
+- Must complete tax interview before any payout
+
+NAVIGATION:
+- Header links: Events, Partnership, Create
+- Back to Events: click Events in header`}
+      </div>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#1B213A]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">

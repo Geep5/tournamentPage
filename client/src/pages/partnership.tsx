@@ -218,6 +218,37 @@ export default function PartnershipPage() {
 
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
+      <div data-agent-context hidden>
+{`PAGE: Partnership Program
+PURPOSE: Learn about and apply for Matcherino's Partnership Program for content creators and tournament organizers.
+
+PROGRAM OVERVIEW:
+- Partnership Program offers benefits for content creators and tournament organizers
+- Tiers: Partner and Partner+ (higher tier unlocks more features)
+- Benefits include: custom coupons, priority support, revenue sharing, featured placement
+- Partners get access to exclusive tools for growing their community
+
+HOW TO APPLY:
+- Open a ticket in the Matcherino Discord server
+- Include: your channel/org name, audience size, games you cover, tournament history
+- Applications reviewed by the partnerships team
+
+ORGANIZER PROGRAM (related):
+- Separate from Partnership -- focuses on tournament organizers specifically
+- Has its own tier structure managed by Dwai
+- Contact Dwai for organizer tier questions
+
+ACTIONS ON THIS PAGE:
+- "Apply Now" button: Opens Discord for partnership application
+- "Learn More" sections: Expand to show tier-specific benefits
+- FAQ section: Common questions about the program
+
+MATCHERINO SUPPORT INFO:
+- Partnership applications: open a ticket in the Matcherino Discord
+- Organizer Program questions: contact Dwai
+- General support: Matcherino Discord
+- Payout questions: brian@matcherino.com`}
+      </div>
       {/* Top Navbar */}
       <header className="sticky top-0 z-50 bg-[#1B213A]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">

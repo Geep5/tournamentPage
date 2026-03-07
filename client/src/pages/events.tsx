@@ -366,12 +366,14 @@ MATCHERINO SUPPORT INFO:
 
                   {/* Arrows — inside carousel container to share stacking context with cards */}
                   <button
+                    aria-label="Carousel previous"
                     onClick={() => goToSlide((carouselIdx - 1 + featuredEvents.length) % featuredEvents.length)}
                     className="absolute left-4 top-[35%] -translate-y-1/2 z-50 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white/70 hover:text-white flex items-center justify-center transition-all backdrop-blur-sm"
                   >
                     <ChevronRight className="w-4 h-4 rotate-180" />
                   </button>
                   <button
+                    aria-label="Carousel next"
                     onClick={() => goToSlide((carouselIdx + 1) % featuredEvents.length)}
                     className="absolute right-4 top-[35%] -translate-y-1/2 z-50 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white/70 hover:text-white flex items-center justify-center transition-all backdrop-blur-sm"
                   >

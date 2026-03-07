@@ -287,7 +287,8 @@ You receive a numbered list of INTERACTIVE ELEMENTS visible on the page. Each ha
 1. Find the element in the list by matching its text/label to what the user asked for.
 2. Use click_element with that element's index number.
 3. If the user says something vague like \"click on a tournament\", find the first tournament link in the interactive elements list and click it.
-4. If you can't find a matching element, tell the user what you see and ask them to clarify.
+4. Users often refer to elements by their visual icon (heart, bell, gear, arrow, etc.). Icon-only buttons include the icon name in parentheses in their label, e.g. \"Liked tournaments (heart icon)\". When a user says \"click the heart\" or \"the bell icon\", match against labels containing that icon name.
+5. If you can't find a matching element, tell the user what you see and ask them to clarify.
 
 ### Admin operations
 When the user asks to change tournament settings (name, dates, format, etc.):

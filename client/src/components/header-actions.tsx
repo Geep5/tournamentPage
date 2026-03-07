@@ -129,7 +129,7 @@ export function HeaderActions() {
       {/* Heart — My Tournaments / Favorites / Recent */}
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative" aria-label="My tournaments">
+          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative" aria-label="Liked tournaments (heart icon)">
             <Heart className="h-5 w-5" />
             {(mockMyTournaments.length + mockFavorites.length) > 0 && (
               <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full" />
@@ -263,7 +263,7 @@ export function HeaderActions() {
       {/* Notifications */}
       <Popover>
         <PopoverTrigger asChild>
-          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative" aria-label="Notifications">
+          <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground relative" aria-label="Notifications (bell icon)">
             <Bell className="h-5 w-5" />
             {unreadCount > 0 && (
               <span className="absolute top-1.5 right-1.5 min-w-[16px] h-4 px-1 flex items-center justify-center text-[10px] font-bold bg-red-500 text-white rounded-full">

@@ -389,7 +389,7 @@ export function MarcoChatBubble() {
   return (
     <div
       data-marco-ui
-      className="fixed bottom-[68px] right-[84px] z-[9999] flex flex-col items-end gap-3 xl:bottom-6 xl:right-[88px]"
+      className="fixed bottom-[68px] right-[84px] z-[9999] flex flex-col items-end gap-3 xl:bottom-6 xl:right-[88px] pointer-events-none"
     >
       {/* Chat panel */}
       <div
@@ -397,7 +397,7 @@ export function MarcoChatBubble() {
         className={cn(
           "origin-bottom-right transition-all duration-200 ease-out",
           open
-            ? "scale-100 opacity-100 translate-y-0"
+            ? "scale-100 opacity-100 translate-y-0 pointer-events-auto"
             : "scale-95 opacity-0 translate-y-2 pointer-events-none"
         )}
       >
@@ -522,6 +522,7 @@ export function MarcoChatBubble() {
         ref={buttonRef}
         onClick={() => setOpen((v) => !v)}
         className={cn(
+          "pointer-events-auto",
           "group flex items-center justify-center rounded-full shadow-lg transition-all duration-200",
           "h-14 w-14 bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 active:from-cyan-600 active:to-blue-700",
           "hover:scale-105 active:scale-95",

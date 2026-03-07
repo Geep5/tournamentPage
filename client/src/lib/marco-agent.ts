@@ -19,11 +19,13 @@ export interface AgentMessage {
 }
 
 export interface AgentAction {
-  type: "click" | "navigate" | "go_back" | "highlight";
+  type: "click" | "navigate" | "go_back" | "highlight" | "fill_input" | "select_option" | "check_checkbox";
   /** For click: the element index from the scanned list */
   elementIndex?: number;
   /** For navigate: the path */
   path?: string;
+  /** For fill_input / select_option / check_checkbox: the value to set */
+  value?: string;
   /** Human-readable narration */
   narration?: string;
 }
@@ -41,6 +43,9 @@ export interface InteractiveElement {
   href?: string;
   ariaLabel?: string;
   disabled?: boolean;
+  placeholder?: string;
+  value?: string;
+  label?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -86,13 +91,44 @@ export function scanInteractiveElements(): InteractiveElement[] {
     else if (tag === 'textarea') type = 'textarea';
     else type = 'button';
 
-    // Deduplicate by text+type (many identical buttons)
-    const key = `${type}:${text}:${href || ''}`;
+    // Capture input-specific fields
+    const isFormEl = type === 'input' || type === 'select' || type === 'textarea';
+    const placeholder = isFormEl ? (el.getAttribute('placeholder') || undefined) : undefined;
+    const value = isFormEl ? ((el as HTMLInputElement).value || el.getAttribute('defaultValue') || '') : undefined;
+
+    // Resolve label: data-agent-label > <label> sibling/parent > .space-y-2 parent label > placeholder > ariaLabel
+    let label: string | undefined;
+    if (isFormEl) {
+      label = el.getAttribute('data-agent-label') || undefined;
+      if (!label) {
+        // Check for <label> with for=el.id
+        if (el.id) {
+          const forLabel = document.querySelector<HTMLLabelElement>(`label[for="${el.id}"]`);
+          if (forLabel) label = forLabel.textContent?.trim();
+        }
+        // Check parent if it's a <label>
+        if (!label && el.parentElement?.tagName === 'LABEL') {
+          label = el.parentElement.textContent?.trim();
+        }
+      }
+      if (!label) {
+        const spaceParent = el.closest('.space-y-2');
+        if (spaceParent) {
+          const firstLabel = spaceParent.querySelector('label');
+          if (firstLabel) label = firstLabel.textContent?.trim();
+        }
+      }
+      if (!label) label = placeholder;
+      if (!label) label = ariaLabel;
+    }
+
+    // Deduplicate — use label/placeholder for form elements since they often lack text
+    const key = isFormEl ? `${type}:${label || ''}:${placeholder || ''}` : `${type}:${text}:${href || ''}`;
     if (seen.has(key)) continue;
     seen.add(key);
 
     // Skip empty text elements (except inputs/selects)
-    if (!text && !ariaLabel && type !== 'input' && type !== 'select' && type !== 'textarea') continue;
+    if (!text && !ariaLabel && !isFormEl) continue;
 
     results.push({
       index: results.length,
@@ -102,6 +138,9 @@ export function scanInteractiveElements(): InteractiveElement[] {
       href,
       ariaLabel,
       disabled,
+      placeholder,
+      value,
+      label,
     });
   }
 
@@ -136,16 +175,40 @@ function findElementByIndex(index: number): HTMLElement | null {
     else if (tag === 'textarea') type = 'textarea';
     else type = 'button';
 
-    const key = `${type}:${text}:${href || ''}`;
+    const isFormEl = type === 'input' || type === 'select' || type === 'textarea';
+    const placeholder = isFormEl ? (el.getAttribute('placeholder') || undefined) : undefined;
+
+    let label: string | undefined;
+    if (isFormEl) {
+      label = el.getAttribute('data-agent-label') || undefined;
+      if (!label && el.id) {
+        const forLabel = document.querySelector<HTMLLabelElement>(`label[for="${el.id}"]`);
+        if (forLabel) label = forLabel.textContent?.trim();
+      }
+      if (!label && el.parentElement?.tagName === 'LABEL') {
+        label = el.parentElement.textContent?.trim();
+      }
+      if (!label) {
+        const spaceParent = el.closest('.space-y-2');
+        if (spaceParent) {
+          const firstLabel = spaceParent.querySelector('label');
+          if (firstLabel) label = firstLabel.textContent?.trim();
+        }
+      }
+      if (!label) label = placeholder;
+      if (!label) label = ariaLabel;
+    }
+
+    const key = isFormEl ? `${type}:${label || ''}:${placeholder || ''}` : `${type}:${text}:${href || ''}`;
     if (seen.has(key)) continue;
     seen.add(key);
 
-    if (!text && !ariaLabel && type !== 'input' && type !== 'select' && type !== 'textarea') continue;
+    if (!text && !ariaLabel && !isFormEl) continue;
+
 
     if (currentIndex === index) return el;
     currentIndex++;
   }
-
   return null;
 }
 
@@ -188,7 +251,7 @@ function clickElement(el: HTMLElement) {
 // System prompt
 // ---------------------------------------------------------------------------
 
-const SYSTEM_PROMPT = `You are Marco, an AI assistant embedded in the Matcherino tournament platform. You help users operate the website by clicking buttons, navigating pages, and answering questions.
+const SYSTEM_PROMPT = `You are Marco, an AI assistant embedded in the Matcherino tournament platform. You help users operate the website by clicking buttons, filling forms, navigating pages, and answering questions.
 
 ## Personality
 - Friendly, direct, efficient. Not robotic.
@@ -198,12 +261,22 @@ const SYSTEM_PROMPT = `You are Marco, an AI assistant embedded in the Matcherino
 ## Critical Rules
 1. ALWAYS check CURRENT PAGE PATH before using navigate. If the user is already on that page, say so — do NOT navigate again.
 2. To interact with anything on the current page (buttons, links, tabs, tournament cards, etc.), use click_element with the matching index from INTERACTIVE ELEMENTS. Do NOT use navigate for on-page actions.
-3. Confirm before destructive actions (publishing, deleting, payouts).
-4. Never guess. If info is missing, ask.
-5. Stay on Matcherino. Don't navigate to external sites unless asked.
-6. For Brawl Stars PIN / Supercell ID issues, redirect to Brawl Stars Discord: https://discord.gg/AYna5z4RtF
+3. To change a field value, use fill_input with the element's index and the new value. Do NOT click an input and then try to type.
+4. Confirm before destructive actions (publishing, deleting, payouts).
+5. Never guess. If info is missing, ask.
+6. Stay on Matcherino. Don't navigate to external sites unless asked.
+7. For Brawl Stars PIN / Supercell ID issues, redirect to Brawl Stars Discord: https://discord.gg/AYna5z4RtF
 
 ## How to Act
+
+### Filling form fields
+The interactive elements list shows inputs with their label, current value, and placeholder.
+To change a field:
+1. Find the input in the list by matching its label (e.g., label="Tournament Name").
+2. Use fill_input with that element's index and the new value.
+3. After filling, tell the user what you changed and remind them to click Save if needed.
+4. For dropdowns, use select_option with the option text.
+5. For checkboxes, use check_checkbox with checked=true/false.
 
 ### Clicking on-page elements
 You receive a numbered list of INTERACTIVE ELEMENTS visible on the page. Each has an index, type, text label, and optional href. To click anything on the current page:
@@ -211,6 +284,15 @@ You receive a numbered list of INTERACTIVE ELEMENTS visible on the page. Each ha
 2. Use click_element with that element's index number.
 3. If the user says something vague like \"click on a tournament\", find the first tournament link in the interactive elements list and click it.
 4. If you can't find a matching element, tell the user what you see and ask them to clarify.
+
+### Admin operations
+When the user asks to change tournament settings (name, dates, format, etc.):
+1. Check if you're already in Admin Mode by looking for admin-prefixed tabs in the interactive elements.
+2. If NOT in admin mode, click the "Enter Admin Mode" button first, then tell the user you're entering admin mode.
+3. Once in admin mode, navigate to the right admin tab (e.g., "General" for name/description, "Bracket" for format).
+4. Find the input by its label and use fill_input to set the new value.
+5. Click the Save button to persist changes.
+6. Do NOT stop after entering admin mode — complete the full operation.
 
 ### Navigation
 - Use navigate ONLY to go to a different page (different path).
@@ -292,6 +374,72 @@ const TOOLS = [
       required: ["narration"],
     },
   },
+  {
+    name: "fill_input",
+    description: "Type a value into a text input, textarea, or contentEditable field on the current page. Use the element's index from the interactive_elements list. This clears the existing value and types the new one.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        element_index: {
+          type: "number" as const,
+          description: "The index of the input element from the interactive_elements list",
+        },
+        value: {
+          type: "string" as const,
+          description: "The text value to type into the input",
+        },
+        narration: {
+          type: "string" as const,
+          description: "Brief description of what you're doing (shown to user)",
+        },
+      },
+      required: ["element_index", "value", "narration"],
+    },
+  },
+  {
+    name: "select_option",
+    description: "Select an option from a dropdown/select element. Use the element's index and provide the option text or value to select.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        element_index: {
+          type: "number" as const,
+          description: "The index of the select element from the interactive_elements list",
+        },
+        value: {
+          type: "string" as const,
+          description: "The option text or value to select",
+        },
+        narration: {
+          type: "string" as const,
+          description: "Brief description shown to user",
+        },
+      },
+      required: ["element_index", "value", "narration"],
+    },
+  },
+  {
+    name: "check_checkbox",
+    description: "Check or uncheck a checkbox input. Use the element's index from the interactive_elements list.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        element_index: {
+          type: "number" as const,
+          description: "The index of the checkbox element from the interactive_elements list",
+        },
+        checked: {
+          type: "boolean" as const,
+          description: "Whether to check (true) or uncheck (false) the checkbox",
+        },
+        narration: {
+          type: "string" as const,
+          description: "Brief description shown to user",
+        },
+      },
+      required: ["element_index", "checked", "narration"],
+    },
+  },
 ];
 
 // ---------------------------------------------------------------------------
@@ -338,7 +486,13 @@ export async function callMarco(
 ): Promise<AgentResponse> {
   // Build the element list for context
   const elementList = elements.map((el) => {
-    let desc = `[${el.index}] ${el.type}: "${el.text}"`;
+    const isFormEl = el.type === 'input' || el.type === 'select' || el.type === 'textarea';
+    let desc: string;
+    if (isFormEl) {
+      desc = `[${el.index}] ${el.type} (label="${el.label || ''}", value="${el.value || ''}", placeholder="${el.placeholder || ''}")`;
+    } else {
+      desc = `[${el.index}] ${el.type}: "${el.text}"`;
+    }
     if (el.href) desc += ` (href=${el.href})`;
     if (el.disabled) desc += ` [disabled]`;
     return desc;
@@ -427,6 +581,30 @@ export async function callMarco(
             narration: input.narration as string,
           });
           break;
+        case 'fill_input':
+          actions.push({
+            type: 'fill_input',
+            elementIndex: input.element_index as number,
+            value: input.value as string,
+            narration: input.narration as string,
+          });
+          break;
+        case 'select_option':
+          actions.push({
+            type: 'select_option',
+            elementIndex: input.element_index as number,
+            value: input.value as string,
+            narration: input.narration as string,
+          });
+          break;
+        case 'check_checkbox':
+          actions.push({
+            type: 'check_checkbox',
+            elementIndex: input.element_index as number,
+            value: String(input.checked),
+            narration: input.narration as string,
+          });
+          break;
       }
     }
   }
@@ -476,6 +654,67 @@ export function executeAction(action: AgentAction): string {
       return action.narration || 'Going back...';
     }
 
+    case 'fill_input': {
+      const el = findElementByIndex(action.elementIndex!);
+      if (!el) return `Could not find input #${action.elementIndex} on the page.`;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      highlightElement(el);
+      setTimeout(() => {
+        if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+          const inp = el as HTMLInputElement;
+          // Use native setter to trigger React's onChange
+          const nativeSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set
+            || Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')?.set;
+          if (nativeSetter) {
+            nativeSetter.call(inp, action.value || '');
+          } else {
+            inp.value = action.value || '';
+          }
+          inp.dispatchEvent(new Event('input', { bubbles: true }));
+          inp.dispatchEvent(new Event('change', { bubbles: true }));
+        } else if (el.isContentEditable) {
+          el.textContent = action.value || '';
+          el.dispatchEvent(new Event('input', { bubbles: true }));
+        }
+      }, 600);
+      return action.narration || 'Filled input.';
+    }
+
+    case 'select_option': {
+      const el = findElementByIndex(action.elementIndex!);
+      if (!el) return `Could not find select #${action.elementIndex} on the page.`;
+      if (el.tagName !== 'SELECT') return `Element #${action.elementIndex} is not a select element.`;
+      const sel = el as HTMLSelectElement;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      highlightElement(el);
+      const option = Array.from(sel.options).find(
+        (o) => o.text.toLowerCase() === (action.value || '').toLowerCase() || o.value === action.value
+      );
+      if (!option) return `Option "${action.value}" not found in select.`;
+      setTimeout(() => {
+        sel.value = option.value;
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      }, 600);
+      return action.narration || 'Selected option.';
+    }
+
+    case 'check_checkbox': {
+      const el = findElementByIndex(action.elementIndex!);
+      if (!el) return `Could not find checkbox #${action.elementIndex} on the page.`;
+      const cb = el as HTMLInputElement;
+      if (cb.type !== 'checkbox') return `Element #${action.elementIndex} is not a checkbox.`;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      highlightElement(el);
+      const shouldCheck = action.value === 'true';
+      setTimeout(() => {
+        if (cb.checked !== shouldCheck) {
+          cb.checked = shouldCheck;
+          cb.dispatchEvent(new Event('change', { bubbles: true }));
+          cb.dispatchEvent(new Event('click', { bubbles: true }));
+        }
+      }, 600);
+      return action.narration || (shouldCheck ? 'Checked.' : 'Unchecked.');
+    }
     default:
       return '';
   }

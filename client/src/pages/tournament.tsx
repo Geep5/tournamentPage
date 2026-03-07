@@ -1957,7 +1957,7 @@ NEXT STEPS FOR USERS:
                       {/* Tournament Name */}
                       <div className="space-y-2">
                         <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Tournament Name</label>
-                        <input type="text" className="w-full bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm focus:outline-none focus:border-primary/50" defaultValue="Road to Brawl Cup" />
+                        <input type="text" data-agent-label="Tournament Name" className="w-full bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm focus:outline-none focus:border-primary/50" defaultValue="Road to Brawl Cup" />
                       </div>
 
                       {/* Description */}
@@ -1997,6 +1997,7 @@ NEXT STEPS FOR USERS:
                             <button className="p-1.5 rounded hover:bg-white/10 text-muted-foreground hover:text-foreground transition-colors" title="Clear Formatting"><span className="text-xs">T\u2093</span></button>
                           </div>
                           <div
+                            data-agent-label="Description"
                             className="w-full bg-white/[0.02] p-4 text-sm focus:outline-none min-h-[160px] text-muted-foreground leading-relaxed"
                             contentEditable
                             suppressContentEditableWarning
@@ -2088,6 +2089,7 @@ NEXT STEPS FOR USERS:
                         <div className="relative">
                           <input
                             type="datetime-local"
+                            data-agent-label="Start Date"
                             className="w-full bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm focus:outline-none focus:border-primary/50 [color-scheme:dark]"
                             defaultValue="2026-02-19T03:00"
                           />
@@ -2190,7 +2192,7 @@ NEXT STEPS FOR USERS:
                       {/* Prize Pool Label */}
                       <div className="flex items-center justify-between py-1">
                         <span className="text-sm font-semibold text-foreground">Prize Pool Label</span>
-                        <input type="text" className="w-48 bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm text-right focus:outline-none focus:border-primary/50" defaultValue="Pot Bonus" />
+                        <input type="text" data-agent-label="Pot Bonus Label" className="w-48 bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm text-right focus:outline-none focus:border-primary/50" defaultValue="Pot Bonus" />
                       </div>
                     </div>
                   </section>
@@ -2341,7 +2343,7 @@ NEXT STEPS FOR USERS:
                     <div className="space-y-6">
                       <div className="flex items-center justify-between py-1">
                         <span className="text-sm font-semibold text-foreground">Stream Link</span>
-                        <input type="text" className="w-64 bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm text-right focus:outline-none focus:border-primary/50 placeholder:text-muted-foreground" placeholder="URL e.g. https://" />
+                        <input type="text" data-agent-label="Banner URL" className="w-64 bg-white/5 border border-white/10 rounded-lg h-10 px-3 text-sm text-right focus:outline-none focus:border-primary/50 placeholder:text-muted-foreground" placeholder="URL e.g. https://" />
                       </div>
 
                       <div className="border-t border-white/[0.04]" />
@@ -2378,7 +2380,7 @@ NEXT STEPS FOR USERS:
                         <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Custom Tournament URL</label>
                         <div className="flex items-center gap-0">
                           <span className="text-sm text-muted-foreground bg-white/5 border border-white/10 border-r-0 rounded-l-lg h-10 flex items-center px-3">https://matcherino.com/t/</span>
-                          <input type="text" className="flex-1 bg-white/5 border border-white/10 rounded-r-lg h-10 px-3 text-sm focus:outline-none focus:border-primary/50" defaultValue="tournamentname" />
+                          <input type="text" data-agent-label="Tournament Slug" className="flex-1 bg-white/5 border border-white/10 rounded-r-lg h-10 px-3 text-sm focus:outline-none focus:border-primary/50" defaultValue="tournamentname" />
                         </div>
                       </div>
 
@@ -2402,7 +2404,7 @@ NEXT STEPS FOR USERS:
                     <div className="bg-indigo-500/10 border border-indigo-500/20 rounded-xl overflow-hidden">
                       <div className="px-5 py-3 bg-indigo-500/10 border-b border-indigo-500/20">
                         <label className="flex items-center gap-3 cursor-pointer">
-                          <input type="checkbox" className="w-4 h-4 rounded border-white/20 bg-white/5 accent-primary" />
+                          <input type="checkbox" data-agent-label="Terms of Service Agreement" className="w-4 h-4 rounded border-white/20 bg-white/5 accent-primary" />
                           <span className="text-sm text-foreground">I have read and agree to the <a href="#" className="text-primary hover:underline font-semibold">Matcherino Terms of Service</a>.</span>
                         </label>
                       </div>

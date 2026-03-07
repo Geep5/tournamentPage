@@ -417,7 +417,7 @@ export function MarcoChatBubble() {
   return (
     <div
       data-marco-ui
-      className="fixed bottom-[68px] right-[84px] z-[9999] flex flex-col items-end gap-3 xl:bottom-6 xl:right-[88px] pointer-events-none max-sm:right-0 max-sm:left-0 max-sm:items-center"
+      className="fixed bottom-[68px] right-[84px] z-[9999] flex flex-col items-end gap-3 xl:bottom-6 xl:right-[88px] pointer-events-none max-sm:right-4"
     >
       {/* Chat panel */}
       <div

@@ -244,61 +244,82 @@ export default function PartnershipPage() {
               /* ── Program Selection ── */
               <>
                 <p className="text-sm text-muted-foreground -mt-4">
-                  Choose a partnership program to learn more and apply.
+                  Become a partner to unlock tools, support, and rewards for your events.
                 </p>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {programs.map((prog) => (
+                {/* ── Matcherino Hero Card ── */}
+                {(() => {
+                  const m = programs.find((p) => p.id === 'matcherino')!;
+                  return (
                     <button
-                      key={prog.id}
-                      onClick={() => {
-                        if (prog.externalUrl) {
-                          window.open(prog.externalUrl, '_blank', 'noopener');
-                        } else {
-                          setSelectedProgram(prog.id);
-                        }
-                      }}
-                      className="rounded-2xl border border-white/5 bg-[#1C2230] overflow-hidden text-left hover:border-white/15 hover:bg-[#1C2230]/80 transition-all group cursor-pointer"
+                      onClick={() => setSelectedProgram(m.id)}
+                      className="rounded-2xl border border-white/5 bg-[#1C2230] overflow-hidden text-left hover:border-primary/30 transition-all group cursor-pointer w-full"
                     >
-                      {/* Cover image or fallback */}
-                      {prog.coverImg ? (
-                        <div className="aspect-[16/7] overflow-hidden">
-                          <img
-                            src={prog.coverImg}
-                            alt={prog.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                          />
+                      <div className="flex flex-col md:flex-row">
+                        <div className="md:w-1/2 aspect-[16/9] md:aspect-auto bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center p-8">
+                          <img src={partnerBadge} alt="Matcherino" className="w-20 h-20 md:w-28 md:h-28 object-contain drop-shadow-lg" />
                         </div>
-                      ) : (
-                        <div className="aspect-[16/7] bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
-                          <ProgramLogo program={prog} size="lg" />
-                        </div>
-                      )}
-                      <div className="p-5 space-y-3">
-                        <div className="flex items-center gap-3">
-                          <ProgramLogo program={prog} size="sm" />
+                        <div className="flex-1 p-6 md:p-8 space-y-4 flex flex-col justify-center">
                           <div>
-                            <h3 className="text-base font-bold text-white group-hover:text-primary transition-colors">{prog.name}</h3>
-                            <p className="text-[11px] text-muted-foreground">{prog.tagline}</p>
+                            <h3 className="text-xl md:text-2xl font-bold text-white group-hover:text-primary transition-colors">{m.name} Partnership</h3>
+                            <p className="text-sm text-muted-foreground mt-1">{m.tagline}</p>
                           </div>
-                        </div>
-                        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{prog.description}</p>
-                        <div className="flex items-center gap-2 text-xs font-semibold text-primary">
-                          {prog.externalUrl ? (
-                            <>
-                              Visit Organizer Program
-                              <ExternalLink className="w-3.5 h-3.5" />
-                            </>
-                          ) : (
-                            <>
-                              Learn more & apply
-                              <ChevronLeft className="w-3.5 h-3.5 rotate-180" />
-                            </>
-                          )}
+                          <p className="text-sm text-muted-foreground leading-relaxed">{m.description}</p>
+                          <div className="flex flex-wrap gap-3">
+                            {m.benefits.slice(0, 3).map((b, i) => (
+                              <span key={i} className="inline-flex items-center gap-1.5 text-xs font-medium text-green-400 bg-green-500/10 px-2.5 py-1 rounded-full">
+                                <CheckCircle2 className="w-3 h-3" />
+                                {b.title}
+                              </span>
+                            ))}
+                          </div>
+                          <div className="flex items-center gap-2 text-sm font-semibold text-primary pt-1">
+                            Learn more & apply
+                            <ChevronLeft className="w-4 h-4 rotate-180" />
+                          </div>
                         </div>
                       </div>
                     </button>
-                  ))}
+                  );
+                })()}
+
+                {/* ── Publisher Programs ── */}
+                <div className="space-y-3 pt-2">
+                  <h3 className="text-lg font-bold text-white">Publisher Programs</h3>
+                  <p className="text-sm text-muted-foreground -mt-1">Run officially supported events through our publisher partners.</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                    {programs.filter((p) => p.externalUrl).map((prog) => (
+                      <button
+                        key={prog.id}
+                        onClick={() => window.open(prog.externalUrl, '_blank', 'noopener')}
+                        className="rounded-2xl border border-white/5 bg-[#1C2230] overflow-hidden text-left hover:border-white/15 hover:bg-[#1C2230]/80 transition-all group cursor-pointer"
+                      >
+                        {prog.coverImg && (
+                          <div className="aspect-[16/7] overflow-hidden">
+                            <img
+                              src={prog.coverImg}
+                              alt={prog.name}
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                            />
+                          </div>
+                        )}
+                        <div className="p-5 space-y-3">
+                          <div className="flex items-center gap-3">
+                            <ProgramLogo program={prog} size="sm" />
+                            <div>
+                              <h3 className="text-base font-bold text-white group-hover:text-primary transition-colors">{prog.name}</h3>
+                              <p className="text-[11px] text-muted-foreground">{prog.tagline}</p>
+                            </div>
+                          </div>
+                          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{prog.description}</p>
+                          <div className="flex items-center gap-2 text-xs font-semibold text-primary">
+                            Visit Organizer Program
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </>
             ) : (

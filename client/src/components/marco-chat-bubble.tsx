@@ -4,9 +4,11 @@ import { X, Send, Loader2 } from "lucide-react";
 import {
   scanInteractiveElements,
   callMarco,
+  buildContextBlock,
   executeAction,
   type AgentMessage,
   type AgentAction,
+  type ClaudeMessage,
 } from "@/lib/marco-agent";
 
 // ---------------------------------------------------------------------------
@@ -268,41 +270,113 @@ export function MarcoChatBubble() {
     setTyping(true);
 
     try {
-      let response: { text: string; actions: AgentAction[] };
+      if (!llmAvailable.current) {
+        const freshContext = readPageContext();
+        const response = mockResponse(trimmed, freshContext);
+        if (response.text) addMarcoMessage(response.text);
+        setTyping(false);
+        return;
+      }
 
-      // Re-read page context fresh (it changes after navigation)
-      const freshContext = readPageContext();
+      // --- Agentic tool-use loop ---
+      // Claude may return stop_reason="tool_use" meaning it wants to
+      // continue after we execute the tools. We loop: call Claude,
+      // execute tools, feed tool results back, repeat until end_turn.
+      const MAX_LOOPS = 6; // safety cap
+      let loopMessages: ClaudeMessage[] | undefined = undefined;
 
-      if (llmAvailable.current) {
+      for (let loop = 0; loop < MAX_LOOPS; loop++) {
+        const freshContext = readPageContext();
+        const elements = scanInteractiveElements();
+        let response;
+
         try {
-          const elements = scanInteractiveElements();
-          const history = buildHistory();
-          response = await callMarco(trimmed, history, freshContext, elements);
+          if (loop === 0) {
+            // First call: build from history + user message
+            const history = buildHistory();
+            response = await callMarco(trimmed, history, freshContext, elements, undefined);
+          } else {
+            // Continuation: send accumulated messages with tool results
+            response = await callMarco(trimmed, [], freshContext, elements, loopMessages);
+          }
         } catch (err: any) {
           if (err.message === 'no_api_key') {
             llmAvailable.current = false;
-            response = mockResponse(trimmed, freshContext);
+            const fallback = mockResponse(trimmed, freshContext);
+            if (fallback.text) addMarcoMessage(fallback.text);
           } else {
             throw err;
           }
+          break;
         }
-      } else {
-        response = mockResponse(trimmed, freshContext);
-      }
 
-      // Add text response
-      if (response.text) {
-        addMarcoMessage(response.text);
-      }
-
-      // Execute actions with a slight delay for UX
-      for (let i = 0; i < response.actions.length; i++) {
-        const action = response.actions[i];
-        await new Promise((r) => setTimeout(r, 600));
-        const result = executeAction(action);
-        if (result && action.narration) {
-          addMarcoMessage(result, action.narration);
+        // Show any text response
+        if (response.text) {
+          addMarcoMessage(response.text);
         }
+
+        // Execute actions
+        const toolResults: Array<{ tool_use_id: string; result: string }> = [];
+        for (const block of response.rawContent) {
+          if (block.type === 'tool_use') {
+            const toolUse = block as unknown as { id: string; name: string; input: Record<string, unknown> };
+            // Find the matching parsed action
+            const action = response.actions.find((a) => a.narration === (toolUse.input.narration as string));
+            if (action) {
+              await new Promise((r) => setTimeout(r, 800));
+              const result = executeAction(action);
+              if (result && action.narration) {
+                addMarcoMessage(result, action.narration);
+              }
+              toolResults.push({ tool_use_id: toolUse.id, result: result || 'Done.' });
+            } else {
+              toolResults.push({ tool_use_id: toolUse.id, result: 'Action executed.' });
+            }
+          }
+        }
+
+        // If Claude doesn't want to continue, we're done
+        if (!response.continueLoop) break;
+
+        // Build continuation messages: previous messages + assistant response + tool results
+        // Wait for DOM to settle after clicks/navigation
+        await new Promise((r) => setTimeout(r, 1200));
+
+        if (!loopMessages) {
+          // First continuation: start from the initial call's messages
+          const history = buildHistory();
+          const contextBlock = buildContextBlock(trimmed, freshContext, elements);
+          loopMessages = [
+            ...history.map((m) => ({ role: m.role as 'user' | 'assistant', content: m.content as string })),
+            { role: 'user' as const, content: contextBlock },
+          ];
+        }
+
+        // Append assistant's raw response
+        loopMessages.push({
+          role: 'assistant' as const,
+          content: response.rawContent as Array<{ type: string; [key: string]: unknown }>,
+        });
+
+        // Append tool results (re-scan page for fresh context)
+        const freshElements = scanInteractiveElements();
+        const freshCtx = readPageContext();
+        const updatedContext = buildContextBlock(trimmed, freshCtx, freshElements);
+
+        loopMessages.push({
+          role: 'user' as const,
+          content: [
+            ...toolResults.map((tr) => ({
+              type: 'tool_result' as const,
+              tool_use_id: tr.tool_use_id,
+              content: tr.result,
+            })),
+            {
+              type: 'text' as const,
+              text: `[Updated page state after tool execution]\n${updatedContext}`,
+            },
+          ],
+        });
       }
     } catch (err: any) {
       addMarcoMessage(`Something went wrong: ${err.message}. Try again?`);

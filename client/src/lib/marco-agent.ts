@@ -33,6 +33,10 @@ export interface AgentAction {
 export interface AgentResponse {
   text: string;
   actions: AgentAction[];
+  /** Whether Claude wants to continue after tool execution */
+  continueLoop: boolean;
+  /** Raw content blocks from Claude (needed for tool-result follow-up) */
+  rawContent: Array<{ type: string; [key: string]: unknown }>;
 }
 
 export interface InteractiveElement {
@@ -446,7 +450,7 @@ const TOOLS = [
 // LLM API call
 // ---------------------------------------------------------------------------
 
-interface ClaudeMessage {
+export interface ClaudeMessage {
   role: "user" | "assistant";
   content: string | Array<{ type: string; [key: string]: unknown }>;
 }
@@ -470,21 +474,13 @@ interface ClaudeResponse {
 }
 
 /**
- * Call Claude via the /api/marco proxy.
- *
- * @param userMessage - The latest user message
- * @param history - Conversation history (excluding the latest user message)
- * @param pageContext - The data-agent-context text from the page (or null)
- * @param elements - Scanned interactive elements on the current page
- * @returns AgentResponse with text and actions
+ * Build the context-enriched user message with current page state.
  */
-export async function callMarco(
+export function buildContextBlock(
   userMessage: string,
-  history: AgentMessage[],
   pageContext: string | null,
   elements: InteractiveElement[],
-): Promise<AgentResponse> {
-  // Build the element list for context
+): string {
   const elementList = elements.map((el) => {
     const isFormEl = el.type === 'input' || el.type === 'select' || el.type === 'textarea';
     let desc: string;
@@ -498,9 +494,8 @@ export async function callMarco(
     return desc;
   }).join('\n');
 
-  // Build the user message with context — current path is emphasized
   const currentPath = window.location.pathname;
-  const contextBlock = [
+  return [
     `## Current State`,
     `CURRENT PAGE PATH: ${currentPath}`,
     `YOU ARE ON: ${currentPath === '/profile' ? 'User Profile' : currentPath === '/events' ? 'Events Browser' : currentPath === '/create' ? 'Create Tournament' : currentPath === '/partnership' ? 'Partnership' : currentPath === '/' ? 'Tournament Detail' : currentPath}`,
@@ -513,13 +508,35 @@ export async function callMarco(
     `## User Message`,
     userMessage,
   ].join('\n');
+}
 
-  // Build messages array
-  const messages: ClaudeMessage[] = [];
-  for (const msg of history) {
-    messages.push({ role: msg.role, content: msg.content });
+/**
+ * Call Claude via the /api/marco proxy.
+ *
+ * Supports two modes:
+ * 1. Initial call: pass userMessage + history + context
+ * 2. Continuation: pass rawMessages directly (for tool-result follow-up)
+ */
+export async function callMarco(
+  userMessage: string,
+  history: AgentMessage[],
+  pageContext: string | null,
+  elements: InteractiveElement[],
+  /** If provided, these raw messages are sent instead of building from history */
+  rawMessages?: ClaudeMessage[],
+): Promise<AgentResponse> {
+  let messages: ClaudeMessage[];
+
+  if (rawMessages) {
+    messages = rawMessages;
+  } else {
+    const contextBlock = buildContextBlock(userMessage, pageContext, elements);
+    messages = [];
+    for (const msg of history) {
+      messages.push({ role: msg.role, content: msg.content });
+    }
+    messages.push({ role: "user", content: contextBlock });
   }
-  messages.push({ role: "user", content: contextBlock });
 
   const body = {
     model: "claude-sonnet-4-20250514",
@@ -536,7 +553,6 @@ export async function callMarco(
   });
 
   if (resp.status === 503) {
-    // No API key configured
     throw new Error('no_api_key');
   }
 
@@ -612,6 +628,8 @@ export async function callMarco(
   return {
     text: textParts.join('\n\n') || (actions.length > 0 ? '' : 'I\'m not sure how to help with that. Could you rephrase?'),
     actions,
+    continueLoop: data.stop_reason === 'tool_use',
+    rawContent: data.content as unknown as Array<{ type: string; [key: string]: unknown }>,
   };
 }
 

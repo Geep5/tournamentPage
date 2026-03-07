@@ -106,6 +106,42 @@ const programs: PartnerProgram[] = [
       { label: "Why do you want to partner with The Bazaar program?", placeholder: "Tell us about your community" },
     ],
   },
+  {
+    id: "metalstorm",
+    name: "Metalstorm",
+    tagline: "Tencent / Level Infinite",
+    description: "Run officially supported Metalstorm tournaments on Matcherino. Bring competitive aerial combat to your community with dogfight brackets, in-game rewards, and Level Infinite promotion.",
+    logo: "✈️",
+    logoType: "emoji",
+    accentColor: "blue-500",
+    coverImg: "https://cdn.cloudflare.steamstatic.com/steam/apps/2453200/library_hero.jpg",
+    externalUrl: "https://store.steampowered.com/app/2453200/Metalstorm/",
+    benefits: [
+      { title: "In-Game Rewards", description: "Distribute exclusive skins and items to tournament participants." },
+      { title: "Verified Events", description: "Your tournaments receive official Metalstorm verification and promotion." },
+      { title: "Level Infinite Support", description: "Direct coordination with the publishing team for event logistics." },
+      { title: "Community Growth", description: "Get featured across Metalstorm social channels and in-game news." },
+    ],
+    formFields: [],
+  },
+  {
+    id: "ironsagavs",
+    name: "Iron Saga VS",
+    tagline: "Gameduchy Community Partner",
+    description: "Partner with Iron Saga VS on Matcherino. Organize mech combat tournaments with exclusive pilot rewards, ranked integration, and publisher-backed prize support.",
+    logo: "🤖",
+    logoType: "emoji",
+    accentColor: "red-500",
+    coverImg: "https://cdn.cloudflare.steamstatic.com/steam/apps/2463800/library_hero.jpg",
+    externalUrl: "https://store.steampowered.com/app/2463800/Iron_Saga_VS/",
+    benefits: [
+      { title: "Exclusive Pilot Rewards", description: "Distribute limited-edition pilots and mech skins to competitors." },
+      { title: "Ranked Integration", description: "Tournament results feed into official Iron Saga VS rankings." },
+      { title: "Publisher Promotion", description: "Featured on Gameduchy community channels and in-game events hub." },
+      { title: "Prize Pool Support", description: "Access publisher-funded prize pool contributions for qualified events." },
+    ],
+    formFields: [],
+  },
 ];
 
 // --- Activity sidebar data ---

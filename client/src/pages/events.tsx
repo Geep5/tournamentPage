@@ -97,6 +97,7 @@ export default function EventsPage() {
   const [browseSearch, setBrowseSearch] = useState("");
   const [carouselIdx, setCarouselIdx] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [bounceOffset, setBounceOffset] = useState(0); // -1 = overshoot left, 1 = overshoot right
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [recommendedCount, setRecommendedCount] = useState(5);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -116,10 +117,18 @@ export default function EventsPage() {
   const goToSlide = useCallback((idx: number) => {
     if (isTransitioning) return;
     setIsTransitioning(true);
+    // Determine direction for overshoot
+    const total = featuredEvents.length;
+    const rawDiff = idx - carouselIdx;
+    const dir = rawDiff > 0 || rawDiff < -(total / 2) ? 1 : -1;
+    // Overshoot phase
+    setBounceOffset(dir * 12);
     setCarouselIdx(idx);
+    // Settle phase
+    setTimeout(() => setBounceOffset(0), 350);
     setTimeout(() => setIsTransitioning(false), 600);
     resetAutoAdvance();
-  }, [isTransitioning, resetAutoAdvance]);
+  }, [isTransitioning, carouselIdx, resetAutoAdvance]);
 
   useEffect(() => {
     resetAutoAdvance();
@@ -161,6 +170,39 @@ export default function EventsPage() {
 
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
+      <div data-agent-context hidden>
+{`PAGE: Events Browser
+PURPOSE: Browse, search, and discover tournaments on Matcherino.
+
+SECTIONS ON THIS PAGE:
+- Featured Events carousel: Highlighted upcoming tournaments with large banner cards
+- Browse by Game: Grid of game tiles showing tournament count, participant count, and crowdfunded totals per game
+- Recommended Events: Scrollable list of upcoming tournaments with details (date, format, participants, entry fee, prize pool)
+- Live Activity Feed: Real-time ticker of recent contributions across all events
+
+GAMES AVAILABLE: Tekken 8, Starcraft II, Guilty Gear Strive, Fatal Fury, 2XKO, Granblue Fantasy Versus Rising, Ultimate Marvel vs Capcom 3, King of Fighters XV, Tetris Effect, Skullgirls 2nd Encore, Street Fighter 6
+
+USER GOALS ON THIS PAGE:
+- Find a tournament for a specific game → Use search bar or Browse by Game section
+- Find upcoming tournaments → Check Featured Events or Recommended Events
+- See what is popular → Browse by Game shows tournament count and participant numbers
+- Access favorited events → Use the star/favorites in the header
+- Register for a tournament → Click on a tournament card to go to its detail page, then register
+
+NAVIGATION:
+- Clicking a tournament card navigates to the Tournament Detail page (/t/slug)
+- Header has: Events, Partnership, Create links
+- "Create" link goes to /create to set up a new tournament
+- Profile accessible via header avatar
+
+MATCHERINO SUPPORT INFO:
+- For Brawl Stars issues (PINs, Supercell ID, disputes): redirect to Brawl Stars Discord https://discord.gg/AYna5z4RtF
+- Tax interview required before any payouts: Profile icon > Retake Interview
+- PayPal cashouts process automatically. Bank wire: email brian@matcherino.com
+- Partnership applications: open a ticket in the Matcherino Discord
+- Account linking issues: contact support — we can unlink Discord accounts on backend
+- "No Session Token" error: try a different login method, contact support if locked out`}
+      </div>
       {/* Header */}
       <header className="sticky top-0 z-50 bg-[#1B213A]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">
@@ -248,18 +290,46 @@ export default function EventsPage() {
                       opacity = 0.5;
                     }
 
+                    // Click handler for side cards
+                    const handleCardClick = () => {
+                      if (isCenter) return; // center card navigates via Link
+                      if (isLeft) goToSlide((carouselIdx - 1 + total) % total);
+                      if (isRight) goToSlide((carouselIdx + 1) % total);
+                    };
+
+                    // Compute bounce-adjusted transforms
+                    const bounceX = isCenter ? bounceOffset : isLeft ? bounceOffset * 0.5 : isRight ? bounceOffset * 0.5 : 0;
+
+                    let finalTransform = transform;
+                    if (bounceX !== 0) {
+                      finalTransform = transform.replace(
+                        /translateX\([^)]+\)/,
+                        (match) => {
+                          const cur = parseFloat(match.replace('translateX(', '').replace('%)', '').replace(')', ''));
+                          return `translateX(${cur + bounceX}%)`;
+                        }
+                      );
+                    }
+
+                    const CardWrapper = isCenter ? Link : 'div';
+                    const cardProps = isCenter
+                      ? { href: '/' as const }
+                      : { onClick: handleCardClick };
+
                     return (
-                      <Link
+                      <CardWrapper
                         key={i}
-                        href="/"
-                        className="absolute block w-[75%] md:w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#1C2230]"
+                        {...cardProps}
+                        className={`absolute block w-[75%] md:w-[50%] max-w-[520px] rounded-xl overflow-hidden border border-white/10 shadow-2xl bg-[#1C2230] ${!isCenter && isVisible ? 'cursor-pointer hover:opacity-70' : ''}`}
                         style={{
-                          transform,
+                          transform: finalTransform,
                           zIndex,
                           opacity: isVisible ? opacity : 0,
-                          transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+                          transition: bounceOffset !== 0
+                            ? 'all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)'
+                            : 'all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
                           transformStyle: 'preserve-3d',
-                          pointerEvents: isCenter ? 'auto' : 'none',
+                          pointerEvents: isVisible ? 'auto' : 'none',
                         }}
                       >
                         {/* Clean image — no overlay */}
@@ -288,7 +358,7 @@ export default function EventsPage() {
                             <span className="flex items-center gap-1"><Users className="w-3 h-3" />{ev.participants}</span>
                           </div>
                         </div>
-                      </Link>
+                      </CardWrapper>
                     );
                   })}
                 </div>

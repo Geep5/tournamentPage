@@ -501,6 +501,47 @@ export default function TournamentPage() {
         '--ring': bannerIndex === 1 ? '330 81% 60%' : bannerIndex === 2 ? '190 90% 50%' : '207 90% 54%'
       } as React.CSSProperties}
     >
+      <div data-agent-context hidden>
+{`PAGE: Tournament Detail
+TOURNAMENT: Road to Brawl Cup SESA
+GAME: Brawl Stars
+ORGANIZER: Quantum Studios
+STATUS: Active — Registration Open
+FORMAT: Single Elimination (Best of 3)
+PARTICIPANTS: 207 teams registered
+PRIZE POOL: $4,250.00 of $5,000.00 goal (85% funded)
+ENTRY FEE: Free
+
+TABS AVAILABLE:
+- Overview: Tournament description, schedule, about section
+- Rules: Tournament ruleset and guidelines
+- Contributions: Crowdfunding — fans can buy contributor pins ($2.50 Mandy, $5.00 Spike) to grow the prize pool
+- Teams (207): List of all registered teams with members
+- Bracket: Single Elimination bracket view. Quarterfinals → Semifinals → Finals.
+- Stream: Live Twitch streams from registered streamers (ikobs, Zeider, dummypotato, ProCaster, BrawlFan99)
+- Goals: Stretch goals for the prize pool
+- Payouts: Prize distribution breakdown
+
+ACTIONS ON THIS PAGE:
+- "Join Tournament" button: Register for this tournament
+- "Contribute to Prize Pool" button: Opens contribution dialog with pin options
+- Bracket tab: Shows full bracket tree with match results
+- Stream tab: Shows embedded Twitch streams
+- Admin Mode toggle: For organizers — reveals admin configuration tabs
+
+MATCHERINO SUPPORT INFO:
+- For Brawl Stars issues (PINs, Supercell ID, disputes): redirect to Brawl Stars Discord https://discord.gg/AYna5z4RtF
+- PIN delivery: Supercell grants in batches, timing varies
+- Tax interview required before any payouts: Profile icon > Retake Interview
+- PayPal cashouts process automatically. Bank wire: email brian@matcherino.com
+- Account issues: contact support via Discord ticket in main Matcherino Discord
+
+NEXT STEPS FOR USERS:
+- New participant: Click "Join Tournament" to register your team
+- Want to support: Click "Contribute to Prize Pool" for pin options
+- Looking for results: Click "Bracket" tab to see match results
+- Need help: Ask Marco!`}
+      </div>
       {/* Top Navbar */}
       <header className="sticky top-0 z-50 bg-[#1B213A]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">

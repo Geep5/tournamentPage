@@ -10,6 +10,7 @@ import PartnershipPage from "@/pages/partnership";
 import CreatePage from "@/pages/create";
 import ProfilePage from "@/pages/profile";
 import { DiscordSupportBubble } from "@/components/discord-support-bubble";
+import { MarcoChatBubble } from "@/components/marco-chat-bubble";
 
 function Router() {
   return (
@@ -31,6 +32,7 @@ function App() {
         <Toaster />
         <Router />
         <DiscordSupportBubble />
+        <MarcoChatBubble />
       </TooltipProvider>
     </QueryClientProvider>
   );

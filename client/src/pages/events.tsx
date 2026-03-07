@@ -15,6 +15,10 @@ import {
   X,
   ChevronRight,
   CircleDollarSign,
+  Wifi,
+  Gamepad2,
+  Swords,
+  Ticket,
 } from "lucide-react";
 import { useState, useEffect, useCallback, useRef } from "react";
 import {
@@ -40,25 +44,25 @@ const featuredEvents = [
 ];
 
 const recommendedEvents = [
-  { name: "Guilty Gear Strive: Celestial Open", date: "Mar 8, 2026", game: "Guilty Gear Strive", format: "Single Elim", participants: 128, prize: "$3,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1384160/header.jpg" },
-  { name: "Korean Starcraft League: Week 87", date: "Mar 10, 2026", game: "Starcraft II", format: "Round Robin", participants: 32, prize: "$2,400", img: "https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg" },
-  { name: "Fatal Fury: City of Wolves Invitational", date: "Mar 12, 2026", game: "Fatal Fury", format: "Double Elim", participants: 64, prize: "$5,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2725020/header.jpg" },
-  { name: "2XKO Launch Tournament", date: "Mar 14, 2026", game: "2XKO", format: "Single Elim", participants: 512, prize: "$10,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2147950/header.jpg" },
-  { name: "Skullgirls Encore: Revival Series", date: "Mar 16, 2026", game: "Skullgirls Encore", format: "Double Elim", participants: 48, prize: "$1,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/245170/header.jpg" },
-  { name: "KOF XV: Global Championship", date: "Mar 20, 2026", game: "King of Fighters XV", format: "Double Elim", participants: 96, prize: "$4,800", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1498570/header.jpg" },
-  { name: "Granblue Rising: Spring Clash", date: "Mar 22, 2026", game: "GBVSR", format: "Single Elim", participants: 64, prize: "$2,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2157560/header.jpg" },
-  { name: "UMvC3 Legends Revival", date: "Mar 24, 2026", game: "UMvC3", format: "Double Elim", participants: 32, prize: "$1,800", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/357190/header.jpg" },
-  { name: "Tetris Effect: Connected Cup", date: "Mar 26, 2026", game: "Tetris Effect", format: "Round Robin", participants: 256, prize: "$6,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1003590/header.jpg" },
-  { name: "Tekken 8: Iron Fist Open", date: "Mar 28, 2026", game: "Tekken 8", format: "Double Elim", participants: 512, prize: "$15,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/header.jpg" },
-  { name: "Street Fighter 6: World Warrior", date: "Apr 2, 2026", game: "Street Fighter 6", format: "Double Elim", participants: 256, prize: "$8,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1326470/header.jpg" },
-  { name: "Guilty Gear Strive: Midnight Carnival", date: "Apr 5, 2026", game: "Guilty Gear Strive", format: "Single Elim", participants: 64, prize: "$2,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1384160/header.jpg" },
-  { name: "Fatal Fury: Wolves Unleashed", date: "Apr 8, 2026", game: "Fatal Fury", format: "Double Elim", participants: 128, prize: "$7,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2725020/header.jpg" },
-  { name: "2XKO Pro Circuit: Week 3", date: "Apr 10, 2026", game: "2XKO", format: "Round Robin", participants: 32, prize: "$3,600", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2147950/header.jpg" },
-  { name: "Skullgirls: Parasite Weave Open", date: "Apr 12, 2026", game: "Skullgirls Encore", format: "Double Elim", participants: 48, prize: "$1,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/245170/header.jpg" },
-  { name: "KOF XV: Rising Stars", date: "Apr 15, 2026", game: "King of Fighters XV", format: "Single Elim", participants: 64, prize: "$3,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1498570/header.jpg" },
-  { name: "GBVSR: Skybound Showdown", date: "Apr 18, 2026", game: "GBVSR", format: "Double Elim", participants: 96, prize: "$4,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2157560/header.jpg" },
-  { name: "UMvC3: Infinite Reborn", date: "Apr 20, 2026", game: "UMvC3", format: "Double Elim", participants: 48, prize: "$2,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/357190/header.jpg" },
-  { name: "Tekken 8: King of Iron Fist", date: "Apr 22, 2026", game: "Tekken 8", format: "Double Elim", participants: 1024, prize: "$50,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/header.jpg" },
+  { name: "Guilty Gear Strive: Celestial Open", date: "Mar 8, 2026", game: "Guilty Gear Strive", format: "Single Elim", participants: 128, maxParticipants: 128, entry: "Free", location: "Online", prize: "$3,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1384160/header.jpg" },
+  { name: "Korean Starcraft League: Week 87", date: "Mar 10, 2026", game: "Starcraft II", format: "Round Robin", participants: 32, maxParticipants: 32, entry: "Free", location: "Online", prize: "$2,400", img: "https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg" },
+  { name: "Fatal Fury: City of Wolves Invitational", date: "Mar 12, 2026", game: "Fatal Fury", format: "Double Elim", participants: 48, maxParticipants: 64, entry: "Free", location: "Online", prize: "$5,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2725020/header.jpg" },
+  { name: "2XKO Launch Tournament", date: "Mar 14, 2026", game: "2XKO", format: "Single Elim", participants: 410, maxParticipants: 512, entry: "$5", location: "Online", prize: "$10,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2147950/header.jpg" },
+  { name: "Skullgirls Encore: Revival Series", date: "Mar 16, 2026", game: "Skullgirls Encore", format: "Double Elim", participants: 48, maxParticipants: 48, entry: "Free", location: "Online", prize: "$1,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/245170/header.jpg" },
+  { name: "KOF XV: Global Championship", date: "Mar 20, 2026", game: "King of Fighters XV", format: "Double Elim", participants: 72, maxParticipants: 96, entry: "$10", location: "Online", prize: "$4,800", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1498570/header.jpg" },
+  { name: "Granblue Rising: Spring Clash", date: "Mar 22, 2026", game: "GBVSR", format: "Single Elim", participants: 64, maxParticipants: 64, entry: "Free", location: "Online", prize: "$2,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2157560/header.jpg" },
+  { name: "UMvC3 Legends Revival", date: "Mar 24, 2026", game: "UMvC3", format: "Double Elim", participants: 28, maxParticipants: 32, entry: "Free", location: "Online", prize: "$1,800", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/357190/header.jpg" },
+  { name: "Tetris Effect: Connected Cup", date: "Mar 26, 2026", game: "Tetris Effect", format: "Round Robin", participants: 200, maxParticipants: 256, entry: "Free", location: "Online", prize: "$6,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1003590/header.jpg" },
+  { name: "Tekken 8: Iron Fist Open", date: "Mar 28, 2026", game: "Tekken 8", format: "Double Elim", participants: 512, maxParticipants: 512, entry: "$15", location: "Online", prize: "$15,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/header.jpg" },
+  { name: "Street Fighter 6: World Warrior", date: "Apr 2, 2026", game: "Street Fighter 6", format: "Double Elim", participants: 180, maxParticipants: 256, entry: "$10", location: "Online", prize: "$8,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1326470/header.jpg" },
+  { name: "Guilty Gear Strive: Midnight Carnival", date: "Apr 5, 2026", game: "Guilty Gear Strive", format: "Single Elim", participants: 64, maxParticipants: 64, entry: "Free", location: "Online", prize: "$2,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1384160/header.jpg" },
+  { name: "Fatal Fury: Wolves Unleashed", date: "Apr 8, 2026", game: "Fatal Fury", format: "Double Elim", participants: 90, maxParticipants: 128, entry: "Free", location: "Online", prize: "$7,500", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2725020/header.jpg" },
+  { name: "2XKO Pro Circuit: Week 3", date: "Apr 10, 2026", game: "2XKO", format: "Round Robin", participants: 32, maxParticipants: 32, entry: "Free", location: "Online", prize: "$3,600", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2147950/header.jpg" },
+  { name: "Skullgirls: Parasite Weave Open", date: "Apr 12, 2026", game: "Skullgirls Encore", format: "Double Elim", participants: 36, maxParticipants: 48, entry: "Free", location: "Online", prize: "$1,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/245170/header.jpg" },
+  { name: "KOF XV: Rising Stars", date: "Apr 15, 2026", game: "King of Fighters XV", format: "Single Elim", participants: 64, maxParticipants: 64, entry: "Free", location: "Online", prize: "$3,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1498570/header.jpg" },
+  { name: "GBVSR: Skybound Showdown", date: "Apr 18, 2026", game: "GBVSR", format: "Double Elim", participants: 60, maxParticipants: 96, entry: "$5", location: "Online", prize: "$4,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2157560/header.jpg" },
+  { name: "UMvC3: Infinite Reborn", date: "Apr 20, 2026", game: "UMvC3", format: "Double Elim", participants: 48, maxParticipants: 48, entry: "Free", location: "Online", prize: "$2,200", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/357190/header.jpg" },
+  { name: "Tekken 8: King of Iron Fist", date: "Apr 22, 2026", game: "Tekken 8", format: "Double Elim", participants: 800, maxParticipants: 1024, entry: "$20", location: "Online", prize: "$50,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/header.jpg" },
 ];
 
 const browseGames = [
@@ -353,13 +357,21 @@ export default function EventsPage() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
-                    <div className="p-3 space-y-1.5">
+                    <div className="p-3 space-y-2">
                       <h4 className="text-sm font-semibold text-white truncate">{ev.name}</h4>
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] text-muted-foreground">{ev.game}</span>
                         <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] px-1.5 py-0 font-bold">
                           {ev.prize}
                         </Badge>
+                      </div>
+                      <div className="grid grid-cols-2 gap-x-2 gap-y-1 text-[10px] text-muted-foreground">
+                        <span className="flex items-center gap-1 truncate"><Calendar className="w-3 h-3 shrink-0" />{ev.date}</span>
+                        <span className="flex items-center gap-1 truncate"><Wifi className="w-3 h-3 shrink-0" />{ev.location}</span>
+                        <span className="flex items-center gap-1 truncate"><Gamepad2 className="w-3 h-3 shrink-0" />{ev.game}</span>
+                        <span className="flex items-center gap-1 truncate"><Ticket className="w-3 h-3 shrink-0" />{ev.entry}</span>
+                        <span className="flex items-center gap-1 truncate"><Swords className="w-3 h-3 shrink-0" />{ev.format}</span>
+                        <span className="flex items-center gap-1 truncate"><Users className="w-3 h-3 shrink-0" />{ev.participants} / {ev.maxParticipants}</span>
                       </div>
                     </div>
                   </Link>

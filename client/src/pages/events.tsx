@@ -315,7 +315,7 @@ MATCHERINO SUPPORT INFO:
                         style={{
                           zIndex,
                           transformStyle: 'preserve-3d',
-                          pointerEvents: isVisible ? 'auto' : 'none',
+                          pointerEvents: isCenter ? 'auto' : 'none',
                         }}
                       >
                         {isCenter ? (

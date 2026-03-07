@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { HeaderActions } from "@/components/header-actions";
-import { Search, Menu, X, CheckCircle2, Globe, Users, Ticket, Sparkles, Calendar, Trophy, ChevronLeft } from "lucide-react";
+import { Search, Menu, X, CheckCircle2, Globe, Users, Ticket, Sparkles, Calendar, Trophy, ChevronLeft, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { Link } from "wouter";
 import { MobileSidebarBar } from "@/components/mobile-sidebar-bar";
@@ -18,6 +18,7 @@ interface PartnerProgram {
   logoType: "asset" | "emoji";
   accentColor: string;
   coverImg?: string;
+  externalUrl?: string;
   benefits: { title: string; description: string }[];
   formFields: { label: string; placeholder: string }[];
 }
@@ -60,6 +61,7 @@ const programs: PartnerProgram[] = [
     logoType: "emoji",
     accentColor: "yellow-500",
     coverImg: "https://supercell.com/images/b524ca49e8549e5d3f5485452da7f26c/cropped.png",
+    externalUrl: "https://event.supercell.com/brawlstars/",
     benefits: [
       { title: "In-Game Item Drops", description: "Reward participants with exclusive Brawl Stars in-game items and skins during your events." },
       { title: "Verified Tournament Status", description: "Your events show a verified Brawl Stars badge, attracting more competitors." },
@@ -86,6 +88,7 @@ const programs: PartnerProgram[] = [
     logoType: "emoji",
     accentColor: "purple-500",
     coverImg: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1617400/3582d761ebef9a077a850170cf2d9431fae366e0/ss_3582d761ebef9a077a850170cf2d9431fae366e0.1920x1080.jpg?t=1772641473",
+    externalUrl: "https://www.thebazaar.gg/",
     benefits: [
       { title: "Exclusive Card-Back Drops", description: "Distribute limited-edition card backs to tournament participants and winners." },
       { title: "Leaderboard Integration", description: "Your tournament results feed into the official Bazaar community leaderboard." },
@@ -248,7 +251,13 @@ export default function PartnershipPage() {
                   {programs.map((prog) => (
                     <button
                       key={prog.id}
-                      onClick={() => setSelectedProgram(prog.id)}
+                      onClick={() => {
+                        if (prog.externalUrl) {
+                          window.open(prog.externalUrl, '_blank', 'noopener');
+                        } else {
+                          setSelectedProgram(prog.id);
+                        }
+                      }}
                       className="rounded-2xl border border-white/5 bg-[#1C2230] overflow-hidden text-left hover:border-white/15 hover:bg-[#1C2230]/80 transition-all group cursor-pointer"
                     >
                       {/* Cover image or fallback */}
@@ -275,12 +284,20 @@ export default function PartnershipPage() {
                         </div>
                         <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{prog.description}</p>
                         <div className="flex items-center gap-2 text-xs font-semibold text-primary">
-                          Learn more & apply
-                          <ChevronLeft className="w-3.5 h-3.5 rotate-180" />
+                          {prog.externalUrl ? (
+                            <>
+                              Visit Organizer Program
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </>
+                          ) : (
+                            <>
+                              Learn more & apply
+                              <ChevronLeft className="w-3.5 h-3.5 rotate-180" />
+                            </>
+                          )}
                         </div>
                       </div>
                     </button>
-                  ))}
                 </div>
               </>
             ) : (

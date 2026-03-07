@@ -59,7 +59,7 @@ const programs: PartnerProgram[] = [
     logo: "⭐",
     logoType: "emoji",
     accentColor: "yellow-500",
-    coverImg: "https://event.supercell.com/brawlstars/share-image.jpg",
+    coverImg: "https://supercell.com/images/b524ca49e8549e5d3f5485452da7f26c/cropped.png",
     benefits: [
       { title: "In-Game Item Drops", description: "Reward participants with exclusive Brawl Stars in-game items and skins during your events." },
       { title: "Verified Tournament Status", description: "Your events show a verified Brawl Stars badge, attracting more competitors." },
@@ -85,7 +85,7 @@ const programs: PartnerProgram[] = [
     logo: "🃏",
     logoType: "emoji",
     accentColor: "purple-500",
-    coverImg: "https://cdn.cloudflare.steamstatic.com/steam/apps/2232680/library_hero.jpg",
+    coverImg: "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1617400/3582d761ebef9a077a850170cf2d9431fae366e0/ss_3582d761ebef9a077a850170cf2d9431fae366e0.1920x1080.jpg?t=1772641473",
     benefits: [
       { title: "Exclusive Card-Back Drops", description: "Distribute limited-edition card backs to tournament participants and winners." },
       { title: "Leaderboard Integration", description: "Your tournament results feed into the official Bazaar community leaderboard." },

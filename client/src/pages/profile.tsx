@@ -393,7 +393,7 @@ NAVIGATION:
           </div>
 
           <div className="flex md:hidden">
-            <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+            <Button variant="ghost" size="icon" className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground">
               <Menu className="h-5 w-5" />
             </Button>
           </div>

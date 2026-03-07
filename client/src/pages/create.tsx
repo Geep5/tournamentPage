@@ -116,7 +116,19 @@ export default function CreatePage() {
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       <div data-agent-context hidden>
-{`PAGE: Tournament Creation
+{`--- USER CONTEXT (injected by Matcherino at render time) ---
+USER: Grant Matcherino (#1004) [from session]
+EMAIL: grant@matcherino.com [from session]
+ACCOUNT TYPE: Organizer (Tier 2) [from session]
+TAX INTERVIEW: Completed [from API]
+BALANCE: $28.33 [from API]
+LINKED ACCOUNTS: Twitch (connected), Discord (not connected) [from API]
+CAN CREATE TOURNAMENTS: Yes (Organizer Tier 2) [from session]
+MAX PARTICIPANTS ALLOWED: 512 (Tier 2 limit) [from API]
+PREVIOUS TOURNAMENTS CREATED: 12 [from API]
+DRAFTS: 2 unsaved drafts [from API]
+
+PAGE: Tournament Creation
 PURPOSE: Create a new tournament event on Matcherino.
 
 REQUIRED FIELDS:

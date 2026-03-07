@@ -330,7 +330,19 @@ export default function ProfilePage() {
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       <div data-agent-context hidden>
-{`PAGE: User Profile
+{`--- USER CONTEXT (injected by Matcherino at render time) ---
+USER: Grant Matcherino (#1004) [from session]
+EMAIL: grant@matcherino.com [from session]
+ACCOUNT TYPE: Organizer (Tier 2) [from session]
+TAX INTERVIEW: Completed [from API]
+BALANCE: $28.33 [from API]
+LINKED ACCOUNTS: Twitch (connected), Discord (not connected) [from API]
+VIEWING OWN PROFILE: Yes [from session — compare profile ID to session user]
+ORGANIZER PROGRAM: Tier 2 — can run events with up to 512 participants [from API]
+PENDING PAYOUTS: None [from API]
+OPEN SUPPORT TICKETS: 0 [from API]
+
+PAGE: User Profile
 PURPOSE: Manage account settings, linked accounts, cashout, and tax information.
 
 SECTIONS ON THIS PAGE:

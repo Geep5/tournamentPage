@@ -163,7 +163,18 @@ export default function EventsPage() {
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       <div data-agent-context hidden>
-{`PAGE: Events Browser
+{`--- USER CONTEXT (injected by Matcherino at render time) ---
+USER: Grant Matcherino (#1004) [from session]
+EMAIL: grant@matcherino.com [from session]
+ACCOUNT TYPE: Organizer (Tier 2) [from session]
+TAX INTERVIEW: Completed [from API]
+BALANCE: $28.33 [from API]
+LINKED ACCOUNTS: Twitch (connected), Discord (not connected) [from API]
+REGISTERED EVENTS: 4 active [from API]
+FAVORITED GAMES: Brawl Stars, Starcraft II [from API]
+RECENT SEARCHES: "brawl stars tournament", "SC2 weekly" [from API]
+
+PAGE: Events Browser
 PURPOSE: Browse, search, and discover tournaments on Matcherino.
 
 SECTIONS ON THIS PAGE:

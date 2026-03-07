@@ -502,7 +502,20 @@ export default function TournamentPage() {
       } as React.CSSProperties}
     >
       <div data-agent-context hidden>
-{`PAGE: Tournament Detail
+{`--- USER CONTEXT (injected by Matcherino at render time) ---
+USER: Grant Matcherino (#1004) [from session]
+EMAIL: grant@matcherino.com [from session]
+ACCOUNT TYPE: Organizer (Tier 2) [from session]
+TAX INTERVIEW: Completed [from API]
+BALANCE: $28.33 [from API]
+LINKED ACCOUNTS: Twitch (connected), Discord (not connected) [from API]
+USER ROLE ON THIS TOURNAMENT: Admin (Organizer) [from page data]
+REGISTRATION STATUS: Not Registered (organizers don't register) [from page data]
+CAN EDIT: Yes [from page data]
+CAN MANAGE BRACKET: Yes [from page data]
+CAN PAYOUT: Yes (tax interview completed) [from page data + API]
+
+PAGE: Tournament Detail
 TOURNAMENT: Road to Brawl Cup SESA
 GAME: Brawl Stars
 ORGANIZER: Quantum Studios

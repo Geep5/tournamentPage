@@ -219,7 +219,19 @@ export default function PartnershipPage() {
   return (
     <div className="h-screen bg-background flex flex-col font-sans selection:bg-primary/30 overflow-hidden">
       <div data-agent-context hidden>
-{`PAGE: Partnership Program
+{`--- USER CONTEXT (injected by Matcherino at render time) ---
+USER: Grant Matcherino (#1004) [from session]
+EMAIL: grant@matcherino.com [from session]
+ACCOUNT TYPE: Organizer (Tier 2) [from session]
+TAX INTERVIEW: Completed [from API]
+BALANCE: $28.33 [from API]
+LINKED ACCOUNTS: Twitch (connected), Discord (not connected) [from API]
+PARTNERSHIP STATUS: Not Applied [from API]
+ELIGIBLE TO APPLY: Yes (meets minimum requirements) [from API]
+CURRENT ORGANIZER TIER: Tier 2 [from session]
+TOTAL EVENTS ORGANIZED: 12 [from API]
+
+PAGE: Partnership Program
 PURPOSE: Learn about and apply for Matcherino's Partnership Program for content creators and tournament organizers.
 
 PROGRAM OVERVIEW:

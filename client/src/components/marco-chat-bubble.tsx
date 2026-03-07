@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, useCallback, type FormEvent } from "react"
 import { cn } from "@/lib/utils";
 import { X, Send, Loader2 } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import { useChatBubble } from "@/lib/chat-bubble-context";
 import {
   scanInteractiveElements,
   callMarco,
@@ -127,9 +128,8 @@ function MarcoIcon({ className }: { className?: string }) {
 // ---------------------------------------------------------------------------
 
 export function MarcoChatBubble() {
-  const [open, setOpen] = useState(() => {
-    return sessionStorage.getItem('marco-chat-open') === 'true';
-  });
+  const { active, toggle, close: closeChat } = useChatBubble();
+  const open = active === "marco";
   const [messages, setMessages] = useState<Message[]>(() => {
     try {
       const raw = sessionStorage.getItem('marco-messages');
@@ -182,7 +182,7 @@ export function MarcoChatBubble() {
         buttonRef.current &&
         !buttonRef.current.contains(e.target as Node)
       ) {
-        setOpen(false);
+        closeChat();
       }
     }
     document.addEventListener("mousedown", handleClick);
@@ -193,7 +193,7 @@ export function MarcoChatBubble() {
   useEffect(() => {
     if (!open) return;
     function handleKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") closeChat();
     }
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
@@ -215,7 +215,7 @@ export function MarcoChatBubble() {
   // Persist open state
   useEffect(() => {
     sessionStorage.setItem('marco-chat-open', open ? 'true' : 'false');
-  }, [open]);
+  }, [open, active]);
 
   // Persist greeted flag
   useEffect(() => {
@@ -389,7 +389,7 @@ export function MarcoChatBubble() {
   return (
     <div
       data-marco-ui
-      className="fixed bottom-[68px] right-[84px] z-[9999] flex flex-col items-end gap-3 xl:bottom-6 xl:right-[88px] pointer-events-none"
+      className="fixed bottom-[68px] right-[84px] z-[9999] flex flex-col items-end gap-3 xl:bottom-6 xl:right-[88px] pointer-events-none max-sm:right-0 max-sm:left-0 max-sm:items-center"
     >
       {/* Chat panel */}
       <div
@@ -401,11 +401,11 @@ export function MarcoChatBubble() {
             : "scale-95 opacity-0 translate-y-2 pointer-events-none"
         )}
       >
-        <div className="w-[380px] h-[520px] rounded-2xl border border-white/10 bg-[#1a1f2e] shadow-2xl overflow-hidden flex flex-col">
+        <div className="w-[380px] max-sm:w-[calc(100vw-2rem)] h-[520px] rounded-2xl border border-white/10 bg-[#1a1f2e] shadow-2xl overflow-hidden flex flex-col">
           {/* Header */}
           <div className="relative bg-gradient-to-r from-cyan-600 to-blue-600 px-5 pt-4 pb-4 shrink-0">
             <button
-              onClick={() => setOpen(false)}
+              onClick={() => closeChat()}
               className="absolute top-3 right-3 text-white/70 hover:text-white transition-colors"
               aria-label="Close"
             >
@@ -520,7 +520,7 @@ export function MarcoChatBubble() {
       {/* FAB trigger */}
       <button
         ref={buttonRef}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => toggle("marco")}
         className={cn(
           "pointer-events-auto",
           "group flex items-center justify-center rounded-full shadow-lg transition-all duration-200",

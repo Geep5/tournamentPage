@@ -11,6 +11,7 @@ import CreatePage from "@/pages/create";
 import ProfilePage from "@/pages/profile";
 import { DiscordSupportBubble } from "@/components/discord-support-bubble";
 import { MarcoChatBubble } from "@/components/marco-chat-bubble";
+import { ChatBubbleProvider } from "@/lib/chat-bubble-context";
 
 function Router() {
   return (
@@ -29,10 +30,12 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Router />
-        <DiscordSupportBubble />
-        <MarcoChatBubble />
+        <ChatBubbleProvider>
+          <Toaster />
+          <Router />
+          <DiscordSupportBubble />
+          <MarcoChatBubble />
+        </ChatBubbleProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );

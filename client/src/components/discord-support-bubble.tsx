@@ -1,7 +1,8 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useLocation } from "wouter";
 import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
+import { useChatBubble } from "@/lib/chat-bubble-context";
 
 /**
  * Maps URL path prefixes to Discord invite links.
@@ -36,7 +37,8 @@ function DiscordIcon({ className }: { className?: string }) {
 }
 
 export function DiscordSupportBubble() {
-  const [open, setOpen] = useState(false);
+  const { active, toggle, close } = useChatBubble();
+  const open = active === "discord";
   const [location] = useLocation();
   const panelRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -47,38 +49,39 @@ export function DiscordSupportBubble() {
   useEffect(() => {
     if (!open) return;
     function handleClick(e: MouseEvent) {
+      if (!(e as any).isTrusted) return;
       if (
         panelRef.current &&
         !panelRef.current.contains(e.target as Node) &&
         buttonRef.current &&
         !buttonRef.current.contains(e.target as Node)
       ) {
-        setOpen(false);
+        close();
       }
     }
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
-  }, [open]);
+  }, [open, close]);
 
   // Close on Escape
   useEffect(() => {
     if (!open) return;
     function handleKey(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") close();
     }
     document.addEventListener("keydown", handleKey);
     return () => document.removeEventListener("keydown", handleKey);
-  }, [open]);
+  }, [open, close]);
 
   return (
-    <div className="fixed bottom-[68px] right-5 z-50 flex flex-col items-end gap-3 xl:bottom-6 xl:right-6">
+    <div className="fixed bottom-[68px] right-5 z-[9999] flex flex-col items-end gap-3 xl:bottom-6 xl:right-6 pointer-events-none">
       {/* Expanded panel */}
       <div
         ref={panelRef}
         className={cn(
           "origin-bottom-right transition-all duration-200 ease-out",
           open
-            ? "scale-100 opacity-100 translate-y-0"
+            ? "scale-100 opacity-100 translate-y-0 pointer-events-auto"
             : "scale-95 opacity-0 translate-y-2 pointer-events-none",
         )}
       >
@@ -86,7 +89,7 @@ export function DiscordSupportBubble() {
           {/* Header */}
           <div className="relative bg-[#5865F2] px-5 pt-5 pb-6">
             <button
-              onClick={() => setOpen(false)}
+              onClick={() => close()}
               className="absolute top-3 right-3 text-white/70 hover:text-white transition-colors"
               aria-label="Close"
             >
@@ -128,8 +131,9 @@ export function DiscordSupportBubble() {
       {/* FAB trigger */}
       <button
         ref={buttonRef}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => toggle("discord")}
         className={cn(
+          "pointer-events-auto",
           "group flex items-center justify-center rounded-full shadow-lg transition-all duration-200",
           "h-14 w-14 bg-[#5865F2] hover:bg-[#4752C4] active:bg-[#3C45A5]",
           "hover:scale-105 active:scale-95",

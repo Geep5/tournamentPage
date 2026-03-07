@@ -3,6 +3,7 @@
   "outputDirectory": "dist/public",
   "framework": null,
   "rewrites": [
+    { "source": "/api/marco", "destination": "/api/marco" },
     { "source": "/(.*)", "destination": "/index.html" }
   ]
 }

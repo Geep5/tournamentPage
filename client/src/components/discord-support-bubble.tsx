@@ -71,7 +71,7 @@ export function DiscordSupportBubble() {
   }, [open]);
 
   return (
-    <div className="fixed bottom-[68px] right-5 z-50 flex flex-col items-end gap-3 md:bottom-6 md:right-6">
+    <div className="fixed bottom-[68px] right-5 z-50 flex flex-col items-end gap-3 xl:bottom-6 xl:right-6">
       {/* Expanded panel */}
       <div
         ref={panelRef}

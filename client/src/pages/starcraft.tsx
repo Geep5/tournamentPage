@@ -45,12 +45,12 @@ interface Tournament {
 }
 
 const tournaments: Tournament[] = [
-  { id: 1, name: "StarCraft Evolution League #20", date: "Mar 15, 2026", format: "Double Elimination", participants: 48, maxParticipants: 64, prize: "$3,200", status: "live", organizer: "ESL", organizerAvatar: "E", region: "Global", img: "https://bnetcmsus-a.akamaihd.net/cms/blog_header/ci/CIGT65ON47WE1507159084046.jpg" },
-  { id: 2, name: "Korean Starcraft League: Week 88", date: "Mar 17, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$2,400", status: "upcoming", organizer: "KSL", organizerAvatar: "K", region: "Korea", img: "https://bnetcmsus-a.akamaihd.net/cms/blog_header/ci/CIGT65ON47WE1507159084046.jpg" },
-  { id: 3, name: "2v2 Circuit 2026 \u2014 Season Opener", date: "Mar 22, 2026", format: "Double Elimination", participants: 128, maxParticipants: 256, prize: "$5,000", status: "upcoming", organizer: "TeamLiquid", organizerAvatar: "T", region: "NA / EU", img: "https://bnetcmsus-a.akamaihd.net/cms/blog_header/ci/CIGT65ON47WE1507159084046.jpg" },
-  { id: 4, name: "Community Showdown III \u2014 EMEA", date: "Mar 8, 2026", format: "Single Elimination", participants: 64, maxParticipants: 64, prize: "$1,000", status: "completed", organizer: "ESL", organizerAvatar: "E", region: "EMEA", img: "https://bnetcmsus-a.akamaihd.net/cms/blog_header/ci/CIGT65ON47WE1507159084046.jpg" },
-  { id: 5, name: "Bronze to GM Weekly #42", date: "Mar 5, 2026", format: "Swiss", participants: 96, maxParticipants: 128, prize: "$400", status: "completed", organizer: "B2GM", organizerAvatar: "B", region: "Global", img: "https://bnetcmsus-a.akamaihd.net/cms/blog_header/ci/CIGT65ON47WE1507159084046.jpg" },
-  { id: 6, name: "StarCraft Evolution League #19", date: "Feb 28, 2026", format: "Double Elimination", participants: 64, maxParticipants: 64, prize: "$3,200", status: "completed", organizer: "ESL", organizerAvatar: "E", region: "Global", img: "https://bnetcmsus-a.akamaihd.net/cms/blog_header/ci/CIGT65ON47WE1507159084046.jpg" },
+  { id: 1, name: "StarCraft Evolution League #20", date: "Mar 15, 2026", format: "Double Elimination", participants: 48, maxParticipants: 64, prize: "$3,200", status: "live", organizer: "ESL", organizerAvatar: "E", region: "Global", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=80" },
+  { id: 2, name: "Korean Starcraft League: Week 88", date: "Mar 17, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$2,400", status: "upcoming", organizer: "KSL", organizerAvatar: "K", region: "Korea", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=80" },
+  { id: 3, name: "2v2 Circuit 2026 \u2014 Season Opener", date: "Mar 22, 2026", format: "Double Elimination", participants: 128, maxParticipants: 256, prize: "$5,000", status: "upcoming", organizer: "TeamLiquid", organizerAvatar: "T", region: "NA / EU", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=80" },
+  { id: 4, name: "Community Showdown III \u2014 EMEA", date: "Mar 8, 2026", format: "Single Elimination", participants: 64, maxParticipants: 64, prize: "$1,000", status: "completed", organizer: "ESL", organizerAvatar: "E", region: "EMEA", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=80" },
+  { id: 5, name: "Bronze to GM Weekly #42", date: "Mar 5, 2026", format: "Swiss", participants: 96, maxParticipants: 128, prize: "$400", status: "completed", organizer: "B2GM", organizerAvatar: "B", region: "Global", img: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=80" },
+  { id: 6, name: "StarCraft Evolution League #19", date: "Feb 28, 2026", format: "Double Elimination", participants: 64, maxParticipants: 64, prize: "$3,200", status: "completed", organizer: "ESL", organizerAvatar: "E", region: "Global", img: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=800&q=80" },
 ];
 
 const activityFeed = [
@@ -262,7 +262,7 @@ Current tab: ${activeTab}
       {/* ── Hero Banner (always visible) ── */}
       <div className="relative w-full h-[160px] md:h-[200px] overflow-hidden shrink-0">
         <img
-          src="https://bnetcmsus-a.akamaihd.net/cms/blog_header/ci/CIGT65ON47WE1507159084046.jpg"
+          src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&q=80"
           alt="StarCraft II"
           className="w-full h-full object-cover"
         />
@@ -444,7 +444,7 @@ Current tab: ${activeTab}
                     <div className="flex flex-col md:flex-row">
                       <div className="md:w-1/2 aspect-[16/9] md:aspect-auto overflow-hidden">
                         <img
-                          src="https://bnetcmsus-a.akamaihd.net/cms/blog_header/ci/CIGT65ON47WE1507159084046.jpg"
+                          src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=1200&q=80"
                           alt="StarCraft II"
                           className="w-full h-full object-cover"
                         />

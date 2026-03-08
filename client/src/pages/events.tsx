@@ -68,7 +68,7 @@ const recommendedEvents = [
 
 const browseGames = [
   { name: "Tekken 8", tournaments: 142, likes: 3800, participants: 18400, crowdfunded: "$284,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/library_600x900_2x.jpg" },
-  { name: "Starcraft II", tournaments: 98, likes: 2100, participants: 9200, crowdfunded: "$196,000", img: "https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg" },
+  { name: "Starcraft II", tournaments: 98, likes: 2100, participants: 9200, crowdfunded: "$196,000", img: "https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg", href: "/p/starcraft" },
   { name: "Guilty Gear Strive", tournaments: 76, likes: 1900, participants: 7600, crowdfunded: "$128,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1384160/library_600x900_2x.jpg" },
   { name: "Fatal Fury", tournaments: 34, likes: 890, participants: 3200, crowdfunded: "$45,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2725020/library_600x900_2x.jpg" },
   { name: "2XKO", tournaments: 28, likes: 2400, participants: 14000, crowdfunded: "$92,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/2147950/library_600x900_2x.jpg" },
@@ -494,7 +494,7 @@ MATCHERINO SUPPORT INFO:
                   .filter((g) => g.name.toLowerCase().includes(browseSearch.toLowerCase()))
                   .map((game, i) => (
                     <Link
-                      href="/"
+                      href={(game as any).href || "/"}
                       key={i}
                       className="rounded-2xl bg-card border border-white/5 overflow-hidden hover:border-white/10 transition-all cursor-pointer group relative block"
                     >

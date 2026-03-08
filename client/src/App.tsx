@@ -9,6 +9,7 @@ import EventsPage from "@/pages/events";
 import PartnershipPage from "@/pages/partnership";
 import CreatePage from "@/pages/create";
 import ProfilePage from "@/pages/profile";
+import StarcraftPage from "@/pages/starcraft";
 import { MarcoChatBubble } from "@/components/marco-chat-bubble";
 
 function Router() {
@@ -19,6 +20,7 @@ function Router() {
       <Route path="/partnership" component={PartnershipPage} />
       <Route path="/create" component={CreatePage} />
       <Route path="/profile" component={ProfilePage} />
+      <Route path="/p/starcraft" component={StarcraftPage} />
       <Route component={NotFound} />
     </Switch>
   );

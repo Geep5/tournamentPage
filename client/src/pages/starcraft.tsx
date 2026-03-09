@@ -309,15 +309,6 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
               className="w-7 h-7 rounded-md object-cover"
             />
             <span className="font-semibold text-white text-sm tracking-tight hidden sm:inline">StarCraft II</span>
-            <span className="text-[10px] text-white/30 hidden sm:inline">/</span>
-            <div className="flex items-center gap-1.5 shrink-0">
-              <img
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Coca-Cola_bottle_cap.svg/200px-Coca-Cola_bottle_cap.svg.png"
-                alt="Coca-Cola"
-                className="w-5 h-5 rounded-full object-contain"
-              />
-              <span className="text-[10px] text-red-400 font-semibold hidden sm:inline">Presented by Coca-Cola</span>
-            </div>
           </div>
 
           {/* Desktop nav */}

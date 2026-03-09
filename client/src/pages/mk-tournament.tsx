@@ -4,12 +4,20 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { HeaderActions } from "@/components/header-actions";
 import { Progress } from "@/components/ui/progress";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { MobileSidebarBar } from "@/components/mobile-sidebar-bar";
 import {
-  Search, Trophy, Calendar, Users, Heart, ChevronRight, ChevronDown,
+  Search, Trophy, Users, Heart, ChevronRight, ChevronDown,
   ChevronLeft, Menu, LayoutGrid, ClipboardList, Coins, GitMerge, Radio,
-  Zap, CircleDollarSign, X, MapPin, Gamepad2, Star,
-  Crown, Shield,
+  Zap, CircleDollarSign, X, Star,
+  Crown, Check, Twitch,
 } from "lucide-react";
 import { useState, useEffect } from "react";
 import helmetLogo from "@assets/mhelmet_1771552283812.png";
@@ -124,12 +132,11 @@ export default function MKTournamentPage() {
   const tournamentId = params?.id ? parseInt(params.id) : 1;
 
   const tournament = allTournaments.find((t) => t.id === tournamentId) ?? allTournaments[0];
-  const otherTournaments = allTournaments.filter((t) => t.id !== tournament.id);
 
   const [activeTab, setActiveTab] = useState("overview");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [orgLiked, setOrgLiked] = useState(false);
-  const [rightTab, setRightTab] = useState<"tournaments" | "activity">("tournaments");
+  const [rightTab, setRightTab] = useState<"prize-pool" | "activity" | "live">("prize-pool");
   const [aboutExpanded, setAboutExpanded] = useState(false);
   const [cols, setCols] = useState(3);
 
@@ -224,17 +231,6 @@ export default function MKTournamentPage() {
         })}
       </div>
 
-      {/* Quick stats */}
-      <div className="rounded-xl bg-white/[0.03] border border-white/5 p-4 space-y-3">
-        <h4 className="text-xs font-bold uppercase tracking-wider text-white/40">Tournament Info</h4>
-        <div className="space-y-2 text-sm">
-          <div className="flex justify-between"><span className="text-white/50">Format</span><span className="text-white font-medium">{tournament.format}</span></div>
-          <div className="flex justify-between"><span className="text-white/50">Region</span><span className="text-white font-medium">{tournament.region}</span></div>
-          <div className="flex justify-between"><span className="text-white/50">Date</span><span className="text-white font-medium">{tournament.date}</span></div>
-          <div className="flex justify-between"><span className="text-white/50">Game</span><span className="text-white font-medium">Mortal Kombat 1</span></div>
-        </div>
-      </div>
-
       {/* Back to program link */}
       <Link href="/p/mortalkombat" className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-white/50 hover:text-white hover:bg-white/5 transition-colors">
         <ChevronLeft className="w-4 h-4" />
@@ -248,12 +244,11 @@ export default function MKTournamentPage() {
     <>
       <div className="flex items-center border-b border-white/5 backdrop-blur-sm sticky top-0 z-10 bg-[#0D0D0D]/80">
         <button
-          onClick={() => setRightTab("tournaments")}
-          className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "tournaments" ? `border-[${MK_RED}] text-red-400 bg-white/5` : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
-          style={rightTab === "tournaments" ? { borderColor: MK_RED } : undefined}
-          aria-label="More MK1 tournaments"
+          onClick={() => setRightTab("prize-pool")}
+          className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "prize-pool" ? "border-yellow-500 text-yellow-500 bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+          aria-label="Prize pool"
         >
-          <Trophy className="w-5 h-5" />
+          <CircleDollarSign className="w-5 h-5" />
         </button>
         <button
           onClick={() => setRightTab("activity")}
@@ -262,68 +257,171 @@ export default function MKTournamentPage() {
         >
           <Zap className="w-5 h-5" />
         </button>
+        <button
+          onClick={() => setRightTab("live")}
+          className={`flex-1 flex justify-center py-4 border-b-2 transition-all ${rightTab === "live" ? "border-primary text-primary bg-white/5" : "border-transparent text-muted-foreground hover:text-foreground hover:bg-white/5"}`}
+        >
+          <span className={`text-[10px] font-bold tracking-wider px-2 py-0.5 rounded ${rightTab === "live" ? "bg-primary/20 text-primary" : "bg-white/10 text-white/70"}`}>LIVE</span>
+        </button>
       </div>
 
-      <div className="p-4 space-y-4 overflow-y-auto flex-1 no-scrollbar">
-        {rightTab === "tournaments" && (
-          <>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-white/40">More MK1 Tournaments</h3>
-            <div className="space-y-3">
-              {otherTournaments.map((t) => (
-                <Link key={t.id} href={`/p/mortalkombat/t/${t.id}`}>
-                  <div className="group rounded-xl overflow-hidden border border-white/5 hover:border-red-500/20 bg-white/[0.02] hover:bg-white/[0.04] transition-all cursor-pointer">
-                    <div className="aspect-[2/1] overflow-hidden relative">
-                      <img src={t.img} alt={t.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-                      <div className="absolute top-1.5 left-1.5 flex items-center gap-1">
-                        <StatusBadge status={t.status} />
-                        {t.featured && (
-                          <Badge className="text-[9px] font-bold border-none gap-0.5" style={{ backgroundColor: `${MK_GOLD}33`, color: MK_GOLD }}>
-                            <Star className="w-2 h-2" />
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="absolute bottom-1.5 right-1.5">
-                        <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[9px] font-bold backdrop-blur-sm">{t.prize}</Badge>
-                      </div>
-                    </div>
-                    <div className="p-2.5 space-y-1">
-                      <h4 className="text-xs font-semibold text-white truncate group-hover:text-red-400 transition-colors">{t.name}</h4>
-                      <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                        <span className="flex items-center gap-0.5"><Calendar className="w-2.5 h-2.5" /> {t.date}</span>
-                        <span className="flex items-center gap-0.5"><Users className="w-2.5 h-2.5" /> {t.participants}/{t.maxParticipants}</span>
-                      </div>
-                    </div>
-                  </div>
-                </Link>
-              ))}
+      <div className="p-6 space-y-8 overflow-y-auto flex-1 no-scrollbar">
+
+        {/* Prize Pool Summary */}
+        {rightTab === "prize-pool" && (
+        <div className="space-y-6">
+          <div className="p-5 rounded-2xl bg-gradient-to-br from-yellow-500/10 to-orange-500/5 border border-yellow-500/20 shadow-lg relative overflow-hidden animate-in fade-in slide-in-from-right-4 duration-300">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-500/10 rounded-full blur-3xl" />
+            <div className="flex items-center justify-between mb-2 relative z-10">
+              <h3 className="font-sans font-semibold text-lg text-yellow-500 flex items-center gap-2">
+                <Trophy className="w-5 h-5" /> Prize Pool
+              </h3>
             </div>
-          </>
+            <div className="space-y-4 relative z-10">
+              <div>
+                <div className="text-3xl font-sans font-bold text-white">{tournament.prize}</div>
+                <div className="text-sm text-yellow-500/80 mt-1 flex justify-between">
+                  <span>65% Funded</span>
+                  <span>$15,000</span>
+                </div>
+              </div>
+              <Progress value={65} className="h-2 bg-black/40" />
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="w-full font-bold shadow-[0_0_15px_rgba(250,204,21,0.2)] hover:shadow-[0_0_25px_rgba(250,204,21,0.4)] transition-all bg-yellow-400 hover:bg-yellow-300 text-black">
+                    Contribute to Prize Pool
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="sm:max-w-md bg-background border border-white/10">
+                  <DialogHeader>
+                    <DialogTitle className="text-2xl font-sans text-center mb-2">Contribute to {tournament.name}</DialogTitle>
+                    <DialogDescription className="text-center text-muted-foreground">
+                      Support the tournament and help grow the prize pool for MK1 competitors.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <div className="space-y-4 mt-6">
+                    {[
+                      { name: "Scorpion Supporter", price: "$5.00", pool: "$3.75", org: "$0.50", platform: "$0.75", emoji: "\ud83d\udd25" },
+                      { name: "Sub-Zero Backer", price: "$10.00", pool: "$7.50", org: "$1.00", platform: "$1.50", emoji: "\u2744\ufe0f" },
+                    ].map((tier) => (
+                      <div key={tier.name} className="flex bg-card/50 border border-white/10 rounded-xl p-4 gap-4 hover:border-yellow-500/50 transition-colors cursor-pointer relative overflow-hidden">
+                        <div className="w-16 h-16 bg-black/30 rounded-lg flex items-center justify-center flex-shrink-0 text-3xl">
+                          {tier.emoji}
+                        </div>
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-foreground">{tier.name}</h4>
+                          <div className="text-2xl font-bold text-yellow-500 my-1">{tier.price}</div>
+                          <div className="text-xs text-muted-foreground space-y-1">
+                            <div className="flex items-center gap-1"><Trophy className="w-3 h-3 text-yellow-500" /> {tier.pool} Prize Pool</div>
+                            <div className="flex items-center gap-1"><Users className="w-3 h-3 text-blue-400" /> {tier.org} Organizer</div>
+                            <div className="flex items-center gap-1"><Heart className="w-3 h-3 text-yellow-400" /> {tier.platform} Matcherino</div>
+                          </div>
+                        </div>
+                        <Button className="absolute right-4 top-1/2 -translate-y-1/2 bg-yellow-400 hover:bg-yellow-300 text-black">Select</Button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-center mt-6 text-sm text-muted-foreground">
+                    You can also make a direct contribution by clicking <a href="#" className="text-primary hover:underline">here</a>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
+          </div>
+
+          <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-500 delay-100">
+            {/* Top Contributors */}
+            <div className="space-y-3">
+              <div className="flex items-start gap-3">
+                <div className="mt-1 flex-shrink-0 w-5 h-5 rounded-full border-2 border-yellow-500/80 flex items-center justify-center bg-yellow-500/10">
+                  <Check className="w-3 h-3 text-yellow-500" strokeWidth={3} />
+                </div>
+                <div>
+                  <h4 className="font-sans font-semibold text-lg text-white tracking-wide">Top Contributors</h4>
+                  <p className="text-sm text-muted-foreground mt-2 leading-relaxed">
+                    These players and fans have contributed the most to the prize pool.
+                  </p>
+                </div>
+              </div>
+              <div className="ml-8 space-y-2">
+                {donors.slice(0, 5).map((d, i) => (
+                  <div key={i} className="flex items-center gap-3 py-1.5">
+                    <span className="text-[10px] font-bold text-white/30 w-4 text-right">{i + 1}</span>
+                    <Avatar className="w-6 h-6">
+                      <AvatarImage src={`https://i.pravatar.cc/150?u=${d.avatar}`} />
+                      <AvatarFallback className="text-[9px]">{d.name.slice(0, 2)}</AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm text-white flex-1">{d.name}</span>
+                    <span className="text-sm font-bold text-yellow-400">${d.amount}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
         )}
 
-        {rightTab === "activity" && (
-          <>
-            <h3 className="text-xs font-bold uppercase tracking-wider text-white/40">Live Activity</h3>
-            <div className="space-y-3">
-              {activityFeed.map((item, i) => (
-                <div key={i} className="flex gap-2.5 group">
-                  <Avatar className="w-7 h-7 flex-shrink-0 border border-white/10">
-                    <AvatarImage src={`https://i.pravatar.cc/150?u=${item.user.toLowerCase()}`} />
-                    <AvatarFallback className="text-[9px]">{item.user.slice(0, 2)}</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs text-white/70 leading-relaxed">
-                      <span className="font-semibold text-white">{item.user}</span>{" "}
-                      {item.action}
-                      {item.amount && <span className="font-bold text-yellow-400"> {item.amount}</span>}
-                    </p>
-                    <span className="text-[10px] text-white/30">{item.time}</span>
+        {/* Live Streams */}
+        {rightTab === "live" && (
+        <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+              <Twitch className="w-4 h-4 text-purple-400" />
+              Live Streams
+            </div>
+            <Button variant="link" className="h-auto p-0 text-xs text-primary hover:text-primary/80">View All (6)</Button>
+          </div>
+          <div className="space-y-3 pr-2 max-h-[340px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent hover:scrollbar-thumb-white/20">
+            {[
+              { name: "SonicFox", avatar: "sonicfox", viewers: "4.2k" },
+              { name: "NinjaKilla", avatar: "ninjakilla", viewers: "2.8k" },
+              { name: "KomboKing", avatar: "komboking", viewers: "1.5k" },
+              { name: "DragonSlayer", avatar: "dragonslayer", viewers: "890" },
+              { name: "FatalityQueen", avatar: "fatalityqueen", viewers: "650" },
+            ].map((s, idx) => (
+              <div key={idx} className="group relative rounded-xl overflow-hidden cursor-pointer">
+                <img src={MK_SS[idx % MK_SS.length]} alt="Stream" className="w-full h-32 object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/40 to-transparent" />
+                <div className="absolute top-2 left-2 px-2 py-1 bg-red-600 text-white text-[10px] font-bold uppercase rounded flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" /> Live
+                </div>
+                <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Avatar className="h-6 w-6 border border-white/20">
+                      <AvatarImage src={`https://i.pravatar.cc/150?u=${s.avatar}`} />
+                      <AvatarFallback>{s.name.slice(0, 2)}</AvatarFallback>
+                    </Avatar>
+                    <span className="font-medium text-sm text-white drop-shadow-md">{s.name}</span>
+                  </div>
+                  <div className="text-xs text-white/80 bg-black/50 px-2 py-1 rounded backdrop-blur-sm">
+                    {s.viewers} views
                   </div>
                 </div>
-              ))}
-            </div>
-          </>
+              </div>
+            ))}
+          </div>
+        </div>
         )}
+
+        {/* Recent Activity */}
+        {rightTab === "activity" && (
+        <div className="space-y-4 animate-in fade-in slide-in-from-right-4 duration-300">
+          <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            <Zap className="w-4 h-4 text-yellow-500" />
+            Recent Activity
+          </div>
+          <div className="space-y-4 border-l-2 border-white/5 pl-4 ml-2">
+            {activityFeed.map((item, i) => (
+              <div key={i} className="relative">
+                <div className="absolute -left-[21px] top-1.5 w-2 h-2 rounded-full bg-primary/50 ring-4 ring-background" />
+                <p className="text-sm"><span className="font-medium text-foreground">{item.user}</span> <span className="text-muted-foreground">{item.action}</span></p>
+                <p className="text-xs text-muted-foreground mt-1">{item.time}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        )}
+
       </div>
     </>
   );
@@ -379,46 +477,57 @@ export default function MKTournamentPage() {
         </aside>
 
         {/* Center content */}
-        <main className="flex-1 relative scroll-smooth pb-12 md:pb-0 overflow-y-auto h-full bg-[#111111]">
-          {/* Hero banner */}
-          <div className="relative h-48 md:h-64 overflow-hidden">
-            <img src={tournament.img} alt={tournament.name} className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-gradient-to-t from-[#111111] via-[#111111]/40 to-transparent" />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#111111]/60 to-transparent" />
-            <div className="absolute bottom-4 left-6 right-6">
-              <div className="flex items-center gap-2 mb-2">
-                <StatusBadge status={tournament.status} />
-                {tournament.featured && (
-                  <Badge className="text-[10px] font-bold border-none gap-0.5" style={{ backgroundColor: `${MK_GOLD}33`, color: MK_GOLD }}>
-                    <Star className="w-2.5 h-2.5" /> Featured
-                  </Badge>
-                )}
-                <Badge className="bg-white/10 text-white/70 border-none text-[10px] backdrop-blur-sm">{tournament.region}</Badge>
-              </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-white tracking-tight">{tournament.name}</h1>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-sm text-white/60">
-                <span className="flex items-center gap-1"><Calendar className="w-4 h-4" /> {tournament.date}</span>
-                <span className="flex items-center gap-1"><Gamepad2 className="w-4 h-4" /> {tournament.format}</span>
-                <span className="flex items-center gap-1"><Users className="w-4 h-4" /> {tournament.participants}/{tournament.maxParticipants}</span>
+        <main className="flex-1 relative scroll-smooth pb-12 md:pb-0 overflow-y-auto h-full bg-[#111111]/50">
+          <div className="w-full max-w-5xl mx-auto px-4 md:px-10 pt-4 pb-0">
+            <div className="flex flex-col xl:flex-row justify-between items-start gap-6 mb-2 md:mb-4">
+              <div className="flex-1 w-full">
+                {/* Tournament Title */}
+                <h1 className="text-3xl md:text-4xl font-sans font-bold text-white leading-tight drop-shadow-md mb-6 flex items-center gap-3 uppercase">
+                  <span className="text-red-500">\u2694\ufe0f</span>
+                  {tournament.name}
+                </h1>
+
+                {/* Feature Image */}
+                <div className="w-full bg-black/20 rounded-2xl flex items-center justify-center border border-white/5 overflow-hidden mb-6">
+                  <img
+                    src={tournament.img}
+                    alt={tournament.name}
+                    className="w-full h-auto object-cover aspect-video"
+                  />
+                </div>
+
+                {/* Quick Stats below image */}
+                <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 mb-2">
+                  <div className="p-4 rounded-xl bg-card/50 border border-white/5 flex flex-col gap-1">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider">Status</span>
+                    <StatusBadge status={tournament.status} />
+                  </div>
+                  <div className="p-4 rounded-xl bg-card/50 border border-white/5 flex flex-col gap-1">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider">Entry Fee</span>
+                    <span className="font-semibold text-foreground mt-1">Free</span>
+                  </div>
+                  <div className="p-4 rounded-xl bg-card/50 border border-white/5 flex flex-col gap-1">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider">Game</span>
+                    <span className="font-semibold text-foreground mt-1">Mortal Kombat 1</span>
+                  </div>
+                  <div className="p-4 rounded-xl bg-card/50 border border-white/5 flex flex-col gap-1">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider">Region</span>
+                    <span className="font-semibold text-foreground mt-1">{tournament.region}</span>
+                  </div>
+                  <div className="p-4 rounded-xl bg-card/50 border border-white/5 flex flex-col gap-1">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider">Date/Time</span>
+                    <span className="font-semibold text-foreground mt-1 text-sm">{tournament.date}</span>
+                  </div>
+                  <div className="p-4 rounded-xl bg-card/50 border border-white/5 flex flex-col gap-1">
+                    <span className="text-xs text-muted-foreground uppercase tracking-wider">Format</span>
+                    <span className="font-semibold text-foreground mt-1">{tournament.format.split(' ')[0]}</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Action bar */}
-          <div className="px-6 py-4 flex flex-wrap items-center gap-3 border-b border-white/5">
-            <Button className="font-bold shadow-[0_0_15px_rgba(200,16,46,0.3)] hover:shadow-[0_0_25px_rgba(200,16,46,0.5)] transition-all" style={{ backgroundColor: MK_RED }}>
-              Join Tournament
-            </Button>
-            <Button variant="outline" className="border-yellow-500/30 text-yellow-400 hover:bg-yellow-500/10">
-              <CircleDollarSign className="w-4 h-4 mr-1.5" /> Contribute
-            </Button>
-            <div className="ml-auto flex items-center gap-2 text-sm">
-              <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-sm font-bold px-3 py-1">{tournament.prize}</Badge>
-            </div>
-          </div>
-
-          {/* Content sections */}
-          <div className="px-6 py-8 space-y-12">
+          <div className="px-4 md:px-10 max-w-5xl mx-auto space-y-12 pb-32 pt-0">
 
             {/* About */}
             <section id="about">
@@ -437,90 +546,8 @@ export default function MKTournamentPage() {
                 <button onClick={() => setAboutExpanded(!aboutExpanded)} className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1">
                   {aboutExpanded ? "Show less" : "Read more"} <ChevronDown className={`w-3 h-3 transition-transform ${aboutExpanded ? "rotate-180" : ""}`} />
                 </button>
-
-                {/* Quick stats */}
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3 border-t border-white/5">
-                  <div className="text-center p-3 rounded-lg bg-white/[0.03]">
-                    <Trophy className="w-5 h-5 mx-auto mb-1 text-yellow-400" />
-                    <div className="text-lg font-bold text-white">{tournament.prize}</div>
-                    <div className="text-[10px] text-white/40 uppercase tracking-wider">Prize Pool</div>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-white/[0.03]">
-                    <Users className="w-5 h-5 mx-auto mb-1 text-blue-400" />
-                    <div className="text-lg font-bold text-white">{tournament.participants}/{tournament.maxParticipants}</div>
-                    <div className="text-[10px] text-white/40 uppercase tracking-wider">Players</div>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-white/[0.03]">
-                    <Gamepad2 className="w-5 h-5 mx-auto mb-1 text-green-400" />
-                    <div className="text-lg font-bold text-white">{tournament.format.split(" ")[0]}</div>
-                    <div className="text-[10px] text-white/40 uppercase tracking-wider">Format</div>
-                  </div>
-                  <div className="text-center p-3 rounded-lg bg-white/[0.03]">
-                    <MapPin className="w-5 h-5 mx-auto mb-1 text-purple-400" />
-                    <div className="text-lg font-bold text-white">{tournament.region.split(" ")[0]}</div>
-                    <div className="text-[10px] text-white/40 uppercase tracking-wider">Region</div>
-                  </div>
-                </div>
               </div>
             </section>
-
-            {/* Prize pool */}
-            <section id="prize-pool">
-              <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                <Trophy className="w-5 h-5 text-yellow-400" /> Prize Pool
-              </h2>
-              <div className="bg-white/[0.03] border border-white/5 rounded-xl p-5 space-y-4">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="text-3xl font-bold text-yellow-400">{tournament.prize}</div>
-                    <div className="text-xs text-white/40 mt-1">Total prize pool</div>
-                  </div>
-                  <div className="text-right">
-                    <div className="text-sm text-white/60">Crowdfunded</div>
-                    <div className="text-lg font-bold text-green-400">$1,475</div>
-                  </div>
-                </div>
-                <Progress value={65} className="h-2 bg-white/5" />
-                <div className="text-xs text-white/40 text-right">65% of stretch goal reached</div>
-
-                {/* Payouts */}
-                <div className="space-y-2 pt-3 border-t border-white/5">
-                  {[
-                    { place: "1st", pct: "50%", icon: Crown, color: "text-yellow-400" },
-                    { place: "2nd", pct: "25%", icon: Shield, color: "text-gray-300" },
-                    { place: "3rd", pct: "15%", icon: Shield, color: "text-amber-600" },
-                    { place: "4th", pct: "10%", icon: Star, color: "text-white/40" },
-                  ].map((p) => (
-                    <div key={p.place} className="flex items-center justify-between py-2 px-3 rounded-lg hover:bg-white/[0.03] transition-colors">
-                      <div className="flex items-center gap-3">
-                        <p.icon className={`w-4 h-4 ${p.color}`} />
-                        <span className="text-sm font-medium text-white">{p.place} Place</span>
-                      </div>
-                      <span className="text-sm font-bold text-white/70">{p.pct}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Top donors */}
-                <div className="pt-3 border-t border-white/5">
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-white/40 mb-3">Top Contributors</h4>
-                  <div className="space-y-2">
-                    {donors.slice(0, 5).map((d, i) => (
-                      <div key={i} className="flex items-center gap-3 py-1.5">
-                        <span className="text-[10px] font-bold text-white/30 w-4 text-right">{i + 1}</span>
-                        <Avatar className="w-6 h-6">
-                          <AvatarImage src={`https://i.pravatar.cc/150?u=${d.avatar}`} />
-                          <AvatarFallback className="text-[9px]">{d.name.slice(0, 2)}</AvatarFallback>
-                        </Avatar>
-                        <span className="text-sm text-white flex-1">{d.name}</span>
-                        <span className="text-sm font-bold text-yellow-400">${d.amount}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </section>
-
             {/* Rules */}
             <section id="rules">
               <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">

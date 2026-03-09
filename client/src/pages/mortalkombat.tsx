@@ -9,6 +9,7 @@ import {
   Users,
   ExternalLink,
   Gamepad2,
+  ChevronLeft,
   ChevronRight,
   Heart,
   Star,
@@ -19,7 +20,7 @@ import {
   X,
   Zap,
 } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import helmetLogo from "@assets/mhelmet_1771552283812.png";
 
 // ---------------------------------------------------------------------------
@@ -29,7 +30,19 @@ const MK_RED = "#C8102E";
 const MK_GOLD = "#F5A623";
 
 const MK_BOX_ART = "https://cdn.cloudflare.steamstatic.com/steam/apps/1971870/library_600x900_2x.jpg";
-const MK_HERO_IMG = "https://cdn.cloudflare.steamstatic.com/steam/apps/1971870/header.jpg";
+const MK_HERO_IMG = "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/header.jpg?t=1750176505";
+
+// Steam screenshots — diverse gameplay/character art
+const MK_SS = [
+  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/ss_7eb14734a264570367c607698371e492415f48a4.1920x1080.jpg?t=1750176505",
+  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/ss_29b0a9e87d5a4981d7403994b661c43117a87d84.1920x1080.jpg?t=1750176505",
+  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/ss_18eadd6859ed15531d25cd67fe1d2402e9bf75b3.1920x1080.jpg?t=1750176505",
+  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/ss_02b8c4f08fbf4d1a5affb9e6e64716d63df16760.1920x1080.jpg?t=1750176505",
+  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/ss_2509da69bd12d209bd0ef9eed13f25cfa551f8e5.1920x1080.jpg?t=1750176505",
+  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/ss_fc0fd6c946a9f182bf8f0059bf4260ff07b0fec7.1920x1080.jpg?t=1750176505",
+  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/ss_535045ba6877519d2d95a3c89716a72c174eab7e.1920x1080.jpg?t=1750176505",
+  "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/1971870/ss_1b8e7526d3f50e06c1283ee651dc7f868ef0474a.1920x1080.jpg?t=1750176505",
+] as const;
 
 // ---------------------------------------------------------------------------
 // Mock data — Tournaments
@@ -52,14 +65,14 @@ interface Tournament {
 }
 
 const tournaments: Tournament[] = [
-  { id: 1, name: "Mortal Kombat 1 Pro Kompetition — NA Finals", date: "Mar 22, 2026", format: "Double Elimination", participants: 128, maxParticipants: 256, prize: "$10,000", status: "live", organizer: "WBG", organizerAvatar: "W", region: "North America", img: MK_HERO_IMG, featured: true },
-  { id: 2, name: "Khaos Reigns Invitational", date: "Mar 29, 2026", format: "Invitational", participants: 16, maxParticipants: 16, prize: "$5,000", status: "upcoming", organizer: "NetherRealm", organizerAvatar: "N", region: "Global", img: MK_HERO_IMG, featured: true },
-  { id: 3, name: "MK1 Weekly Kombat #38", date: "Mar 18, 2026", format: "Double Elimination", participants: 64, maxParticipants: 128, prize: "$500", status: "upcoming", organizer: "FGC Hub", organizerAvatar: "F", region: "NA East", img: MK_HERO_IMG },
-  { id: 4, name: "EU Mortal Monday — Week 14", date: "Mar 17, 2026", format: "Swiss", participants: 48, maxParticipants: 64, prize: "$300", status: "upcoming", organizer: "EUFC", organizerAvatar: "E", region: "Europe", img: MK_HERO_IMG },
-  { id: 5, name: "Kameo Clash Showdown", date: "Mar 10, 2026", format: "Double Elimination", participants: 96, maxParticipants: 96, prize: "$2,000", status: "completed", organizer: "NRS Community", organizerAvatar: "N", region: "Global", img: MK_HERO_IMG },
-  { id: 6, name: "Tower of Time Championship", date: "Mar 5, 2026", format: "Single Elimination", participants: 32, maxParticipants: 32, prize: "$1,500", status: "completed", organizer: "WBG", organizerAvatar: "W", region: "North America", img: MK_HERO_IMG, featured: true },
-  { id: 7, name: "Fatality Friday #22", date: "Feb 28, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$200", status: "completed", organizer: "FGC Hub", organizerAvatar: "F", region: "Global", img: MK_HERO_IMG },
-  { id: 8, name: "MK1 Pro Kompetition — LATAM Qualifier", date: "Apr 5, 2026", format: "Double Elimination", participants: 12, maxParticipants: 128, prize: "$4,000", status: "upcoming", organizer: "WBG", organizerAvatar: "W", region: "LATAM", img: MK_HERO_IMG, featured: true },
+  { id: 1, name: "Mortal Kombat 1 Pro Kompetition \u2014 NA Finals", date: "Mar 22, 2026", format: "Double Elimination", participants: 128, maxParticipants: 256, prize: "$10,000", status: "live", organizer: "WBG", organizerAvatar: "W", region: "North America", img: MK_SS[0], featured: true },
+  { id: 2, name: "Khaos Reigns Invitational", date: "Mar 29, 2026", format: "Invitational", participants: 16, maxParticipants: 16, prize: "$5,000", status: "upcoming", organizer: "NetherRealm", organizerAvatar: "N", region: "Global", img: MK_SS[1], featured: true },
+  { id: 3, name: "MK1 Weekly Kombat #38", date: "Mar 18, 2026", format: "Double Elimination", participants: 64, maxParticipants: 128, prize: "$500", status: "upcoming", organizer: "FGC Hub", organizerAvatar: "F", region: "NA East", img: MK_SS[2] },
+  { id: 4, name: "EU Mortal Monday \u2014 Week 14", date: "Mar 17, 2026", format: "Swiss", participants: 48, maxParticipants: 64, prize: "$300", status: "upcoming", organizer: "EUFC", organizerAvatar: "E", region: "Europe", img: MK_SS[3] },
+  { id: 5, name: "Kameo Clash Showdown", date: "Mar 10, 2026", format: "Double Elimination", participants: 96, maxParticipants: 96, prize: "$2,000", status: "completed", organizer: "NRS Community", organizerAvatar: "N", region: "Global", img: MK_SS[4] },
+  { id: 6, name: "Tower of Time Championship", date: "Mar 5, 2026", format: "Single Elimination", participants: 32, maxParticipants: 32, prize: "$1,500", status: "completed", organizer: "WBG", organizerAvatar: "W", region: "North America", img: MK_SS[5], featured: true },
+  { id: 7, name: "Fatality Friday #22", date: "Feb 28, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$200", status: "completed", organizer: "FGC Hub", organizerAvatar: "F", region: "Global", img: MK_SS[6] },
+  { id: 8, name: "MK1 Pro Kompetition \u2014 LATAM Qualifier", date: "Apr 5, 2026", format: "Double Elimination", participants: 12, maxParticipants: 128, prize: "$4,000", status: "upcoming", organizer: "WBG", organizerAvatar: "W", region: "LATAM", img: MK_SS[7], featured: true },
 ];
 
 const activityFeed = [
@@ -117,6 +130,28 @@ export default function MortalKombatPage() {
   const [eventsFilter, setEventsFilter] = useState<"all" | "featured" | "live" | "upcoming" | "completed">("all");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [carouselIdx, setCarouselIdx] = useState(0);
+
+  const featuredTournaments = tournaments.filter((t) => t.featured);
+
+  // Auto-advance featured carousel
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const resetAutoAdvance = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    timerRef.current = setInterval(() => {
+      setCarouselIdx((prev) => (prev + 1) % featuredTournaments.length);
+    }, 5000);
+  }, [featuredTournaments.length]);
+
+  useEffect(() => {
+    resetAutoAdvance();
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [resetAutoAdvance]);
+
+  const goToSlide = (idx: number) => {
+    setCarouselIdx(idx);
+    resetAutoAdvance();
+  };
 
   const navItems = [
     { id: "events" as const, label: "Events" },
@@ -293,6 +328,69 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
             {/* =========================================================== */}
             {activeTab === "events" && (
               <>
+                {/* Featured Carousel */}
+                <div className="relative rounded-2xl overflow-hidden border border-red-500/20 bg-black">
+                  {/* Slides */}
+                  <div className="relative w-full aspect-[21/9] md:aspect-[3/1] overflow-hidden">
+                    {featuredTournaments.map((t, i) => (
+                      <div
+                        key={t.id}
+                        className={`absolute inset-0 transition-all duration-700 ease-in-out ${
+                          i === carouselIdx ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                        }`}
+                      >
+                        <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6">
+                          <div className="flex items-center gap-2 mb-2">
+                            <StatusBadge status={t.status} />
+                            <Badge className='text-[10px] font-bold border-none gap-0.5' style={{ backgroundColor: `${MK_GOLD}33`, color: MK_GOLD }}>
+                              <Star className='w-2.5 h-2.5' /> Featured
+                            </Badge>
+                          </div>
+                          <h2 className="text-lg md:text-2xl font-bold text-white tracking-tight">{t.name}</h2>
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-white/60">
+                            <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" /> {t.date}</span>
+                            <span className="flex items-center gap-1"><MapPin className="w-3.5 h-3.5" /> {t.region}</span>
+                            <span className="flex items-center gap-1"><Users className="w-3.5 h-3.5" /> {t.participants}/{t.maxParticipants}</span>
+                            <span className="flex items-center gap-1"><Gamepad2 className="w-3.5 h-3.5" /> {t.format}</span>
+                            <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-xs font-bold">{t.prize}</Badge>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Arrows */}
+                  <button
+                    onClick={() => goToSlide((carouselIdx - 1 + featuredTournaments.length) % featuredTournaments.length)}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all z-10"
+                    aria-label="Previous featured tournament"
+                  >
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => goToSlide((carouselIdx + 1) % featuredTournaments.length)}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 backdrop-blur-sm border border-white/10 flex items-center justify-center text-white/70 hover:text-white hover:bg-black/70 transition-all z-10"
+                    aria-label="Next featured tournament"
+                  >
+                    <ChevronRight className="w-5 h-5" />
+                  </button>
+
+                  {/* Dots */}
+                  <div className="absolute bottom-2 right-2 md:bottom-4 md:right-4 flex items-center gap-1.5 z-10">
+                    {featuredTournaments.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => goToSlide(i)}
+                        className={`w-2 h-2 rounded-full transition-all ${i === carouselIdx ? 'bg-red-500 w-5' : 'bg-white/30 hover:bg-white/50'}`}
+                        aria-label={`Go to featured tournament ${i + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+
                 {/* Filter bar — includes "Featured" */}
                 <div className="flex items-center gap-2 flex-wrap">
                   {(["all", "featured", "live", "upcoming", "completed"] as const).map((f) => (

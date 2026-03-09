@@ -21,6 +21,9 @@ import {
   Handshake,
   Menu,
   X,
+  Zap,
+  TrendingUp,
+  Target,
 } from "lucide-react";
 import { useState } from "react";
 import helmetLogo from "@assets/mhelmet_1771552283812.png";
@@ -64,12 +67,37 @@ const activityFeed = [
   { user: "MaxPax", action: "registered for", target: "2v2 Circuit 2026", time: "2d ago" },
 ];
 
-const topContributors = [
-  { name: "Serral", amount: "$2,450", avatar: "S" },
-  { name: "AcresDeCruz", amount: "$1,800", avatar: "A" },
-  { name: "MarineLord", amount: "$1,200", avatar: "M" },
-  { name: "RogueZerg", amount: "$950", avatar: "R" },
-  { name: "ByunPrime", amount: "$720", avatar: "B" },
+// ---------------------------------------------------------------------------
+// Mock data — Season Sponsors & Quests
+// ---------------------------------------------------------------------------
+
+const currentSeason = { name: "Season 3", period: "Jan – Jun 2026", totalSponsored: "$14,200" };
+
+const seasonSponsors = [
+  { name: "HyperX", contributed: "$5,000", questsActive: 2, avatar: "H", color: "bg-red-500/20 text-red-400" },
+  { name: "Razer", contributed: "$4,200", questsActive: 1, avatar: "R", color: "bg-green-500/20 text-green-400" },
+  { name: "Monster Energy", contributed: "$3,000", questsActive: 2, avatar: "M", color: "bg-lime-500/20 text-lime-400" },
+  { name: "Intel", contributed: "$2,000", questsActive: 1, avatar: "I", color: "bg-blue-500/20 text-blue-400" },
+];
+
+interface SponsorQuest {
+  id: number;
+  sponsor: string;
+  title: string;
+  description: string;
+  reward: string;
+  completions: number;
+  maxCompletions: number | null;
+  type: "watch" | "follow" | "share" | "visit";
+}
+
+const sponsorQuests: SponsorQuest[] = [
+  { id: 1, sponsor: "HyperX", title: "Watch HyperX Spotlight", description: "Watch a 30-second HyperX feature.", reward: "$0.50 to prize pool", completions: 1842, maxCompletions: null, type: "watch" },
+  { id: 2, sponsor: "HyperX", title: "Follow HyperX on X", description: "Follow @HyperX on X (Twitter).", reward: "$0.25 to prize pool", completions: 3210, maxCompletions: 5000, type: "follow" },
+  { id: 3, sponsor: "Razer", title: "Visit Razer SC2 Gear", description: "Check out Razer's StarCraft II peripherals page.", reward: "$0.50 to prize pool", completions: 980, maxCompletions: null, type: "visit" },
+  { id: 4, sponsor: "Monster Energy", title: "Share the StarCraft Energy", description: "Share a Monster x SC2 post on social media.", reward: "$0.25 to prize pool", completions: 2100, maxCompletions: null, type: "share" },
+  { id: 5, sponsor: "Monster Energy", title: "Watch Monster Clutch Plays", description: "Watch a 15-second Monster Energy clutch plays reel.", reward: "$0.50 to prize pool", completions: 1456, maxCompletions: 3000, type: "watch" },
+  { id: 6, sponsor: "Intel", title: "Visit Intel Gaming Hub", description: "Explore Intel's gaming processor lineup.", reward: "$0.50 to prize pool", completions: 720, maxCompletions: null, type: "visit" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -273,11 +301,15 @@ Current tab: ${activeTab}
               <img src="https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg" alt="StarCraft II" className="w-full h-full object-cover" />
             </div>
             <div className="pb-0.5">
-              <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">StarCraft II</h1>
-              <div className="flex items-center gap-3 text-[11px] text-white/50 mt-0.5">
-                <span className="flex items-center gap-1"><Trophy className="w-3 h-3" /> 98 tournaments</span>
-                <span className="flex items-center gap-1"><Users className="w-3 h-3" /> 9,200 players</span>
-                <span className="flex items-center gap-1"><CircleDollarSign className="w-3 h-3" /> $196K crowdfunded</span>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">StarCraft II</h1>
+                <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-[10px] font-bold">{currentSeason.name}</Badge>
+              </div>
+              <div className="flex items-center gap-3 text-[11px] text-white/50 mt-0.5 flex-wrap">
+                <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {currentSeason.period}</span>
+                <span className="flex items-center gap-1"><Trophy className="w-3 h-3" /> {tournaments.filter(t => t.status !== 'completed').length} active events</span>
+                <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {seasonSponsors.length} sponsors</span>
+                <span className="flex items-center gap-1"><CircleDollarSign className="w-3 h-3" /> {currentSeason.totalSponsored} to prize pools</span>
               </div>
             </div>
           </div>
@@ -354,7 +386,7 @@ Current tab: ${activeTab}
                 ))}
               </div>
 
-              {/* Activity + Contributors — inline in center, no sidebar */}
+              {/* Activity + Season Sponsors */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 {/* Activity Feed */}
                 <div className="lg:col-span-2 rounded-xl border border-white/5 bg-card overflow-hidden">
@@ -384,29 +416,83 @@ Current tab: ${activeTab}
                   </div>
                 </div>
 
-                {/* Top Contributors */}
+                {/* Season Sponsors */}
                 <div className="rounded-xl border border-white/5 bg-card overflow-hidden">
-                  <div className="px-4 py-3 border-b border-white/5 flex items-center gap-2">
-                    <Star className="w-4 h-4 text-yellow-400" />
-                    <h3 className="text-sm font-semibold text-white">Top Contributors</h3>
+                  <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <TrendingUp className="w-4 h-4 text-green-400" />
+                      <h3 className="text-sm font-semibold text-white">Season Sponsors</h3>
+                    </div>
+                    <span className="text-[10px] text-muted-foreground">{currentSeason.name}</span>
                   </div>
                   <div className="divide-y divide-white/5">
-                    {topContributors.map((c, i) => (
+                    {seasonSponsors.map((s, i) => (
                       <div key={i} className="px-4 py-3 flex items-center gap-3 hover:bg-white/[0.02] transition-colors">
-                        <span className="text-xs font-bold text-muted-foreground w-4 text-right">{i + 1}</span>
-                        <Avatar className="w-7 h-7">
-                          <AvatarFallback className={`text-[10px] ${i === 0 ? "bg-yellow-500/20 text-yellow-400" : i === 1 ? "bg-gray-400/20 text-gray-300" : i === 2 ? "bg-orange-500/20 text-orange-400" : "bg-white/10 text-white/60"}`}>
-                            {c.avatar}
-                          </AvatarFallback>
+                        <Avatar className="w-8 h-8">
+                          <AvatarFallback className={`text-[10px] font-bold ${s.color}`}>{s.avatar}</AvatarFallback>
                         </Avatar>
-                        <span className="text-sm text-white font-medium flex-1 truncate">{c.name}</span>
-                        <span className="text-sm font-bold text-yellow-400">{c.amount}</span>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-sm text-white font-medium block truncate">{s.name}</span>
+                          <span className="text-[10px] text-muted-foreground">{s.questsActive} active quest{s.questsActive !== 1 ? 's' : ''}</span>
+                        </div>
+                        <span className="text-sm font-bold text-green-400">{s.contributed}</span>
                       </div>
                     ))}
                   </div>
+                  <div className="px-4 py-2.5 border-t border-white/5 bg-white/[0.02] flex items-center justify-between">
+                    <span className="text-[11px] text-muted-foreground">Total to prize pools</span>
+                    <span className="text-sm font-bold text-white">{currentSeason.totalSponsored}</span>
+                  </div>
                 </div>
               </div>
-
+              {/* SponsorQuests — users complete these to fund prize pools */}
+              <div className="rounded-xl border border-white/5 bg-card overflow-hidden">
+                <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-yellow-400" />
+                    <h3 className="text-sm font-semibold text-white">SponsorQuests</h3>
+                    <Badge className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20 text-[10px]">
+                      {sponsorQuests.length} active
+                    </Badge>
+                  </div>
+                  <span className="text-[10px] text-muted-foreground">Complete quests → money goes to prize pools</span>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5">
+                  {sponsorQuests.map((q) => (
+                    <div key={q.id} className="p-4 bg-card hover:bg-white/[0.02] transition-colors flex gap-3 cursor-pointer group">
+                      <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
+                        q.type === 'watch' ? 'bg-purple-500/20 text-purple-400' :
+                        q.type === 'follow' ? 'bg-blue-500/20 text-blue-400' :
+                        q.type === 'share' ? 'bg-pink-500/20 text-pink-400' :
+                        'bg-cyan-500/20 text-cyan-400'
+                      }`}>
+                        {q.type === 'watch' ? <Target className="w-4 h-4" /> :
+                         q.type === 'follow' ? <Heart className="w-4 h-4" /> :
+                         q.type === 'share' ? <ExternalLink className="w-4 h-4" /> :
+                         <Search className="w-4 h-4" />}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-medium text-white group-hover:text-cyan-400 transition-colors truncate">{q.title}</span>
+                        </div>
+                        <p className="text-[11px] text-muted-foreground mt-0.5 truncate">{q.description}</p>
+                        <div className="flex items-center gap-3 mt-1.5">
+                          <span className="text-[10px] text-muted-foreground">{q.sponsor}</span>
+                          <Badge className="bg-green-500/10 text-green-400 border-none text-[10px] font-bold">{q.reward}</Badge>
+                          <span className="text-[10px] text-muted-foreground ml-auto">
+                            {q.completions.toLocaleString()}{q.maxCompletions ? `/${q.maxCompletions.toLocaleString()}` : ''} done
+                          </span>
+                        </div>
+                        {q.maxCompletions && (
+                          <div className="w-full h-1 bg-white/5 rounded-full mt-1.5 overflow-hidden">
+                            <div className="h-full bg-green-500/60 rounded-full" style={{ width: `${Math.min((q.completions / q.maxCompletions) * 100, 100)}%` }} />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
               {/* Create CTA */}
               <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 p-6 text-center">
                 <h3 className="text-lg font-semibold text-white mb-1">Want to run a StarCraft II tournament?</h3>

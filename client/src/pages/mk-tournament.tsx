@@ -483,7 +483,7 @@ export default function MKTournamentPage() {
               <div className="flex-1 w-full">
                 {/* Tournament Title */}
                 <h1 className="text-3xl md:text-4xl font-sans font-bold text-white leading-tight drop-shadow-md mb-6 flex items-center gap-3 uppercase">
-                  <span className="text-red-500">\u2694\ufe0f</span>
+                  <span className="text-red-500">{"\u2694\ufe0f"}</span>
                   {tournament.name}
                 </h1>
 

@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { MobileSidebarBar } from "@/components/mobile-sidebar-bar";
 import {
@@ -98,6 +98,7 @@ interface SeasonSponsor {
   contributed: string;
   contributedNum: number;
   avatar: string;
+  logo: string;
   color: string;
   tagline: string;
   quests: SponsorQuest[];
@@ -109,6 +110,7 @@ const seasonSponsors: SeasonSponsor[] = [
     contributed: "$6,400",
     contributedNum: 6400,
     avatar: "CC",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Coca-Cola_bottle_cap.svg/200px-Coca-Cola_bottle_cap.svg.png",
     color: "bg-red-500/20 text-red-400",
     tagline: "Refreshing the StarCraft II competitive scene since Season 1.",
     quests: [
@@ -122,6 +124,7 @@ const seasonSponsors: SeasonSponsor[] = [
     contributed: "$4,200",
     contributedNum: 4200,
     avatar: "I",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Intel_logo_%282006-2020%29.svg/200px-Intel_logo_%282006-2020%29.svg.png",
     color: "bg-blue-500/20 text-blue-400",
     tagline: "Powering the hardware behind every GG.",
     quests: [
@@ -134,6 +137,7 @@ const seasonSponsors: SeasonSponsor[] = [
     contributed: "$3,600",
     contributedNum: 3600,
     avatar: "M",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/Monster_Energy_logo.svg/200px-Monster_Energy_logo.svg.png",
     color: "bg-lime-500/20 text-lime-400",
     tagline: "Unleash the beast. Fuel the grind.",
     quests: [
@@ -297,7 +301,7 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
             <img src={helmetLogo} alt="Back to Matcherino" className="w-8 h-8 object-contain brightness-0 invert cursor-pointer hover:opacity-80 transition-opacity" title="Back to Matcherino" />
           </Link>
 
-          {/* Program branding */}
+          {/* Program branding + Title Sponsor */}
           <div className="flex items-center gap-2.5 shrink-0 border-l border-white/10 pl-4">
             <img
               src="https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg"
@@ -305,6 +309,15 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
               className="w-7 h-7 rounded-md object-cover"
             />
             <span className="font-semibold text-white text-sm tracking-tight hidden sm:inline">StarCraft II</span>
+            <span className="text-[10px] text-white/30 hidden sm:inline">/</span>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <img
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Coca-Cola_bottle_cap.svg/200px-Coca-Cola_bottle_cap.svg.png"
+                alt="Coca-Cola"
+                className="w-5 h-5 rounded-full object-contain"
+              />
+              <span className="text-[10px] text-red-400 font-semibold hidden sm:inline">Presented by Coca-Cola</span>
+            </div>
           </div>
 
           {/* Desktop nav */}
@@ -387,10 +400,19 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
                 <div className="w-16 h-16 md:w-20 md:h-20 rounded-xl border-2 border-white/20 overflow-hidden shadow-2xl shrink-0 bg-black">
                   <img src="https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg" alt="StarCraft II" className="w-full h-full object-cover" />
                 </div>
-                <div className="pb-0.5">
-                  <div className="flex items-center gap-2">
+                <div className="pb-0.5 flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">StarCraft II</h1>
                     <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-[10px] font-bold">{currentSeason.name}</Badge>
+                    <span className="text-white/20">|</span>
+                    <div className="flex items-center gap-1.5">
+                      <img
+                        src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Coca-Cola_bottle_cap.svg/200px-Coca-Cola_bottle_cap.svg.png"
+                        alt="Coca-Cola"
+                        className="w-5 h-5 rounded-full object-contain"
+                      />
+                      <span className="text-xs text-red-400 font-semibold">Presented by Coca-Cola</span>
+                    </div>
                   </div>
                   <p className="text-[11px] text-white/50 mt-0.5">{currentSeason.period} \u00b7 Community Program by Matcherino</p>
                 </div>
@@ -445,7 +467,8 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
                       {/* Sponsor avatars */}
                       <div className="flex items-center -space-x-2">
                         {seasonSponsors.map((s, i) => (
-                          <Avatar key={i} className="w-7 h-7 border-2 border-[#1C2230]" title={`${s.name} — ${s.contributed}`}>
+                          <Avatar key={i} className="w-7 h-7 border-2 border-[#1C2230]" title={`${s.name} \u2014 ${s.contributed}`}>
+                            <AvatarImage src={s.logo} alt={s.name} className="object-contain p-0.5" />
                             <AvatarFallback className={`text-[9px] font-bold ${s.color}`}>{s.avatar}</AvatarFallback>
                           </Avatar>
                         ))}
@@ -532,6 +555,7 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
                       {/* Sponsor header */}
                       <div className="px-4 py-3 flex items-center gap-3 border-b border-white/5 bg-white/[0.02]">
                         <Avatar className="w-9 h-9">
+                          <AvatarImage src={sponsor.logo} alt={sponsor.name} className="object-contain p-1" />
                           <AvatarFallback className={`text-xs font-bold ${sponsor.color}`}>{sponsor.avatar}</AvatarFallback>
                         </Avatar>
                         <div className="flex-1 min-w-0">

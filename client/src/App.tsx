@@ -11,6 +11,7 @@ import CreatePage from "@/pages/create";
 import ProfilePage from "@/pages/profile";
 import StarcraftPage from "@/pages/starcraft";
 import MortalKombatPage from "@/pages/mortalkombat";
+import MKTournamentPage from "@/pages/mk-tournament";
 import { MarcoChatBubble } from "@/components/marco-chat-bubble";
 
 function Router() {
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/profile" component={ProfilePage} />
       <Route path="/p/starcraft" component={StarcraftPage} />
       <Route path="/p/mortalkombat" component={MortalKombatPage} />
+      <Route path="/p/mortalkombat/t/:id" component={MKTournamentPage} />
       <Route component={NotFound} />
     </Switch>
   );

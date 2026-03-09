@@ -333,10 +333,11 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
                   {/* Slides */}
                   <div className="relative w-full aspect-[21/9] md:aspect-[3/1] overflow-hidden">
                     {featuredTournaments.map((t, i) => (
-                      <div
+                      <Link
                         key={t.id}
+                        href={`/p/mortalkombat/t/${t.id}`}
                         className={`absolute inset-0 transition-all duration-700 ease-in-out ${
-                          i === carouselIdx ? 'opacity-100 scale-100' : 'opacity-0 scale-105'
+                          i === carouselIdx ? 'opacity-100 scale-100' : 'opacity-0 scale-105 pointer-events-none'
                         }`}
                       >
                         <img src={t.img} alt={t.name} className="w-full h-full object-cover" />
@@ -358,7 +359,7 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
                             <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-xs font-bold">{t.prize}</Badge>
                           </div>
                         </div>
-                      </div>
+                      </Link>
                     ))}
                   </div>
 
@@ -420,7 +421,7 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
                 {/* Tournament grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredTournaments.map((t) => (
-                    <Link key={t.id} href="/">
+                    <Link key={t.id} href={`/p/mortalkombat/t/${t.id}`}>
                       <div
                         className={`group rounded-2xl bg-card overflow-hidden hover:border-white/10 transition-all cursor-pointer border ${
                           t.featured ? "border-red-500/30 ring-1 ring-red-500/10" : "border-white/5"

@@ -80,15 +80,7 @@ const currentSeason = {
   totalFunded: "$14,200",
   distributed: "$8,600",
   remaining: "$5,600",
-  blurb: "The StarCraft II Community Program on Matcherino connects sponsors, organizers, and fans. Sponsors fund SponsorQuests. Fans complete quests to grow a central prize pool. Program managers distribute the pool to tournament organizers throughout the season.",
 };
-
-const seasonSponsors = [
-  { name: "HyperX", contributed: "$5,000", questsActive: 2, avatar: "H", color: "bg-red-500/20 text-red-400" },
-  { name: "Razer", contributed: "$4,200", questsActive: 1, avatar: "R", color: "bg-green-500/20 text-green-400" },
-  { name: "Monster Energy", contributed: "$3,000", questsActive: 2, avatar: "M", color: "bg-lime-500/20 text-lime-400" },
-  { name: "Intel", contributed: "$2,000", questsActive: 1, avatar: "I", color: "bg-blue-500/20 text-blue-400" },
-];
 
 interface SponsorQuest {
   id: number;
@@ -101,14 +93,57 @@ interface SponsorQuest {
   type: "watch" | "follow" | "share" | "visit";
 }
 
-const sponsorQuests: SponsorQuest[] = [
-  { id: 1, sponsor: "HyperX", title: "Watch HyperX Spotlight", description: "Watch a 30-second HyperX feature.", reward: "$0.50 to prize pool", completions: 1842, maxCompletions: null, type: "watch" },
-  { id: 2, sponsor: "HyperX", title: "Follow HyperX on X", description: "Follow @HyperX on X (Twitter).", reward: "$0.25 to prize pool", completions: 3210, maxCompletions: 5000, type: "follow" },
-  { id: 3, sponsor: "Razer", title: "Visit Razer SC2 Gear", description: "Check out Razer's StarCraft II peripherals page.", reward: "$0.50 to prize pool", completions: 980, maxCompletions: null, type: "visit" },
-  { id: 4, sponsor: "Monster Energy", title: "Share the StarCraft Energy", description: "Share a Monster x SC2 post on social media.", reward: "$0.25 to prize pool", completions: 2100, maxCompletions: null, type: "share" },
-  { id: 5, sponsor: "Monster Energy", title: "Watch Monster Clutch Plays", description: "Watch a 15-second Monster Energy clutch plays reel.", reward: "$0.50 to prize pool", completions: 1456, maxCompletions: 3000, type: "watch" },
-  { id: 6, sponsor: "Intel", title: "Visit Intel Gaming Hub", description: "Explore Intel's gaming processor lineup.", reward: "$0.50 to prize pool", completions: 720, maxCompletions: null, type: "visit" },
+interface SeasonSponsor {
+  name: string;
+  contributed: string;
+  contributedNum: number;
+  avatar: string;
+  color: string;
+  tagline: string;
+  quests: SponsorQuest[];
+}
+
+const seasonSponsors: SeasonSponsor[] = [
+  {
+    name: "Coca-Cola",
+    contributed: "$6,400",
+    contributedNum: 6400,
+    avatar: "CC",
+    color: "bg-red-500/20 text-red-400",
+    tagline: "Refreshing the StarCraft II competitive scene since Season 1.",
+    quests: [
+      { id: 1, sponsor: "Coca-Cola", title: "Watch Coca-Cola Clutch Moment", description: "Watch a 15-second featured Coca-Cola clutch play.", reward: "$0.50", completions: 3420, maxCompletions: null, type: "watch" },
+      { id: 2, sponsor: "Coca-Cola", title: "Follow Coca-Cola Gaming", description: "Follow @CocaColaGaming on X.", reward: "$0.25", completions: 4810, maxCompletions: 6000, type: "follow" },
+      { id: 3, sponsor: "Coca-Cola", title: "Share a Coke x SC2 Moment", description: "Share a Coca-Cola sponsored highlight on social.", reward: "$0.25", completions: 2150, maxCompletions: null, type: "share" },
+    ],
+  },
+  {
+    name: "Intel",
+    contributed: "$4,200",
+    contributedNum: 4200,
+    avatar: "I",
+    color: "bg-blue-500/20 text-blue-400",
+    tagline: "Powering the hardware behind every GG.",
+    quests: [
+      { id: 4, sponsor: "Intel", title: "Visit Intel Gaming Hub", description: "Explore Intel's gaming processor lineup.", reward: "$0.50", completions: 1280, maxCompletions: null, type: "visit" },
+      { id: 5, sponsor: "Intel", title: "Watch Intel Performance Reel", description: "Watch a 30-second Intel performance feature.", reward: "$0.50", completions: 890, maxCompletions: 2000, type: "watch" },
+    ],
+  },
+  {
+    name: "Monster Energy",
+    contributed: "$3,600",
+    contributedNum: 3600,
+    avatar: "M",
+    color: "bg-lime-500/20 text-lime-400",
+    tagline: "Unleash the beast. Fuel the grind.",
+    quests: [
+      { id: 6, sponsor: "Monster Energy", title: "Share the StarCraft Energy", description: "Share a Monster x SC2 post on social media.", reward: "$0.25", completions: 2100, maxCompletions: null, type: "share" },
+      { id: 7, sponsor: "Monster Energy", title: "Watch Monster Clutch Plays", description: "Watch a 15-second Monster Energy clutch reel.", reward: "$0.50", completions: 1456, maxCompletions: 3000, type: "watch" },
+    ],
+  },
 ];
+
+const allQuests = seasonSponsors.flatMap((s) => s.quests);
 
 // ---------------------------------------------------------------------------
 // Mock data \u2014 Partnership
@@ -481,51 +516,77 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
                   ))}
                 </div>
 
-                {/* SponsorQuests */}
-                <div className="rounded-xl border border-white/5 bg-card overflow-hidden">
-                  <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
+                {/* Sponsors + Quests — sponsor-centric layout */}
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Zap className="w-4 h-4 text-yellow-400" />
                       <h3 className="text-sm font-semibold text-white">SponsorQuests</h3>
-                      <Badge className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20 text-[10px]">
-                        {sponsorQuests.length} active
-                      </Badge>
+                      <Badge className="bg-yellow-500/10 text-yellow-400 border-yellow-500/20 text-[10px]">{allQuests.length} active</Badge>
                     </div>
-                    <span className="text-[10px] text-muted-foreground">Complete quests \u2192 money goes to prize pools</span>
+                    <span className="text-[10px] text-muted-foreground">Complete quests \u2192 grows the prize pool fund</span>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-white/5">
-                    {sponsorQuests.map((q) => (
-                      <div key={q.id} className="p-4 bg-card hover:bg-white/[0.02] transition-colors flex gap-3 cursor-pointer group">
-                        <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-                          q.type === "watch" ? "bg-purple-500/20 text-purple-400" :
-                          q.type === "follow" ? "bg-blue-500/20 text-blue-400" :
-                          q.type === "share" ? "bg-pink-500/20 text-pink-400" :
-                          "bg-cyan-500/20 text-cyan-400"
-                        }`}>
-                          {q.type === "watch" ? <Target className="w-4 h-4" /> :
-                           q.type === "follow" ? <Heart className="w-4 h-4" /> :
-                           q.type === "share" ? <ExternalLink className="w-4 h-4" /> :
-                           <Search className="w-4 h-4" />}
-                        </div>
+
+                  {seasonSponsors.map((sponsor) => (
+                    <div key={sponsor.name} className="rounded-xl border border-white/5 bg-card overflow-hidden">
+                      {/* Sponsor header */}
+                      <div className="px-4 py-3 flex items-center gap-3 border-b border-white/5 bg-white/[0.02]">
+                        <Avatar className="w-9 h-9">
+                          <AvatarFallback className={`text-xs font-bold ${sponsor.color}`}>{sponsor.avatar}</AvatarFallback>
+                        </Avatar>
                         <div className="flex-1 min-w-0">
-                          <span className="text-sm font-medium text-white group-hover:text-cyan-400 transition-colors truncate block">{q.title}</span>
-                          <p className="text-[11px] text-muted-foreground mt-0.5 truncate">{q.description}</p>
-                          <div className="flex items-center gap-3 mt-1.5">
-                            <span className="text-[10px] text-muted-foreground">{q.sponsor}</span>
-                            <Badge className="bg-green-500/10 text-green-400 border-none text-[10px] font-bold">{q.reward}</Badge>
-                            <span className="text-[10px] text-muted-foreground ml-auto">
-                              {q.completions.toLocaleString()}{q.maxCompletions ? `/${q.maxCompletions.toLocaleString()}` : ""} done
-                            </span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-bold text-white">{sponsor.name}</span>
+                            <Badge className="bg-green-500/10 text-green-400 border-none text-[10px] font-bold">{sponsor.contributed} funded</Badge>
                           </div>
-                          {q.maxCompletions && (
-                            <div className="w-full h-1 bg-white/5 rounded-full mt-1.5 overflow-hidden">
-                              <div className="h-full bg-green-500/60 rounded-full" style={{ width: `${Math.min((q.completions / q.maxCompletions) * 100, 100)}%` }} />
-                            </div>
-                          )}
+                          <p className="text-[11px] text-muted-foreground truncate">{sponsor.tagline}</p>
+                        </div>
+                        <div className="text-right shrink-0 hidden sm:block">
+                          <span className="text-[10px] text-muted-foreground">{sponsor.quests.length} quest{sponsor.quests.length !== 1 ? 's' : ''}</span>
                         </div>
                       </div>
-                    ))}
-                  </div>
+
+                      {/* Quests for this sponsor */}
+                      <div className="divide-y divide-white/5">
+                        {sponsor.quests.map((q) => (
+                          <div key={q.id} className="px-4 py-3 flex gap-3 hover:bg-white/[0.02] transition-colors cursor-pointer group">
+                            <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                              q.type === 'watch' ? 'bg-purple-500/20 text-purple-400' :
+                              q.type === 'follow' ? 'bg-blue-500/20 text-blue-400' :
+                              q.type === 'share' ? 'bg-pink-500/20 text-pink-400' :
+                              'bg-cyan-500/20 text-cyan-400'
+                            }`}>
+                              {q.type === 'watch' ? <Target className="w-3.5 h-3.5" /> :
+                               q.type === 'follow' ? <Heart className="w-3.5 h-3.5" /> :
+                               q.type === 'share' ? <ExternalLink className="w-3.5 h-3.5" /> :
+                               <Search className="w-3.5 h-3.5" />}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-medium text-white group-hover:text-cyan-400 transition-colors truncate">{q.title}</span>
+                                <Badge className="bg-green-500/10 text-green-400 border-none text-[10px] font-bold shrink-0">{q.reward} / completion</Badge>
+                              </div>
+                              <p className="text-[11px] text-muted-foreground mt-0.5">{q.description}</p>
+                              <div className="flex items-center gap-3 mt-1.5">
+                                <span className="text-[10px] text-muted-foreground">{q.completions.toLocaleString()} completions</span>
+                                {q.maxCompletions && (
+                                  <span className="text-[10px] text-muted-foreground">of {q.maxCompletions.toLocaleString()}</span>
+                                )}
+                                <span className="text-[10px] text-green-400 font-bold ml-auto">
+                                  ${(q.completions * parseFloat(q.reward.replace('$', ''))).toLocaleString()} earned
+                                </span>
+                              </div>
+                              {q.maxCompletions && (
+                                <div className="w-full h-1 bg-white/5 rounded-full mt-1.5 overflow-hidden">
+                                  <div className="h-full bg-green-500/60 rounded-full" style={{ width: `${Math.min((q.completions / q.maxCompletions) * 100, 100)}%` }} />
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ))}
                 </div>
 
                 {/* Create CTA */}

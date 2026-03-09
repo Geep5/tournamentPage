@@ -420,51 +420,52 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
                 {/* Tournament grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                   {filteredTournaments.map((t) => (
-                    <div
-                      key={t.id}
-                      className={`group rounded-2xl bg-card overflow-hidden hover:border-white/10 transition-all cursor-pointer border ${
-                        t.featured ? "border-red-500/30 ring-1 ring-red-500/10" : "border-white/5"
-                      }`}
-                    >
-                      <div className="aspect-[16/9] overflow-hidden relative">
-                        <img src={t.img} alt={t.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                        <div className="absolute top-2 left-2 flex items-center gap-1.5">
-                          <StatusBadge status={t.status} />
-                          {t.featured && (
-                            <Badge className="text-[10px] font-bold border-none gap-0.5" style={{ backgroundColor: `${MK_GOLD}22`, color: MK_GOLD }}>
-                              <Star className="w-2.5 h-2.5" /> Featured
+                    <Link key={t.id} href="/">
+                      <div
+                        className={`group rounded-2xl bg-card overflow-hidden hover:border-white/10 transition-all cursor-pointer border ${
+                          t.featured ? "border-red-500/30 ring-1 ring-red-500/10" : "border-white/5"
+                        }`}
+                      >
+                        <div className="aspect-[16/9] overflow-hidden relative">
+                          <img src={t.img} alt={t.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          <div className="absolute top-2 left-2 flex items-center gap-1.5">
+                            <StatusBadge status={t.status} />
+                            {t.featured && (
+                              <Badge className="text-[10px] font-bold border-none gap-0.5" style={{ backgroundColor: `${MK_GOLD}22`, color: MK_GOLD }}>
+                                <Star className="w-2.5 h-2.5" /> Featured
+                              </Badge>
+                            )}
+                          </div>
+                          <div className="absolute bottom-2 right-2">
+                            <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] font-bold backdrop-blur-sm">
+                              {t.prize}
                             </Badge>
-                          )}
-                        </div>
-                        <div className="absolute bottom-2 right-2">
-                          <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] font-bold backdrop-blur-sm">
-                            {t.prize}
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="p-3 space-y-2">
-                        <h3 className="text-sm font-semibold text-white truncate group-hover:text-red-400 transition-colors">{t.name}</h3>
-                        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
-                          <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {t.date}</span>
-                          <span className="flex items-center gap-1"><Gamepad2 className="w-3 h-3" /> {t.format}</span>
-                          <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.region}</span>
-                        </div>
-                        <div className="flex items-center justify-between pt-1">
-                          <div className="flex items-center gap-1.5">
-                            <Avatar className="w-5 h-5">
-                              <AvatarFallback className="text-[9px] font-bold bg-white/10 text-white/60">{t.organizerAvatar}</AvatarFallback>
-                            </Avatar>
-                            <span className="text-[11px] text-muted-foreground">{t.organizer}</span>
                           </div>
-                          <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                            <Users className="w-3 h-3" />
-                            <span>
-                              {t.participants}/{t.maxParticipants}
-                            </span>
+                        </div>
+                        <div className="p-3 space-y-2">
+                          <h3 className="text-sm font-semibold text-white truncate group-hover:text-red-400 transition-colors">{t.name}</h3>
+                          <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+                            <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {t.date}</span>
+                            <span className="flex items-center gap-1"><Gamepad2 className="w-3 h-3" /> {t.format}</span>
+                            <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.region}</span>
+                          </div>
+                          <div className="flex items-center justify-between pt-1">
+                            <div className="flex items-center gap-1.5">
+                              <Avatar className="w-5 h-5">
+                                <AvatarFallback className="text-[9px] font-bold bg-white/10 text-white/60">{t.organizerAvatar}</AvatarFallback>
+                              </Avatar>
+                              <span className="text-[11px] text-muted-foreground">{t.organizer}</span>
+                            </div>
+                            <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
+                              <Users className="w-3 h-3" />
+                              <span>
+                                {t.participants}/{t.maxParticipants}
+                              </span>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
 

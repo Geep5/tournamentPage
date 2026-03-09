@@ -67,6 +67,7 @@ const recommendedEvents = [
 ];
 
 const browseGames = [
+  { name: "Mortal Kombat 1", tournaments: 86, likes: 4200, participants: 21000, crowdfunded: "$312,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1971870/library_600x900_2x.jpg", href: "/p/mortalkombat" },
   { name: "Tekken 8", tournaments: 142, likes: 3800, participants: 18400, crowdfunded: "$284,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1778820/library_600x900_2x.jpg" },
   { name: "Starcraft II", tournaments: 98, likes: 2100, participants: 9200, crowdfunded: "$196,000", img: "https://upload.wikimedia.org/wikipedia/en/2/20/StarCraft_II_-_Box_Art.jpg", href: "/p/starcraft" },
   { name: "Guilty Gear Strive", tournaments: 76, likes: 1900, participants: 7600, crowdfunded: "$128,000", img: "https://cdn.cloudflare.steamstatic.com/steam/apps/1384160/library_600x900_2x.jpg" },

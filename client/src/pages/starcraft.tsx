@@ -74,7 +74,14 @@ const activityFeed = [
 // ---------------------------------------------------------------------------
 
 const SEASON_END = new Date("2026-07-01T00:00:00");
-const currentSeason = { name: "Season 3", period: "Jan \u2013 Jun 2026", totalSponsored: "$14,200" };
+const currentSeason = {
+  name: "Season 3",
+  period: "Jan \u2013 Jun 2026",
+  totalFunded: "$14,200",
+  distributed: "$8,600",
+  remaining: "$5,600",
+  blurb: "The StarCraft II Community Program on Matcherino connects sponsors, organizers, and fans. Sponsors fund SponsorQuests. Fans complete quests to grow a central prize pool. Program managers distribute the pool to tournament organizers throughout the season.",
+};
 
 const seasonSponsors = [
   { name: "HyperX", contributed: "$5,000", questsActive: 2, avatar: "H", color: "bg-red-500/20 text-red-400" },
@@ -282,27 +289,17 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
             ))}
           </nav>
 
-          {/* Season countdown (desktop) */}
-          <div className="hidden lg:flex items-center gap-2 ml-auto mr-2 text-[11px] text-white/50">
-            <Timer className="w-3.5 h-3.5 text-cyan-400" />
-            <span className="text-white/70 font-medium">{currentSeason.name} ends in</span>
-            <div className="flex items-center gap-1 font-mono">
-              <span className="bg-white/10 rounded px-1.5 py-0.5 text-white font-bold">{countdown.days}<span className="text-white/40 font-normal ml-0.5">d</span></span>
-              <span className="bg-white/10 rounded px-1.5 py-0.5 text-white font-bold">{String(countdown.hours).padStart(2, "0")}<span className="text-white/40 font-normal ml-0.5">h</span></span>
-              <span className="bg-white/10 rounded px-1.5 py-0.5 text-white font-bold">{String(countdown.minutes).padStart(2, "0")}<span className="text-white/40 font-normal ml-0.5">m</span></span>
-              <span className="bg-white/10 rounded px-1.5 py-0.5 text-white font-bold">{String(countdown.seconds).padStart(2, "0")}<span className="text-white/40 font-normal ml-0.5">s</span></span>
-            </div>
-          </div>
 
           {/* Mobile hamburger */}
+
           <div className="flex md:hidden ml-auto">
             <Button variant="ghost" size="icon" className="min-h-11 min-w-11 text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
 
-          {/* Right actions (desktop, only when countdown isn't pushing them) */}
-          <div className="hidden md:flex items-center gap-2 shrink-0">
+          {/* Right actions */}
+          <div className="hidden md:flex items-center gap-2 shrink-0 ml-auto">
             <Button size="sm" variant="outline" className="text-white/60 border-white/10 hover:bg-white/10 text-xs gap-1.5">
               <ExternalLink className="w-3.5 h-3.5" /> Discord
             </Button>
@@ -315,14 +312,6 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
         {/* Mobile menu */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-white/5 bg-[#1B213A] px-4 py-3 space-y-1">
-            {/* Mobile countdown */}
-            <div className="flex items-center gap-2 text-[11px] text-white/50 pb-2 mb-1 border-b border-white/5">
-              <Timer className="w-3.5 h-3.5 text-cyan-400" />
-              <span className="text-white/70 font-medium">{currentSeason.name} ends in</span>
-              <span className="font-mono text-white font-bold">
-                {countdown.days}d {String(countdown.hours).padStart(2, "0")}h {String(countdown.minutes).padStart(2, "0")}m
-              </span>
-            </div>
             {navItems.map((item) => (
               <button
                 key={item.id}
@@ -368,12 +357,7 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
                     <h1 className="text-xl md:text-2xl font-bold text-white tracking-tight">StarCraft II</h1>
                     <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-[10px] font-bold">{currentSeason.name}</Badge>
                   </div>
-                  <div className="flex items-center gap-3 text-[11px] text-white/50 mt-0.5 flex-wrap">
-                    <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {currentSeason.period}</span>
-                    <span className="flex items-center gap-1"><Trophy className="w-3 h-3" /> {tournaments.filter(t => t.status !== 'completed').length} active events</span>
-                    <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {seasonSponsors.length} sponsors</span>
-                    <span className="flex items-center gap-1"><CircleDollarSign className="w-3 h-3" /> {currentSeason.totalSponsored} to prize pools</span>
-                  </div>
+                  <p className="text-[11px] text-white/50 mt-0.5">{currentSeason.period} \u00b7 Community Program by Matcherino</p>
                 </div>
               </div>
             </div>
@@ -387,6 +371,55 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
             {/* =========================================================== */}
             {activeTab === "events" && (
               <>
+                {/* Season Program Strip */}
+                <div className="rounded-xl border border-white/5 bg-[#1C2230] p-4">
+                  <div className="flex flex-col md:flex-row md:items-center gap-4">
+                    {/* Blurb — compact */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h2 className="text-sm font-bold text-white">{currentSeason.name} Community Program</h2>
+                        <div className="flex items-center gap-1 text-[10px] text-white/40 font-mono">
+                          <Timer className="w-3 h-3 text-cyan-400" />
+                          <span className="text-white font-bold">{countdown.days}d {String(countdown.hours).padStart(2, '0')}h {String(countdown.minutes).padStart(2, '0')}m</span>
+                          <span>left</span>
+                        </div>
+                      </div>
+                      <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                        Sponsors fund quests, fans complete them, and prize money flows into a central pool. Program managers distribute the fund to tournament organizers throughout the season.
+                      </p>
+                    </div>
+
+                    {/* Stats + Sponsors — right side */}
+                    <div className="flex items-center gap-3 shrink-0 flex-wrap">
+                      {/* Fund stats */}
+                      <div className="flex items-center gap-2">
+                        <div className="text-center px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/5">
+                          <span className="text-sm font-bold text-green-400 block">{currentSeason.totalFunded}</span>
+                          <span className="text-[9px] text-muted-foreground">Funded</span>
+                        </div>
+                        <div className="text-center px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/5">
+                          <span className="text-sm font-bold text-cyan-400 block">{currentSeason.distributed}</span>
+                          <span className="text-[9px] text-muted-foreground">Distributed</span>
+                        </div>
+                        <div className="text-center px-3 py-1.5 rounded-lg bg-white/[0.04] border border-white/5">
+                          <span className="text-sm font-bold text-yellow-400 block">{currentSeason.remaining}</span>
+                          <span className="text-[9px] text-muted-foreground">Remaining</span>
+                        </div>
+                      </div>
+
+                      {/* Sponsor avatars */}
+                      <div className="flex items-center -space-x-2">
+                        {seasonSponsors.map((s, i) => (
+                          <Avatar key={i} className="w-7 h-7 border-2 border-[#1C2230]" title={`${s.name} — ${s.contributed}`}>
+                            <AvatarFallback className={`text-[9px] font-bold ${s.color}`}>{s.avatar}</AvatarFallback>
+                          </Avatar>
+                        ))}
+                        <span className="text-[10px] text-muted-foreground ml-3">{seasonSponsors.length} sponsors</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 {/* Filter bar */}
                 <div className="flex items-center gap-2 flex-wrap">
                   {(["all", "live", "upcoming", "completed"] as const).map((f) => (
@@ -446,35 +479,6 @@ Right sidebar: Activity feed (recent contributions, registrations, wins)
                       </div>
                     </div>
                   ))}
-                </div>
-
-                {/* Season Sponsors */}
-                <div className="rounded-xl border border-white/5 bg-card overflow-hidden">
-                  <div className="px-4 py-3 border-b border-white/5 flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <TrendingUp className="w-4 h-4 text-green-400" />
-                      <h3 className="text-sm font-semibold text-white">Season Sponsors</h3>
-                    </div>
-                    <span className="text-[10px] text-muted-foreground">{currentSeason.name}</span>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 divide-y sm:divide-y-0 divide-white/5">
-                    {seasonSponsors.map((s, i) => (
-                      <div key={i} className="px-4 py-3 flex items-center gap-3 hover:bg-white/[0.02] transition-colors sm:border-l sm:first:border-l-0 border-white/5">
-                        <Avatar className="w-8 h-8">
-                          <AvatarFallback className={`text-[10px] font-bold ${s.color}`}>{s.avatar}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1 min-w-0">
-                          <span className="text-sm text-white font-medium block truncate">{s.name}</span>
-                          <span className="text-[10px] text-muted-foreground">{s.questsActive} active quest{s.questsActive !== 1 ? "s" : ""}</span>
-                        </div>
-                        <span className="text-sm font-bold text-green-400">{s.contributed}</span>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="px-4 py-2.5 border-t border-white/5 bg-white/[0.02] flex items-center justify-between">
-                    <span className="text-[11px] text-muted-foreground">Total to prize pools</span>
-                    <span className="text-sm font-bold text-white">{currentSeason.totalSponsored}</span>
-                  </div>
                 </div>
 
                 {/* SponsorQuests */}

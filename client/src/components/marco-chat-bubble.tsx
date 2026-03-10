@@ -12,6 +12,7 @@ import {
   type AgentAction,
   type ClaudeMessage,
 } from "@/lib/marco-agent";
+import { matchOfflineRoute } from "@/lib/marco-glossary";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -35,24 +36,16 @@ function mockResponse(input: string, ctx: string | null): { text: string; action
   const navMatch = lower.match(/(?:go\s+to|take\s+me\s+to|navigate\s+to|open|switch\s+to|head\s+to)\s+(?:my\s+|the\s+)?(.+?)$/);
   if (navMatch) {
     const target = navMatch[1].trim();
-    const routes: Record<string, { path: string; label: string }> = {
-      profile: { path: '/profile', label: 'Profile' },
-      events: { path: '/events', label: 'Events' },
-      create: { path: '/create', label: 'Create Tournament' },
-      partnership: { path: '/partnership', label: 'Partnership' },
-      home: { path: '/', label: 'Home' },
-    };
-    for (const [name, route] of Object.entries(routes)) {
-      if (target.includes(name)) {
-        const cur = window.location.pathname;
-        if (cur === route.path || (route.path !== '/' && cur.startsWith(route.path))) {
-          return { text: `You're already on the ${route.label} page. What would you like to do here?`, actions: [] };
-        }
-        return {
-          text: `Navigating to ${route.label}...`,
-          actions: [{ type: 'navigate', path: route.path, narration: `Going to ${route.label}` }],
-        };
+    const match = matchOfflineRoute(target);
+    if (match) {
+      const cur = window.location.pathname;
+      if (cur === match.path || (match.path !== '/' && cur.startsWith(match.path))) {
+        return { text: `You're already on the ${match.label} page. What would you like to do here?`, actions: [] };
       }
+      return {
+        text: `Navigating to ${match.label}...`,
+        actions: [{ type: 'navigate', path: match.path, narration: `Going to ${match.label}` }],
+      };
     }
   }
 

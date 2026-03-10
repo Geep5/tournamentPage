@@ -428,6 +428,46 @@ export default function MKTournamentPage() {
 
   return (
     <div className="flex flex-col h-screen" style={{ backgroundColor: "#0D0D0D" }}>
+      <div data-agent-context hidden>
+{`--- USER CONTEXT (injected by Matcherino at render time) ---
+USER: Grant Matcherino (#1004) [from session]
+EMAIL: grant@matcherino.com [from session]
+ACCOUNT TYPE: Organizer (Tier 2) [from session]
+TAX INTERVIEW: Completed [from API]
+BALANCE: $28.33 [from API]
+LINKED ACCOUNTS: Twitch (connected), Discord (not connected) [from API]
+
+PAGE: MK1 Tournament Detail
+PATH: /p/mortalkombat/t/${tournamentId}
+TOURNAMENT: ${tournament.name}
+GAME: Mortal Kombat 1
+ORGANIZER: ${tournament.organizer}
+STATUS: ${tournament.status === 'live' ? 'Live' : tournament.status === 'upcoming' ? 'Upcoming' : 'Completed'}
+FORMAT: ${tournament.format}
+PARTICIPANTS: ${tournament.participants} / ${tournament.maxParticipants}
+PRIZE POOL: ${tournament.prize}
+REGION: ${tournament.region}
+
+This is a tournament detail page inside the Mortal Kombat 1 white-label program.
+The header has breadcrumb navigation back to the MK1 Program page (/p/mortalkombat).
+
+TABS AVAILABLE:
+- Overview: Tournament description, about section
+- Rules: Tournament ruleset and guidelines
+- Contributions: Crowdfunding pins to grow the prize pool
+- Participants (${tournament.participants}): List of all registered players
+- Bracket: Tournament bracket view
+- Stream: Live streams from registered streamers
+
+LEFT SIDEBAR: Tournament card, tab navigation
+RIGHT SIDEBAR: Other MK1 tournaments, top contributors
+
+ACTIONS ON THIS PAGE:
+- Join Tournament button: Register for this tournament
+- Contribute to Prize Pool: Buy contributor pins
+- Admin Mode toggle (for organizers): Edit tournament settings, manage bracket
+`}
+      </div>
       {/* Header */}
       <header className="border-b border-white/5 bg-[#0D0D0D]/90 backdrop-blur-md sticky top-0 z-50">
         <div className="flex items-center h-14 px-4">

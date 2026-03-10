@@ -50,6 +50,79 @@ This is what allows "change the tournament name to test123" to work end-to-end: 
 
 ---
 
+## Site Glossary
+
+Marco needs to know **where things live** across the Matcherino platform so it can navigate to the right page when a user asks about something. This is the glossary system.
+
+### Three Layers of Context
+
+| Layer | What | Where it lives |
+|-------|------|-----------------|
+| **1. Glossary** | Static navigation map: which pages exist, what info/actions live on each | `client/src/lib/marco-glossary.ts` -- injected into the system prompt every LLM call |
+| **2. General user context** | Session/account data: name, email, balance, linked accounts, tax status | `data-agent-context` block on every page (top section, identical across pages) |
+| **3. Page-specific context** | What's on *this* page right now: tabs, sections, actions, current state | `data-agent-context` block on every page (bottom section, unique per page) |
+
+### How It Works
+
+```
+┌─────────────────────────────────────────────────────────┐
+│ SYSTEM PROMPT (static, every call)                      │
+│                                                         │
+│  Personality + Rules + Matcherino Knowledge              │
+│  + Site Glossary (from marco-glossary.ts)                │
+│    "To change payout settings → /profile"                │
+│    "To create a tournament → /create"                    │
+│    "To manage bracket → tournament detail, Admin Mode"   │
+└─────────────────────────────────────────────────────────┘
+                           +
+┌─────────────────────────────────────────────────────────┐
+│ USER MESSAGE (dynamic, each call)                       │
+│                                                         │
+│  Current page path + "YOU ARE ON: ..."                   │
+│  + General user context (from data-agent-context)        │
+│  + Page-specific context (from data-agent-context)       │
+│  + Interactive elements list (from DOM scan)             │
+│  + The user's message                                    │
+└─────────────────────────────────────────────────────────┘
+```
+
+The glossary is what lets Marco answer "how do I cash out?" with "navigate to `/profile` -- that's where Payment Settings and the Cash Out button are" -- even when the user is on a completely different page.
+
+### The Glossary Module
+
+**Key file:** `client/src/lib/marco-glossary.ts`
+
+Each glossary entry has:
+
+| Field | Purpose |
+|-------|---------|
+| `path` | URL path (e.g. `/profile`, `/p/starcraft`) |
+| `label` | Human name (e.g. "User Profile") |
+| `description` | One-liner for tool hints |
+| `keywords` | Lowercase terms for offline intent matching |
+| `contents` | What info/actions live on this page (injected into system prompt) |
+| `navigable` | Whether Marco can navigate here directly (false for dynamic routes like `/p/mortalkombat/t/:id`) |
+
+The module exports helpers consumed by the rest of the codebase:
+
+| Export | Consumer | Purpose |
+|--------|----------|---------|
+| `buildGlossaryPrompt()` | `marco-agent.ts` SYSTEM_PROMPT | Generates the full glossary block for Claude |
+| `getNavigateToolPaths()` | `marco-agent.ts` navigate tool | Lists available paths in the tool description |
+| `getPageLabel(pathname)` | `marco-agent.ts` buildContextBlock | Resolves path to human label for "YOU ARE ON" |
+| `matchOfflineRoute(target)` | `marco-chat-bubble.tsx` mockResponse | Keyword-based route matching for offline mode |
+
+### Adding a New Page to the Glossary
+
+When a new page is added to Matcherino:
+
+1. Add an entry to the `GLOSSARY` array in `marco-glossary.ts`
+2. Fill in `contents` with everything a user might ask about that lives on that page
+3. Add `data-agent-context` to the page component (see Page Context section below)
+4. That's it -- the system prompt, navigate tool, path labels, and offline routing all update automatically
+
+---
+
 ## What Marco Needs to Run
 
 ### 1. The Chat UI Component
@@ -200,6 +273,45 @@ ELIGIBLE TO APPLY: Yes [from API]
 CURRENT ORGANIZER TIER: Tier 2 [from session]
 ```
 
+**White-Label Program Page (StarCraft II, Mortal Kombat 1, etc.)**
+```
+PAGE: StarCraft II White-Label Program
+PATH: /p/starcraft
+TAB: Events
+
+This is the StarCraft II community hub -- a white-label program page.
+The header is program-branded. Users are "inside" the StarCraft program.
+Clicking the Matcherino helmet exits back to the main Events page.
+
+Current tab: Events
+- Events: Shows all StarCraft II tournaments (live, upcoming, past)
+- Partnership: Apply to become a StarCraft II tournament organizer partner
+- FAQ: Common questions about tournaments, prizes, and the platform
+Right sidebar: Activity feed (recent contributions, registrations, wins)
+```
+
+**White-Label Tournament Detail (e.g. MK1 Tournament)**
+```
+PAGE: MK1 Tournament Detail
+PATH: /p/mortalkombat/t/1
+TOURNAMENT: MK1 Pro Kompetition -- NA Finals
+GAME: Mortal Kombat 1
+ORGANIZER: WBG
+STATUS: Live
+FORMAT: Double Elimination
+PARTICIPANTS: 128 / 256
+PRIZE POOL: $10,000
+REGION: North America
+
+TABS AVAILABLE:
+- Overview, Rules, Contributions, Participants, Bracket, Stream
+
+ACTIONS ON THIS PAGE:
+- Join Tournament button: Register for this tournament
+- Contribute to Prize Pool: Buy contributor pins
+- Admin Mode toggle (for organizers)
+```
+
 ### Rules for Page Context
 
 1. **Be explicit about what the user can do.** If they're an admin, say so. If they can't payout because their tax interview isn't done, say that.
@@ -313,9 +425,11 @@ The system prompt defines Marco's personality, rules, and domain knowledge. Key 
 - **Critical Rules:** Check current path before navigating, use fill_input for forms (not click), confirm destructive actions.
 - **Admin Operations:** Enter admin mode -> navigate to correct tab -> fill input -> click Save. Do NOT stop after entering admin mode.
 - **Matcherino Knowledge:** Tournament structure, bracket formats, payout rules, common support issues.
+- **Site Glossary:** Auto-generated from `marco-glossary.ts` -- maps every page to what info/actions live there. This is how Marco knows which page to navigate to.
 
-The full prompt is in `marco-agent.ts` as `SYSTEM_PROMPT`. Update it when:
+The full prompt is in `marco-agent.ts` as `SYSTEM_PROMPT`. The glossary section is dynamically built from `marco-glossary.ts`. Update the glossary module when:
 - New pages are added to the platform
+- Page content/structure changes (new tabs, new actions)
 - New admin workflows are available
 - Common support patterns change
 - New tools are added (document their purpose in the prompt)
@@ -376,6 +490,7 @@ For every new page added to Matcherino:
 
 | File | Purpose |
 |------|---------|
+| `client/src/lib/marco-glossary.ts` | Site glossary: single source of truth for all page routes, labels, and content maps |
 | `client/src/lib/marco-agent.ts` | Agent core: scanner, tools, LLM calls, action executor |
 | `client/src/components/marco-chat-bubble.tsx` | Chat UI: messages, input, agentic loop, session persistence |
 | `api/marco.ts` | Vercel serverless proxy (demo only -- replace in production) |

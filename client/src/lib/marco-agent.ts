@@ -1,3 +1,5 @@
+import { buildGlossaryPrompt, getNavigateToolPaths, getPageLabel } from './marco-glossary';
+
 /**
  * Marco Agent -- LLM-powered agent that observes the page and acts on it.
  *
@@ -324,12 +326,7 @@ For general questions about Matcherino, just respond with text — no tool neede
 - Discord unlinking: must be done by Matcherino support
 - ESL/FACEIT prizes: https://matcherino.com/esl
 
-## Site Pages
-/events — Browse tournaments
-/create — Create tournament
-/ — Tournament detail (overview, bracket, teams, contributions, streams)
-/profile — User profile, settings, cashout, linked accounts
-/partnership — Partnership program`;
+${buildGlossaryPrompt()}`;
 
 // ---------------------------------------------------------------------------
 // Tool schemas for Claude
@@ -356,7 +353,7 @@ const TOOLS = [
   },
   {
     name: "navigate",
-    description: "Navigate to a different page on Matcherino. Available pages: / (home/tournament), /events, /create, /profile, /partnership. Check the current_path first — if already there, tell the user instead.",
+    description: `Navigate to a different page on Matcherino. Available pages: ${getNavigateToolPaths()}. Check the current_path first — if already there, tell the user instead.`,
     input_schema: {
       type: "object" as const,
       properties: {
@@ -506,7 +503,7 @@ export function buildContextBlock(
   return [
     `## Current State`,
     `CURRENT PAGE PATH: ${currentPath}`,
-    `YOU ARE ON: ${currentPath === '/profile' ? 'User Profile' : currentPath === '/events' ? 'Events Browser' : currentPath === '/create' ? 'Create Tournament' : currentPath === '/partnership' ? 'Partnership' : currentPath === '/' ? 'Tournament Detail' : currentPath}`,
+    `YOU ARE ON: ${getPageLabel(currentPath)}`,
     '',
     pageContext ? `## Page Context\n${pageContext}` : '## Page Context\n(none available)',
     '',

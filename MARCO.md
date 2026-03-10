@@ -434,7 +434,11 @@ The system prompt defines Marco's personality, rules, and domain knowledge. Key 
 
 - **Personality:** Friendly, direct, efficient. Narrates actions.
 - **Critical Rules:** Check current path before navigating, use fill_input for forms (not click), confirm destructive actions.
-- **Admin Operations:** Enter admin mode -> navigate to correct tab -> fill input -> click Save. Do NOT stop after entering admin mode.
+- **Filling Form Fields:** Distinguishes inputs, selects, checkboxes, rich text fields (`fill_rich_text`), and toggle switches (`click_element` after checking ON/OFF state).
+- **Admin Operations:** Enter admin mode -> `scroll_to_section` to the right tab -> fill input -> click Save. Confirm before Publish/Cancel/Refund. Use `read_page_text` to verify after saving.
+- **Timeouts:** `set_timeout` for delayed checks and reminders (1--300 seconds).
+- **Reading Page Content:** `read_page_text` to see text, numbers, status, errors -- the interactive elements list only shows buttons and inputs, not static content.
+- **Scrolling:** `scroll_to_section` for off-screen admin sections, especially the Payouts accordion.
 - **Matcherino Knowledge:** Tournament structure, bracket formats, payout rules, common support issues.
 - **Site Glossary:** Auto-generated from `marco-glossary.ts` -- maps every page to what info/actions live there. This is how Marco knows which page to navigate to.
 

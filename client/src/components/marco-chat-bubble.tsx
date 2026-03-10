@@ -177,6 +177,8 @@ export function MarcoChatBubble() {
   const pageContextRef = useRef<string | null>(null);
   /** Tracks whether the LLM API is available (false = no API key). */
   const llmAvailable = useRef(true);
+  /** Active timeout IDs for cleanup on unmount. */
+  const activeTimers = useRef<Set<ReturnType<typeof setTimeout>>>(new Set());
 
   // Read page context hints from DOM — re-read on every route change
   function readPageContext(): string | null {
@@ -254,6 +256,14 @@ export function MarcoChatBubble() {
       setTimeout(() => inputRef.current?.focus(), 200);
     }
   }, [open, greeted]);
+
+  // Clean up active timers on unmount
+  useEffect(() => {
+    return () => {
+      activeTimers.current.forEach((id) => clearTimeout(id));
+      activeTimers.current.clear();
+    };
+  }, []);
 
   // -----------------------------------------------------------------------
   // Helpers
@@ -349,6 +359,36 @@ export function MarcoChatBubble() {
               const result = executeAction(action);
               if (result && action.narration) {
                 addMarcoMessage(result, action.narration);
+              }
+
+              // Schedule the timer callback if this was a set_timeout action
+              if (action.type === 'set_timeout' && action.delayMs && action.message) {
+                const timerMessage = action.message;
+                const timerId = setTimeout(async () => {
+                  activeTimers.current.delete(timerId);
+                  // Inject the timer's message as a new user turn and run a fresh agentic call
+                  addMarcoMessage(`Timer fired: ${timerMessage}`, 'Timer callback');
+                  setTyping(true);
+                  try {
+                    const ctx = readPageContext();
+                    const els = scanInteractiveElements();
+                    const hist = buildHistory();
+                    const timerResponse = await callMarco(
+                      `[TIMER FIRED] ${timerMessage}`,
+                      hist, ctx, els, undefined,
+                    );
+                    if (timerResponse.text) addMarcoMessage(timerResponse.text);
+                    for (const act of timerResponse.actions) {
+                      const res = executeAction(act);
+                      if (res && act.narration) addMarcoMessage(res, act.narration);
+                    }
+                  } catch (err: any) {
+                    addMarcoMessage(`Timer callback failed: ${err.message}`);
+                  } finally {
+                    setTyping(false);
+                  }
+                }, action.delayMs);
+                activeTimers.current.add(timerId);
               }
               toolResults.push({ tool_use_id: toolUse.id, result: result || 'Done.' });
             } else {

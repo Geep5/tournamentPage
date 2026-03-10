@@ -21,7 +21,7 @@ export interface AgentMessage {
 }
 
 export interface AgentAction {
-  type: "click" | "navigate" | "go_back" | "highlight" | "fill_input" | "select_option" | "check_checkbox";
+  type: "click" | "navigate" | "go_back" | "highlight" | "fill_input" | "select_option" | "check_checkbox" | "set_timeout";
   /** For click: the element index from the scanned list */
   elementIndex?: number;
   /** For navigate: the path */
@@ -30,6 +30,10 @@ export interface AgentAction {
   value?: string;
   /** Human-readable narration */
   narration?: string;
+  /** For set_timeout: delay in milliseconds */
+  delayMs?: number;
+  /** For set_timeout: the follow-up message to inject when the timer fires */
+  message?: string;
 }
 
 export interface AgentResponse {
@@ -316,6 +320,13 @@ When the user asks to change tournament settings (name, dates, format, etc.):
 ### General questions
 For general questions about Matcherino, just respond with text — no tool needed.
 
+### Setting timeouts
+- Use set_timeout when you need to wait before checking or doing something.
+- Examples: "check if the bracket updated in 30 seconds", "remind me to save in 2 minutes".
+- When the timer fires, you receive the message as a new turn and can act on it (click, navigate, check state, respond).
+- Maximum delay: 300 seconds (5 minutes). Minimum: 1 second.
+- Tell the user what you're scheduling and why.
+
 ## Matcherino Knowledge
 - Tournaments have: title, game, format, dates, entry fee, prize pool, rules
 - Bracket formats: Single Elim, Double Elim, Round Robin, Swiss
@@ -449,6 +460,29 @@ const TOOLS = [
       required: ["element_index", "checked", "narration"],
     },
   },
+  {
+    name: "set_timeout",
+    description: "Set a timer that will send a follow-up message to yourself after a delay. Use this when you need to wait before checking something (e.g., wait for a bracket to update, poll for registration changes, remind the user about something). When the timer fires, you will receive the message as a new user message and can act on it. Maximum delay: 300 seconds (5 minutes).",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        delay_seconds: {
+          type: "number" as const,
+          description: "How many seconds to wait before firing (1–300)",
+        },
+        message: {
+          type: "string" as const,
+          description: "The instruction/reminder that will be sent to you when the timer fires (e.g., 'Check if the bracket has been updated' or 'Remind the user to save their changes')",
+        },
+        narration: {
+          type: "string" as const,
+          description: "Brief description shown to user (e.g., 'Setting a 30-second reminder')",
+        },
+      },
+      required: ["delay_seconds", "message", "narration"],
+    },
+  },
+
 ];
 
 // ---------------------------------------------------------------------------
@@ -626,6 +660,16 @@ export async function callMarco(
             narration: input.narration as string,
           });
           break;
+        case 'set_timeout': {
+          const delaySec = Math.max(1, Math.min(300, input.delay_seconds as number));
+          actions.push({
+            type: 'set_timeout',
+            delayMs: delaySec * 1000,
+            message: input.message as string,
+            narration: input.narration as string,
+          });
+          break;
+        }
       }
     }
   }
@@ -737,6 +781,12 @@ export function executeAction(action: AgentAction): string {
         }
       }, 600);
       return action.narration || (shouldCheck ? 'Checked.' : 'Unchecked.');
+    }
+    case 'set_timeout': {
+      // Timer scheduling is handled by the chat bubble component, not here.
+      // executeAction just returns the narration for the chat UI.
+      const secs = Math.round((action.delayMs || 0) / 1000);
+      return action.narration || `Timer set for ${secs} seconds.`;
     }
     default:
       return '';

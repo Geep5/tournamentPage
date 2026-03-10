@@ -393,6 +393,7 @@ This gives Marco a reliable handle regardless of how the label is associated in 
 | `check_checkbox` | Check or uncheck a checkbox | `element_index`, `checked`, `narration` |
 | `navigate` | Go to a different page path | `path`, `narration` |
 | `go_back` | Browser history back | `narration` |
+| `set_timeout` | Schedule a delayed follow-up action | `delay_seconds` (1--300), `message`, `narration` |
 
 ### Production Tools (Layer 2 -- API)
 

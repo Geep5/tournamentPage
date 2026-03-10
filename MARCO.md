@@ -351,11 +351,18 @@ For regular elements:
 [2] tab: "Bracket"
 ```
 
-For form elements (inputs, selects, textareas):
+For form elements (inputs, selects, textareas, rich text):
 ```
 [3] input (label="Tournament Name", value="Road to Brawl Cup", placeholder="")
 [4] select (label="Format", value="Single Elimination", placeholder="")
 [5] input (label="", value="", placeholder="Search...")
+[6] richtext (label="Description", value="Welcome to the tournament...", placeholder="")
+```
+
+For toggle switches:
+```
+[7] switch: "Game by Game Match Reporting" (OFF)
+[8] switch: "Admin Only Score Reporting" (ON)
 ```
 
 ### How Labels Are Resolved (priority order)
@@ -388,12 +395,15 @@ This gives Marco a reliable handle regardless of how the label is associated in 
 | Tool | Purpose | Parameters |
 |------|---------|------------|
 | `click_element` | Click a button, link, tab, or card | `element_index`, `narration` |
-| `fill_input` | Type into a text input, textarea, or contentEditable | `element_index`, `value`, `narration` |
+| `fill_input` | Type into a text input or textarea | `element_index`, `value`, `narration` |
+| `fill_rich_text` | Set content of a contentEditable rich text field | `element_index`, `value`, `narration` |
 | `select_option` | Pick an option from a `<select>` dropdown | `element_index`, `value`, `narration` |
 | `check_checkbox` | Check or uncheck a checkbox | `element_index`, `checked`, `narration` |
 | `navigate` | Go to a different page path | `path`, `narration` |
 | `go_back` | Browser history back | `narration` |
 | `set_timeout` | Schedule a delayed follow-up action | `delay_seconds` (1--300), `message`, `narration` |
+| `read_page_text` | Read visible text content from the page | `selector` (optional), `narration` |
+| `scroll_to_section` | Scroll a section into view | `target` (section ID or heading), `narration` |
 
 ### Production Tools (Layer 2 -- API)
 

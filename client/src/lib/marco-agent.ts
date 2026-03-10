@@ -21,7 +21,7 @@ export interface AgentMessage {
 }
 
 export interface AgentAction {
-  type: "click" | "navigate" | "go_back" | "highlight" | "fill_input" | "select_option" | "check_checkbox" | "set_timeout";
+  type: "click" | "navigate" | "go_back" | "highlight" | "fill_input" | "select_option" | "check_checkbox" | "set_timeout" | "read_page_text" | "fill_rich_text" | "scroll_to_section";
   /** For click: the element index from the scanned list */
   elementIndex?: number;
   /** For navigate: the path */
@@ -34,6 +34,10 @@ export interface AgentAction {
   delayMs?: number;
   /** For set_timeout: the follow-up message to inject when the timer fires */
   message?: string;
+  /** For read_page_text: CSS selector or section heading to scope the read */
+  selector?: string;
+  /** For scroll_to_section: the heading text or section ID to scroll to */
+  target?: string;
 }
 
 export interface AgentResponse {
@@ -53,6 +57,8 @@ export interface InteractiveElement {
   href?: string;
   ariaLabel?: string;
   disabled?: boolean;
+  /** For role='switch' elements: current checked state */
+  ariaChecked?: boolean;
   placeholder?: string;
   value?: string;
   label?: string;
@@ -68,6 +74,8 @@ const INTERACTIVE_SELECTOR = [
   '[role="button"]',
   '[role="tab"]',
   '[role="link"]',
+  '[role="switch"]',
+  '[contenteditable="true"], [contenteditable=""]',
   'input:not([type="hidden"])',
   'select',
   'textarea',
@@ -98,21 +106,26 @@ export function scanInteractiveElements(): InteractiveElement[] {
     // Determine element type
     let type: string;
     if (el.getAttribute('role') === 'tab') type = 'tab';
+    else if (el.getAttribute('role') === 'switch') type = 'switch';
     else if (tag === 'a') type = 'link';
     else if (tag === 'button' || el.getAttribute('role') === 'button') type = 'button';
+    else if (el.isContentEditable) type = 'richtext';
     else if (tag === 'input') type = 'input';
     else if (tag === 'select') type = 'select';
     else if (tag === 'textarea') type = 'textarea';
     else type = 'button';
 
     // Capture input-specific fields
-    const isFormEl = type === 'input' || type === 'select' || type === 'textarea';
-    const placeholder = isFormEl ? (el.getAttribute('placeholder') || undefined) : undefined;
-    const value = isFormEl ? ((el as HTMLInputElement).value || el.getAttribute('defaultValue') || '') : undefined;
+    const isFormEl = type === 'input' || type === 'select' || type === 'textarea' || type === 'richtext';
+    const placeholder = isFormEl ? (el.getAttribute('placeholder') || el.getAttribute('data-placeholder') || undefined) : undefined;
+    const value = type === 'richtext'
+      ? (el.textContent || '').trim().substring(0, 120)
+      : isFormEl ? ((el as HTMLInputElement).value || el.getAttribute('defaultValue') || '') : undefined;
+    const ariaChecked = type === 'switch' ? el.getAttribute('aria-checked') === 'true' : undefined;
 
     // Resolve label: data-agent-label > <label> sibling/parent > .space-y-2 parent label > placeholder > ariaLabel
     let label: string | undefined;
-    if (isFormEl) {
+    if (isFormEl || type === 'switch') {
       label = el.getAttribute('data-agent-label') || undefined;
       if (!label) {
         // Check for <label> with for=el.id
@@ -132,17 +145,27 @@ export function scanInteractiveElements(): InteractiveElement[] {
           if (firstLabel) label = firstLabel.textContent?.trim();
         }
       }
+      // For switches: try to find the sibling label text in the parent flex container
+      if (!label && type === 'switch') {
+        const parent = el.closest('.flex');
+        if (parent) {
+          const labelSpan = parent.querySelector('span.text-sm');
+          if (labelSpan) label = labelSpan.textContent?.trim();
+        }
+      }
       if (!label) label = placeholder;
       if (!label) label = ariaLabel;
     }
 
     // Deduplicate — use label/placeholder for form elements, text+ariaLabel for others
-    const key = isFormEl ? `${type}:${label || ''}:${placeholder || ''}` : `${type}:${text}:${ariaLabel || ''}:${href || ''}`;
+    const key = isFormEl || type === 'switch'
+      ? `${type}:${label || ''}:${placeholder || ''}`
+      : `${type}:${text}:${ariaLabel || ''}:${href || ''}`;
     if (seen.has(key)) continue;
     seen.add(key);
 
-    // Skip empty text elements (except inputs/selects)
-    if (!text && !ariaLabel && !isFormEl) continue;
+    // Skip empty text elements (except form elements and switches)
+    if (!text && !ariaLabel && !isFormEl && type !== 'switch') continue;
 
     results.push({
       index: results.length,
@@ -155,6 +178,7 @@ export function scanInteractiveElements(): InteractiveElement[] {
       placeholder,
       value,
       label,
+      ariaChecked,
     });
   }
 
@@ -185,18 +209,20 @@ function findElementByIndex(index: number): HTMLElement | null {
 
     let type: string;
     if (el.getAttribute('role') === 'tab') type = 'tab';
+    else if (el.getAttribute('role') === 'switch') type = 'switch';
     else if (tag === 'a') type = 'link';
     else if (tag === 'button' || el.getAttribute('role') === 'button') type = 'button';
+    else if (el.isContentEditable) type = 'richtext';
     else if (tag === 'input') type = 'input';
     else if (tag === 'select') type = 'select';
     else if (tag === 'textarea') type = 'textarea';
     else type = 'button';
 
-    const isFormEl = type === 'input' || type === 'select' || type === 'textarea';
-    const placeholder = isFormEl ? (el.getAttribute('placeholder') || undefined) : undefined;
+    const isFormEl = type === 'input' || type === 'select' || type === 'textarea' || type === 'richtext';
+    const placeholder = isFormEl ? (el.getAttribute('placeholder') || el.getAttribute('data-placeholder') || undefined) : undefined;
 
     let label: string | undefined;
-    if (isFormEl) {
+    if (isFormEl || type === 'switch') {
       label = el.getAttribute('data-agent-label') || undefined;
       if (!label && el.id) {
         const forLabel = document.querySelector<HTMLLabelElement>(`label[for="${el.id}"]`);
@@ -212,15 +238,24 @@ function findElementByIndex(index: number): HTMLElement | null {
           if (firstLabel) label = firstLabel.textContent?.trim();
         }
       }
+      if (!label && type === 'switch') {
+        const parent = el.closest('.flex');
+        if (parent) {
+          const labelSpan = parent.querySelector('span.text-sm');
+          if (labelSpan) label = labelSpan.textContent?.trim();
+        }
+      }
       if (!label) label = placeholder;
       if (!label) label = ariaLabel;
     }
 
-    const key = isFormEl ? `${type}:${label || ''}:${placeholder || ''}` : `${type}:${text}:${ariaLabel || ''}:${href || ''}`;
+    const key = isFormEl || type === 'switch'
+      ? `${type}:${label || ''}:${placeholder || ''}`
+      : `${type}:${text}:${ariaLabel || ''}:${href || ''}`;
     if (seen.has(key)) continue;
     seen.add(key);
 
-    if (!text && !ariaLabel && !isFormEl) continue;
+    if (!text && !ariaLabel && !isFormEl && type !== 'switch') continue;
 
 
     if (currentIndex === index) return el;
@@ -294,6 +329,8 @@ To change a field:
 3. After filling, tell the user what you changed and remind them to click Save if needed.
 4. For dropdowns, use select_option with the option text.
 5. For checkboxes, use check_checkbox with checked=true/false.
+6. For rich text fields (Description, Rules, Check-in Process, Messaging body), use fill_rich_text — NOT fill_input. These appear as type 'richtext' in the elements list.
+7. For toggle switches (type 'switch'), use click_element to toggle them. The current state is shown as ON/OFF in the elements list. Check the state before clicking to avoid toggling the wrong way.
 
 ### Clicking on-page elements
 You receive a numbered list of INTERACTIVE ELEMENTS visible on the page. Each has an index, type, text label, and optional href. To click anything on the current page:
@@ -307,10 +344,12 @@ You receive a numbered list of INTERACTIVE ELEMENTS visible on the page. Each ha
 When the user asks to change tournament settings (name, dates, format, etc.):
 1. Check if you're already in Admin Mode by looking for admin-prefixed tabs in the interactive elements.
 2. If NOT in admin mode, click the "Enter Admin Mode" button first, then tell the user you're entering admin mode.
-3. Once in admin mode, navigate to the right admin tab (e.g., "General" for name/description, "Bracket" for format).
-4. Find the input by its label and use fill_input to set the new value.
+3. Once in admin mode, use scroll_to_section to scroll to the right admin section (e.g., 'admin-bracket', 'admin-payouts').
+4. Find the input by its label and use fill_input (or fill_rich_text for rich text fields) to set the new value.
 5. Click the Save button to persist changes.
 6. Do NOT stop after entering admin mode — complete the full operation.
+7. Use read_page_text to verify changes took effect after saving.
+8. ALWAYS confirm with the user before clicking Publish, Cancel, or Refund — these are destructive and irreversible.
 
 ### Navigation
 - Use navigate ONLY to go to a different page (different path).
@@ -326,6 +365,18 @@ For general questions about Matcherino, just respond with text — no tool neede
 - When the timer fires, you receive the message as a new turn and can act on it (click, navigate, check state, respond).
 - Maximum delay: 300 seconds (5 minutes). Minimum: 1 second.
 - Tell the user what you're scheduling and why.
+
+### Reading page content
+- Use read_page_text to see what's currently displayed on the page — text, numbers, status, tables, error messages.
+- You CANNOT see page text from the interactive elements list alone — that only shows buttons, inputs, and links.
+- Use it to verify the current state before and after making changes.
+- Scope reads with a selector or heading text to get relevant content (e.g., read_page_text with selector 'Prize Pool').
+
+### Scrolling to sections
+- Long admin pages have sections that may be off-screen. Use scroll_to_section before interacting with elements in those sections.
+- Target by section ID: 'admin-overview', 'admin-rules', 'admin-bracket', 'admin-contributions', 'admin-teams', 'admin-prizepool', 'admin-stream', 'admin-payouts', 'admin-sponsors', 'admin-streaming', 'admin-location', 'admin-venues', 'admin-messaging'.
+- Or target by heading text: 'General Settings', 'Bracket', 'Participants', etc.
+- After scrolling, elements in that section become visible and will appear in your next interactive elements scan.
 
 ## Matcherino Knowledge
 - Tournaments have: title, game, format, dates, entry fee, prize pool, rules
@@ -482,6 +533,64 @@ const TOOLS = [
       required: ["delay_seconds", "message", "narration"],
     },
   },
+  {
+    name: "read_page_text",
+    description: "Read visible text content from the current page. Returns up to 2000 characters. Use this to check the current state of the page — tournament status, prize pool amount, participant count, error messages, table data, or any information displayed on screen. You can optionally scope the read to a specific section by providing a CSS selector or section heading.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        selector: {
+          type: "string" as const,
+          description: "Optional: CSS selector (e.g. '#admin-bracket', '.prize-pool') or section heading text (e.g. 'Prize Pool', 'Participants') to scope the read. If omitted, reads the main content area.",
+        },
+        narration: {
+          type: "string" as const,
+          description: "Brief description shown to user (e.g., 'Reading the current bracket settings')",
+        },
+      },
+      required: ["narration"],
+    },
+  },
+  {
+    name: "fill_rich_text",
+    description: "Set the content of a rich text / contentEditable field. Use this instead of fill_input for rich text editors (Description, Rules, Check-in Process, Payout Info, Messaging body). These appear as 'richtext' type in the interactive elements list.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        element_index: {
+          type: "number" as const,
+          description: "The index of the richtext element from the interactive_elements list",
+        },
+        value: {
+          type: "string" as const,
+          description: "The text content to set in the rich text editor",
+        },
+        narration: {
+          type: "string" as const,
+          description: "Brief description shown to user",
+        },
+      },
+      required: ["element_index", "value", "narration"],
+    },
+  },
+  {
+    name: "scroll_to_section",
+    description: "Scroll a page section into view. Use this before interacting with elements that may be off-screen, especially in long admin pages. You can target by section ID (e.g. 'admin-bracket', 'admin-payouts') or heading text (e.g. 'Bracket', 'Payouts Management'). After scrolling, the interactive elements list will update on the next tool call.",
+    input_schema: {
+      type: "object" as const,
+      properties: {
+        target: {
+          type: "string" as const,
+          description: "Section ID (e.g. 'admin-bracket') or heading text (e.g. 'Payouts Management') to scroll to",
+        },
+        narration: {
+          type: "string" as const,
+          description: "Brief description shown to user",
+        },
+      },
+      required: ["target", "narration"],
+    },
+  },
 
 ];
 
@@ -521,9 +630,11 @@ export function buildContextBlock(
   elements: InteractiveElement[],
 ): string {
   const elementList = elements.map((el) => {
-    const isFormEl = el.type === 'input' || el.type === 'select' || el.type === 'textarea';
+    const isFormEl = el.type === 'input' || el.type === 'select' || el.type === 'textarea' || el.type === 'richtext';
     let desc: string;
-    if (isFormEl) {
+    if (el.type === 'switch') {
+      desc = `[${el.index}] switch: "${el.label || el.text}" (${el.ariaChecked ? 'ON' : 'OFF'})`;
+    } else if (isFormEl) {
       desc = `[${el.index}] ${el.type} (label="${el.label || ''}", value="${el.value || ''}", placeholder="${el.placeholder || ''}")`;
     } else {
       desc = `[${el.index}] ${el.type}: "${el.text}"`;
@@ -670,6 +781,28 @@ export async function callMarco(
           });
           break;
         }
+        case 'read_page_text':
+          actions.push({
+            type: 'read_page_text',
+            selector: (input.selector as string) || undefined,
+            narration: input.narration as string,
+          });
+          break;
+        case 'fill_rich_text':
+          actions.push({
+            type: 'fill_rich_text',
+            elementIndex: input.element_index as number,
+            value: input.value as string,
+            narration: input.narration as string,
+          });
+          break;
+        case 'scroll_to_section':
+          actions.push({
+            type: 'scroll_to_section',
+            target: input.target as string,
+            narration: input.narration as string,
+          });
+          break;
       }
     }
   }
@@ -788,6 +921,59 @@ export function executeAction(action: AgentAction): string {
       const secs = Math.round((action.delayMs || 0) / 1000);
       return action.narration || `Timer set for ${secs} seconds.`;
     }
+    case 'read_page_text': {
+      let root: Element | null = null;
+      const sel = action.selector;
+      if (sel) {
+        // Try as CSS selector first
+        try { root = document.querySelector(sel); } catch { /* not valid CSS */ }
+        // Try as section ID (with or without # prefix)
+        if (!root) root = document.getElementById(sel) || document.getElementById(`admin-${sel.toLowerCase()}`);
+        // Try as heading text match
+        if (!root) {
+          const headings = Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6'));
+          const match = headings.find((h) => h.textContent?.trim().toLowerCase().includes(sel.toLowerCase()));
+          if (match) root = match.closest('section') || match.parentElement;
+        }
+      }
+      if (!root) root = document.querySelector('main') || document.querySelector('[class*="content"]') || document.body;
+      const text = (root.textContent || '').replace(/\s+/g, ' ').trim().substring(0, 2000);
+      return text || 'No text content found.';
+    }
+
+    case 'fill_rich_text': {
+      const el = findElementByIndex(action.elementIndex!);
+      if (!el) return `Could not find richtext element #${action.elementIndex} on the page.`;
+      if (!el.isContentEditable) return `Element #${action.elementIndex} is not a contentEditable field.`;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      highlightElement(el);
+      setTimeout(() => {
+        // Clear and set content — use textContent for plain text
+        el.textContent = action.value || '';
+        el.dispatchEvent(new Event('input', { bubbles: true }));
+        el.dispatchEvent(new Event('change', { bubbles: true }));
+      }, 600);
+      return action.narration || 'Updated rich text field.';
+    }
+
+    case 'scroll_to_section': {
+      const target = action.target!;
+      let section: Element | null = null;
+      // Try as element ID first
+      section = document.getElementById(target);
+      // Try prefixed with admin-
+      if (!section) section = document.getElementById(`admin-${target.toLowerCase().replace(/\s+/g, '-')}`);
+      // Try matching heading text
+      if (!section) {
+        const headings = Array.from(document.querySelectorAll('h1,h2,h3,h4,h5,h6'));
+        const match = headings.find((h) => h.textContent?.trim().toLowerCase().includes(target.toLowerCase()));
+        if (match) section = match.closest('section') || match;
+      }
+      if (!section) return `Could not find section "${target}" on the page.`;
+      section.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      return action.narration || `Scrolled to ${target}.`;
+    }
+
     default:
       return '';
   }

@@ -357,7 +357,8 @@ export function MarcoChatBubble() {
             if (action) {
               await new Promise((r) => setTimeout(r, 800));
               const result = executeAction(action);
-              if (result && action.narration) {
+              // Don't show raw page text in chat — it's internal context for the LLM
+              if (result && action.narration && action.type !== 'read_page_text') {
                 addMarcoMessage(result, action.narration);
               }
 

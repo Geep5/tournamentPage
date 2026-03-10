@@ -543,7 +543,37 @@ ACTIONS ON THIS PAGE:
 - "Contribute to Prize Pool" button: Opens contribution dialog with pin options
 - Bracket tab: Shows full bracket tree with match results
 - Stream tab: Shows embedded Twitch streams
-- Admin Mode toggle: For organizers — reveals admin configuration tabs
+- Admin Mode toggle: For organizers — reveals admin configuration tabs (see ADMIN MODE below)
+
+ADMIN MODE (organizers only):
+Click "Enter Admin Mode" to reveal the admin sidebar. Admin tabs are organized into 3 groups:
+
+  Configure:
+  - General (admin-overview): Tournament name, game, dates, cover image, banner, timezone, registration type, description (rich text), team/match settings
+  - Rules (admin-rules): Rules editor (rich text), check-in process (rich text)
+  - Crowdfunding (admin-contributions): Enable/disable crowdfunding, contribution items (pins), goal amount
+  - Bracket (admin-bracket): Format (Single Elim, Double Elim, Round Robin, Swiss), bracket size, seeding, best-of, third-place match toggle
+
+  Tournament:
+  - Participants (admin-teams): View/manage registered teams, approve/reject entries
+  - Prize Pool (admin-prizepool): View prize pool total, funding breakdown
+  - Marketplace (admin-stream): Contributor pin/item management
+  - Payouts (admin-payouts): Prize distribution buckets (uses collapsible accordion — use scroll_to_section to reach), payout amounts, initiate payouts. DESTRUCTIVE: payout actions are irreversible.
+
+  Operations:
+  - Sponsors (admin-sponsors): Add/manage tournament sponsors
+  - Stream (admin-streaming): Embedded stream configuration
+  - Location (admin-location): Venue address, map, online/offline toggle
+  - Venues & Series (admin-venues): Link to venue/series pages
+  - Messaging (admin-messaging): Send messages to participants. Body is rich text (use fill_rich_text).
+
+Admin workflow tips:
+- To edit a field: Enter Admin Mode → scroll_to_section('admin-XXX') → find input by label → fill_input or fill_rich_text → click Save
+- Rich text fields (Description, Rules, Check-in Process, Messaging body): use fill_rich_text, NOT fill_input
+- Toggle switches (e.g. third-place match, crowdfunding): use click_element after checking current ON/OFF state
+- Payouts section uses collapsible accordions — scroll_to_section('admin-payouts') first, then interact
+- DESTRUCTIVE ACTIONS: Publish, Cancel Tournament, Refund — ALWAYS confirm with user before clicking. These are irreversible.
+- Publish requires the Terms of Service checkbox to be checked first
 
 MATCHERINO SUPPORT INFO:
 - For Brawl Stars issues (PINs, Supercell ID, disputes): redirect to Brawl Stars Discord https://discord.gg/AYna5z4RtF
@@ -556,6 +586,7 @@ NEXT STEPS FOR USERS:
 - New participant: Click "Join Tournament" to register your team
 - Want to support: Click "Contribute to Prize Pool" for pin options
 - Looking for results: Click "Bracket" tab to see match results
+- Admin/organizer: Click "Enter Admin Mode" to configure tournament settings
 - Need help: Ask Marco!`}
       </div>
       {/* Top Navbar */}

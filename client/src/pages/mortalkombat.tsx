@@ -206,7 +206,18 @@ Current tab: ${activeTab}
 - Partnership: Apply to become an MK1 tournament organizer partner
 - FAQ: Common questions about tournaments, prizes, and the platform
 Right sidebar: Activity feed (recent contributions, registrations, wins)
-`}>
+
+ACTIONS ON THIS PAGE:
+- Click a tournament card to view its detail page (navigates to /p/mortalkombat/t/:id)
+- Switch tabs (Events, Partnership, FAQ) to browse program content
+- "Apply for Partnership" on Partnership tab to submit an organizer application
+- Click the Matcherino helmet to exit back to Events
+
+NEXT STEPS FOR USERS:
+- Looking for tournaments: Browse the Events tab for live and upcoming MK1 events
+- Want to organize: Go to Partnership tab and apply
+- Have a question: Check the FAQ tab first, then ask Marco
+- Need help: Ask Marco!`}>
       {/* —— White-Label Header (MK branded) —— */}
       <header className="sticky top-0 z-50 bg-[#0D0D0D]/95 backdrop-blur-md border-b border-red-900/30">
         <div className="flex items-center h-14 px-4 gap-4">

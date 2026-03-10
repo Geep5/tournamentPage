@@ -283,7 +283,7 @@ PAGE: StarCraft II White-Label Program
 PATH: /p/starcraft
 TAB: ${activeTab}
 
-This is the StarCraft II community hub \u2014 a white-label program page.
+This is the StarCraft II community hub — a white-label program page.
 The header is program-branded. Users are "inside" the StarCraft program.
 Clicking the Matcherino helmet exits back to the main Events page.
 
@@ -292,7 +292,18 @@ Current tab: ${activeTab}
 - Partnership: Apply to become a StarCraft II tournament organizer partner
 - FAQ: Common questions about tournaments, prizes, and the platform
 Right sidebar: Activity feed (recent contributions, registrations, wins)
-`}>
+
+ACTIONS ON THIS PAGE:
+- Click a tournament card to view its detail page (navigates to /p/starcraft/t/:id — not yet in this codebase)
+- Switch tabs (Events, Partnership, FAQ) to browse program content
+- "Apply for Partnership" on Partnership tab to submit an organizer application
+- Click the Matcherino helmet to exit back to Events
+
+NEXT STEPS FOR USERS:
+- Looking for tournaments: Browse the Events tab for live and upcoming StarCraft II events
+- Want to organize: Go to Partnership tab and apply
+- Have a question: Check the FAQ tab first, then ask Marco
+- Need help: Ask Marco!`}>
       {/* \u2500\u2500 White-Label Header \u2500\u2500 */}
       <header className="sticky top-0 z-50 bg-[#1B213A]/95 backdrop-blur-md border-b border-white/5">
         <div className="flex items-center h-14 px-4 gap-4">

@@ -863,17 +863,6 @@ export default function StarcraftPage() {
                     ))}
                   </div>
                 </div>
-
-                {/* Create CTA */}
-                <div className="rounded-xl border border-cyan-500/20 bg-gradient-to-r from-cyan-500/5 to-blue-500/5 p-6 text-center">
-                  <h3 className="text-lg font-semibold text-white mb-1">Want to run a StarCraft II tournament?</h3>
-                  <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
-                    Create your own community tournament with brackets, prize pools, and crowdfunding.
-                  </p>
-                  <Button className="bg-cyan-600 hover:bg-cyan-500 text-white gap-2" onClick={() => setActiveTab("partnership")}>
-                    <Handshake className="w-4 h-4" /> Become a Partner
-                  </Button>
-                </div>
               </>
             )}
 

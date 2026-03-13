@@ -14,6 +14,7 @@ import MortalKombatPage from "@/pages/mortalkombat";
 import MKTournamentPage from "@/pages/mk-tournament";
 import SC2TournamentPage from "@/pages/sc2-tournament";
 import { MarcoChatBubble } from "@/components/marco-chat-bubble";
+import { PasswordGate } from "@/components/password-gate";
 
 function Router() {
   return (
@@ -34,13 +35,15 @@ function Router() {
 
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-        <MarcoChatBubble />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <PasswordGate>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+          <MarcoChatBubble />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </PasswordGate>
   );
 }
 

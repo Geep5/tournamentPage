@@ -751,6 +751,7 @@ export default function StarcraftPage() {
                               <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {t.date}</span>
                               <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.region}</span>
                               <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {t.participants}/{t.maxParticipants}</span>
+                              <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] font-bold">{t.prize}</Badge>
                             </div>
                           </div>
                         </Link>
@@ -831,7 +832,7 @@ export default function StarcraftPage() {
                             <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {t.date}</span>
                             <span className="flex items-center gap-1"><Gamepad2 className="w-3 h-3" /> {t.format}</span>
                             <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.region}</span>
-                            <span className="flex items-center gap-1 text-yellow-400 font-semibold">{t.prize}</span>
+                            <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] font-bold">{t.prize}</Badge>
                           </div>
                           <div className="flex items-center justify-between pt-1">
                             <div className="flex items-center gap-1.5">

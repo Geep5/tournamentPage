@@ -71,33 +71,34 @@ interface EwcQualifier {
 interface EwcRegion {
   region: string;
   org: string;
+  prize: string;
   qualified: ({ tag: string; avatar: string; img?: string } | null)[];
   qualifiers: EwcQualifier[];
 }
 
 const ewcRegions: EwcRegion[] = [
   {
-    region: "Americas", org: "MTCH",
+    region: "Americas", org: "MTCH", prize: "$10,000",
     qualified: [{ tag: "Astrea", avatar: "A", img: astreaImg }, null],
     qualifiers: [{ name: "MTCH Americas Qualifier", date: "May 18, 2026", slots: 2, link: "/t/mtch-americas-qualifier" }],
   },
   {
-    region: "EMEA", org: "MTCH",
+    region: "EMEA", org: "MTCH", prize: "$10,000",
     qualified: [null, null],
     qualifiers: [{ name: "MTCH EMEA Qualifier", date: "May 25, 2026", slots: 2, link: "/t/mtch-emea-qualifier" }],
   },
   {
-    region: "KR", org: "GSL",
+    region: "KR", org: "GSL", prize: "$10,000",
     qualified: [{ tag: "Serral", avatar: "S", img: serralImg }, { tag: "Clem", avatar: "C", img: clemImg }],
     qualifiers: [{ name: "GSL KR Qualifier", date: "Jun 8, 2026", slots: 2, link: "/t/gsl-kr-qualifier" }],
   },
   {
-    region: "China", org: "NTES",
+    region: "China", org: "NTES", prize: "$10,000",
     qualified: [null],
     qualifiers: [{ name: "NTES China Qualifier", date: "May 4, 2026", slots: 1, link: "/t/ntes-china-qualifier" }],
   },
   {
-    region: "Global", org: "MTCH",
+    region: "Global", org: "MTCH", prize: "$10,000",
     qualified: [null, null, null, null, null],
     qualifiers: [
       { name: "Global Open #1", date: "Mar 16, 2026", slots: 1, link: "/t/global-open-1" },
@@ -634,6 +635,7 @@ export default function StarcraftPage() {
                                   {r.org} · {filled}/{r.qualified.length} qualified
                                   {singleQualifier && " · " + r.qualifiers[0].date}
                                 </span>
+                                <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] font-bold mt-1">{r.prize}</Badge>
                               </div>
                               {!singleQualifier && (
                                 <ChevronRight className={`w-3.5 h-3.5 text-white/30 transition-transform ${isExpanded ? "rotate-90" : ""}`} />

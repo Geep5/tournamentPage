@@ -31,13 +31,14 @@ const SC2_BG = "#0D0D0D";
 
 // Real SC2 tournament images from Matcherino CDN
 const SC2_IMGS = [
-  "https://cdn.matcherino.com/6a0e65e1-9476-4c9e-bbf0-a435c64f36e1/-/crop/657x370/60,0/-/preview/",
-  "https://cdn.matcherino.com/1a8642ce-6b14-4f13-9eeb-eb2d5ec4a5b7/-/crop/1344x755/0,6/-/resize/800x450/",
-  "https://cdn.matcherino.com/c2d84f49-df5b-4066-b8ec-17e2df6e1433/-/crop/1920x1079/0,0/-/resize/800x450/",
-  "https://cdn.matcherino.com/b9646dd5-c109-4aeb-ab5f-8b50293ff049/-/crop/7272x4089/0,235/-/resize/800x450/",
-  "https://cdn.matcherino.com/d6e9b953-9d53-4654-957a-f25b43e7d410/-/crop/1920x1079/0,0/-/resize/800x450/",
-  "https://cdn.matcherino.com/37e83177-4e5f-47d6-9827-ef76e46dc593/-/crop/1536x864/0,76/-/resize/800x450/",
-  "https://cdn.matcherino.com/acd02ecb-042e-4c35-bf58-26d5e1cf1bf0/-/crop/347x195/917,829/-/preview/",
+  "https://cdn.matcherino.com/684148c1-caae-44a6-9ad6-332481b101a0/-/crop/581x327/0,4/-/resize/800x450/",
+  "https://cdn.matcherino.com/09e34bd3-d6c3-428d-93d0-c0957deb41d0/-/crop/3000x1687/0,508/-/resize/800x450/",
+  "https://cdn.matcherino.com/41541e69-049f-40de-8619-031f3ca69fb1/-/crop/552x310/191,0/-/resize/800x450/",
+  "https://cdn.matcherino.com/73a4e53a-1900-4ec0-bac5-1b9a6a8c11af/-/resize/800x450/",
+  "https://cdn.matcherino.com/af8bd6ca-b994-4531-8426-09764770bd11/-/resize/800x450/",
+  "https://cdn.matcherino.com/a0e8d1ec-04e6-49ad-b32c-f258cba3fa73/-/resize/800x450/",
+  "https://cdn.matcherino.com/00298fde-bca7-47b0-a0df-aca9ae736306/-/resize/800x450/",
+  "https://cdn.matcherino.com/d0c8b053-2c6e-4317-9a37-a237cbf03a53/-/crop/1024x576/0,224/-/resize/800x450/",
 ] as const;
 
 // ---------------------------------------------------------------------------
@@ -67,10 +68,10 @@ const allTournaments: SC2Tournament[] = [
   { id: 4, name: "Northern Lights AS #25", date: "Apr 5, 2026", format: "Swiss", participants: 36, maxParticipants: 64, prize: "$1,500", status: "upcoming", organizer: "NorthernSC", organizerAvatar: "N", region: "EU", img: SC2_IMGS[3], partnered: true, qualifier: true },
   { id: 5, name: "Korean Starcraft League: Week 88", date: "Mar 17, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$2,400", status: "upcoming", organizer: "KSL", organizerAvatar: "K", region: "Korea", img: SC2_IMGS[4], partnered: true },
   { id: 6, name: "StarCraft Evolution League #20", date: "Mar 15, 2026", format: "Double Elimination", participants: 48, maxParticipants: 64, prize: "$3,200", status: "live", organizer: "ESL", organizerAvatar: "E", region: "Global", img: SC2_IMGS[5], partnered: true },
-  { id: 7, name: "Community Showdown III — EMEA", date: "Mar 8, 2026", format: "Single Elimination", participants: 64, maxParticipants: 64, prize: "$1,000", status: "completed", organizer: "ESL", organizerAvatar: "E", region: "EMEA", img: SC2_IMGS[4], partnered: true },
-  { id: 8, name: "Bronze to GM Weekly #42", date: "Mar 5, 2026", format: "Swiss", participants: 96, maxParticipants: 128, prize: "$400", status: "completed", organizer: "B2GM", organizerAvatar: "B", region: "Global", img: SC2_IMGS[5], partnered: false },
-  { id: 9, name: "Ladder Heroes Open #12", date: "Mar 12, 2026", format: "Single Elimination", participants: 32, maxParticipants: 64, prize: "$200", status: "upcoming", organizer: "LadderH", organizerAvatar: "L", region: "NA", img: SC2_IMGS[4], partnered: false },
-  { id: 10, name: "Casual 2v2 Bash", date: "Mar 20, 2026", format: "Double Elimination", participants: 16, maxParticipants: 32, prize: "$150", status: "upcoming", organizer: "SC2Fun", organizerAvatar: "S", region: "Global", img: SC2_IMGS[6], partnered: false },
+  { id: 7, name: "Community Showdown III — EMEA", date: "Mar 8, 2026", format: "Single Elimination", participants: 64, maxParticipants: 64, prize: "$1,000", status: "completed", organizer: "ESL", organizerAvatar: "E", region: "EMEA", img: SC2_IMGS[6], partnered: true },
+  { id: 8, name: "Bronze to GM Weekly #42", date: "Mar 5, 2026", format: "Swiss", participants: 96, maxParticipants: 128, prize: "$400", status: "completed", organizer: "B2GM", organizerAvatar: "B", region: "Global", img: SC2_IMGS[7], partnered: false },
+  { id: 9, name: "Ladder Heroes Open #12", date: "Mar 12, 2026", format: "Single Elimination", participants: 32, maxParticipants: 64, prize: "$200", status: "upcoming", organizer: "LadderH", organizerAvatar: "L", region: "NA", img: SC2_IMGS[0], partnered: false },
+  { id: 10, name: "Casual 2v2 Bash", date: "Mar 20, 2026", format: "Double Elimination", participants: 16, maxParticipants: 32, prize: "$150", status: "upcoming", organizer: "SC2Fun", organizerAvatar: "S", region: "Global", img: SC2_IMGS[1], partnered: false },
 ];
 
 // Player headshot photos (real tournament/team photos)

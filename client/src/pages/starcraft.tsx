@@ -135,10 +135,10 @@ const currentSeason = {
 };
 
 // ---------------------------------------------------------------------------
-// Mock data — Partnership Tiers & Open Applications
+// Mock data — Partnership Program & Applications
 // ---------------------------------------------------------------------------
 
-interface TierApplication {
+interface ProgramApplication {
   id: string;
   title: string;
   description: string;
@@ -147,217 +147,57 @@ interface TierApplication {
   fields: { label: string; placeholder: string }[];
 }
 
-interface PartnerTier {
-  id: string;
-  name: string;
-  color: string;
-  bgColor: string;
-  borderColor: string;
-  description: string;
-  perks: string[];
-  applications: TierApplication[];
-}
-
-const partnerTiers: PartnerTier[] = [
+// Applications visible to organizers already in the program
+const programApplications: ProgramApplication[] = [
   {
-    id: "program",
-    name: "Program",
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-500/10",
-    borderColor: "border-emerald-500/20",
-    description: "Community organizers running crowdfunded tournaments.",
-    perks: [
-      "Contribution codes for your events",
-      "Verified StarCraft II tournament badge",
-      "Custom Matcherino event URL",
-      "Community Discord role",
-    ],
-    applications: [
-      {
-        id: "program-codes-s3",
-        title: "S3 2026 Contribution Codes",
-        description: "Request contribution codes for your Season 3 community events. Codes let fans fund the prize pool at zero cost.",
-        deadline: "Jun 30, 2026",
-        status: "open",
-        fields: [
-          { label: "Organization / Streamer Name", placeholder: "Your org or channel name" },
-          { label: "Email Address", placeholder: "you@example.com" },
-          { label: "Tournament name & date", placeholder: "e.g. Weekly Cup #12 — Jul 5, 2026" },
-          { label: "Estimated participants", placeholder: "e.g. 32, 64, 128" },
-          { label: "How will you distribute codes?", placeholder: "Stream, Discord, social media, etc." },
-        ],
-      },
+    id: "app-contribution-codes",
+    title: "Contribution Codes",
+    description: "Request contribution codes for your upcoming events. Codes let fans fund the prize pool at zero cost.",
+    deadline: "Rolling",
+    status: "open",
+    fields: [
+      { label: "Tournament name & date", placeholder: "e.g. Weekly Cup #12 — Jul 5, 2026" },
+      { label: "Estimated participants", placeholder: "e.g. 32, 64, 128" },
+      { label: "How will you distribute codes?", placeholder: "Stream, Discord, social media, etc." },
     ],
   },
   {
-    id: "ladder",
-    name: "Ladder",
-    color: "text-blue-400",
-    bgColor: "bg-blue-500/10",
-    borderColor: "border-blue-500/20",
-    description: "Established organizers with direct prize pool funding.",
-    perks: [
-      "Direct prize pool deposits",
-      "Priority event listing placement",
-      "Dedicated support contact",
-    ],
-    applications: [
-      {
-        id: "ladder-funding-q3",
-        title: "Q3 2026 Prize Pool Funding",
-        description: "Apply for direct prize pool funding for your Q3 events. Funding is allocated per-event based on track record.",
-        deadline: "May 15, 2026",
-        status: "open",
-        fields: [
-          { label: "Organization Name", placeholder: "Your org name" },
-          { label: "Email Address", placeholder: "you@example.com" },
-          { label: "Events planned for Q3", placeholder: "e.g. 6 weekly cups + 1 season final" },
-          { label: "Average participants per event", placeholder: "e.g. 48" },
-          { label: "Requested funding per event", placeholder: "e.g. $500" },
-          { label: "Links to past events", placeholder: "URLs to 2-3 previous tournaments" },
-        ],
-      },
-      {
-        id: "ladder-featured-summer",
-        title: "Summer 2026 Featured Listing",
-        description: "Get your summer events featured at the top of the StarCraft II events page.",
-        deadline: "Jun 1, 2026",
-        status: "open",
-        fields: [
-          { label: "Organization Name", placeholder: "Your org name" },
-          { label: "Email Address", placeholder: "you@example.com" },
-          { label: "Event name & date", placeholder: "e.g. Summer Showdown — Jul 12, 2026" },
-          { label: "Expected prize pool", placeholder: "e.g. $1,500" },
-          { label: "Stream link", placeholder: "twitch.tv/... or youtube.com/..." },
-        ],
-      },
+    id: "app-in-game-items",
+    title: "In-Game Item Drops",
+    description: "Request portraits, skins, or banners for your tournament winners and contributors.",
+    deadline: "Aug 1, 2026",
+    status: "open",
+    fields: [
+      { label: "Tournament name & date", placeholder: "e.g. Fall League Finals — Oct 2026" },
+      { label: "Expected number of winners", placeholder: "e.g. Top 8" },
+      { label: "Expected contributor count", placeholder: "e.g. 200+" },
+      { label: "Requested item type", placeholder: "Portraits, Banners, Skins, or any" },
     ],
   },
   {
-    id: "diamond",
-    name: "Diamond",
-    color: "text-cyan-400",
-    bgColor: "bg-cyan-500/10",
-    borderColor: "border-cyan-500/20",
-    description: "Top-tier organizers with in-game item drops for events.",
-    perks: [
-      "In-game items for tournament winners",
-      "In-game items for donors & contributors",
-      "Co-branded stream overlays",
-      "Blizzard community spotlight eligibility",
-    ],
-    applications: [
-      {
-        id: "diamond-items-fall26",
-        title: "Fall 2026 Winner Item Drop",
-        description: "Request portraits, skins, or banners to distribute to your Fall 2026 tournament winners.",
-        deadline: "Aug 1, 2026",
-        status: "open",
-        fields: [
-          { label: "Organization Name", placeholder: "Your org name" },
-          { label: "Email Address", placeholder: "you@example.com" },
-          { label: "Tournament name & date", placeholder: "e.g. Fall League Finals — Oct 2026" },
-          { label: "Expected number of winners", placeholder: "e.g. Top 8" },
-          { label: "Requested item type", placeholder: "Portraits, Banners, Skins, or any" },
-        ],
-      },
-      {
-        id: "diamond-donor-fall26",
-        title: "Fall 2026 Contributor Rewards",
-        description: "Reward everyone who contributes to your Fall 2026 prize pool with in-game items.",
-        deadline: "Aug 1, 2026",
-        status: "open",
-        fields: [
-          { label: "Organization Name", placeholder: "Your org name" },
-          { label: "Email Address", placeholder: "you@example.com" },
-          { label: "Tournament name & link", placeholder: "matcherino.com/tournaments/..." },
-          { label: "Expected contributor count", placeholder: "e.g. 200+" },
-          { label: "Minimum contribution threshold?", placeholder: "e.g. Any, $5+, $10+" },
-        ],
-      },
+    id: "app-prize-funding",
+    title: "Prize Pool Funding",
+    description: "Apply for direct prize pool funding for an upcoming event. Funding is allocated per-event based on track record.",
+    deadline: "May 15, 2026",
+    status: "open",
+    fields: [
+      { label: "Event name & date", placeholder: "e.g. Summer Showdown — Jul 12, 2026" },
+      { label: "Events planned this season", placeholder: "e.g. 6 weekly cups + 1 season final" },
+      { label: "Average participants per event", placeholder: "e.g. 48" },
+      { label: "Requested funding per event", placeholder: "e.g. $500" },
+      { label: "Links to past events", placeholder: "URLs to 2-3 previous tournaments" },
     ],
   },
   {
-    id: "masters",
-    name: "Masters",
-    color: "text-yellow-400",
-    bgColor: "bg-yellow-500/10",
-    borderColor: "border-yellow-500/20",
-    description: "Elite organizers with Blizzard-funded base prize pools.",
-    perks: [
-      "Base prize pool funded by Blizzard",
-      "Official Blizzard co-branding",
-      "Priority scheduling & conflict resolution",
-      "Annual organizer summit invitation",
-    ],
-    applications: [
-      {
-        id: "masters-funding-h2-26",
-        title: "H2 2026 Blizzard Base Funding",
-        description: "Apply for Blizzard base prize pool funding for your H2 2026 tournament series.",
-        deadline: "Jun 15, 2026",
-        status: "open",
-        fields: [
-          { label: "Organization Name", placeholder: "Your org name" },
-          { label: "Primary Contact Email", placeholder: "you@example.com" },
-          { label: "Events planned for H2 2026", placeholder: "e.g. 8 monthly cups + grand final" },
-          { label: "Average viewership per event", placeholder: "e.g. 500 concurrent" },
-          { label: "Requested base prize per event", placeholder: "e.g. $2,000" },
-          { label: "Proposed schedule", placeholder: "Dates or cadence" },
-        ],
-      },
-    ],
-  },
-  {
-    id: "grandmaster",
-    name: "Grandmaster",
-    color: "text-red-400",
-    bgColor: "bg-red-500/10",
-    borderColor: "border-red-500/20",
-    description: "Invite-only. Flagship community events with full Blizzard support.",
-    perks: [
-      "Flagship event status (major prize pools)",
-      "Full Blizzard marketing & broadcast support",
-      "Cross-promotion on official Blizzard channels",
-      "On-site Blizzard staff support (LAN events)",
-      "Exclusive Grandmaster-tier in-game items (unique skins, portraits, sprays)",
-      "Custom in-game event tie-ins (loading screens, achievements)",
-    ],
-    applications: [
-      {
-        id: "gm-flagship-fall26",
-        title: "Fall 2026 Flagship Event",
-        description: "Propose a large-scale StarCraft II community event for Fall 2026. Only a handful are approved each year.",
-        deadline: "Jul 1, 2026",
-        status: "open",
-        fields: [
-          { label: "Organization Name", placeholder: "Your org name" },
-          { label: "Primary Contact Email", placeholder: "you@example.com" },
-          { label: "Event name", placeholder: "e.g. StarCraft Community Championship 2026" },
-          { label: "Proposed date & duration", placeholder: "e.g. Oct 15-17, 2026 (3 days)" },
-          { label: "Format (online / LAN / hybrid)", placeholder: "e.g. LAN Finals with online qualifiers" },
-          { label: "Expected participants", placeholder: "e.g. 256 qualifiers \u2192 16 LAN" },
-          { label: "Requested total prize pool", placeholder: "e.g. $25,000" },
-          { label: "Venue (if LAN)", placeholder: "City, venue name, or TBD" },
-          { label: "Broadcast plan", placeholder: "Casters, stream platform, production level" },
-        ],
-      },
-      {
-        id: "gm-items-fall26",
-        title: "Fall 2026 Special In-Game Items",
-        description: "Request exclusive Grandmaster-tier in-game items for your Fall 2026 event \u2014 unique skins, portraits, sprays, loading screens, or achievements not available at lower tiers.",
-        deadline: "Jul 1, 2026",
-        status: "open",
-        fields: [
-          { label: "Organization Name", placeholder: "Your org name" },
-          { label: "Contact Email", placeholder: "you@example.com" },
-          { label: "Event name & date", placeholder: "e.g. SC2 Community Championship \u2014 Oct 2026" },
-          { label: "Item types requested", placeholder: "e.g. Unique portrait, weapon skin, spray, loading screen" },
-          { label: "Distribution plan", placeholder: "e.g. Top 8 winners + all contributors" },
-          { label: "Expected recipients", placeholder: "e.g. ~500 contributors, 8 winners" },
-          { label: "Theme or art direction (if any)", placeholder: "e.g. Protoss-themed, event logo integration" },
-        ],
-      },
+    id: "app-featured-listing",
+    title: "Featured Event Listing",
+    description: "Get your event featured at the top of the StarCraft II events page.",
+    deadline: "Jun 1, 2026",
+    status: "open",
+    fields: [
+      { label: "Event name & date", placeholder: "e.g. Summer Showdown — Jul 12, 2026" },
+      { label: "Expected prize pool", placeholder: "e.g. $1,500" },
+      { label: "Stream link", placeholder: "twitch.tv/... or youtube.com/..." },
     ],
   },
 ];
@@ -414,7 +254,7 @@ export default function StarcraftPage() {
   const [activeTab, setActiveTab] = useState<TabId>("events");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeApplication, setActiveApplication] = useState<string | null>(null);
-  const [expandedTier, setExpandedTier] = useState<string | null>(null);
+  const [inProgram, setInProgram] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [faqRole, setFaqRole] = useState<"players" | "organizers">("players");
   const [partnerFilter, setPartnerFilter] = useState<"all" | "partnered" | "unpartnered">("all");
@@ -864,150 +704,73 @@ export default function StarcraftPage() {
             {/* ═══════════ PARTNERSHIP TAB ═══════════ */}
             {activeTab === "partnership" && (
               <>
-                <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                    <Handshake className="w-5 h-5" />
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 rounded-lg bg-primary/10 text-primary">
+                      <Handshake className="w-5 h-5" />
+                    </div>
+                    <h2 className="text-2xl font-bold text-white">StarCraft II Partnership</h2>
                   </div>
-                  <h2 className="text-2xl font-bold text-white">StarCraft II Partnership</h2>
+
+                  {/* Admin toggle */}
+                  <div className="flex items-center gap-2 text-xs">
+                    <span className={`font-medium ${!inProgram ? 'text-white' : 'text-muted-foreground'}`}>Public View</span>
+                    <button
+                      onClick={() => { setInProgram(!inProgram); setActiveApplication(null); }}
+                      className={`relative w-10 h-5 rounded-full transition-colors ${inProgram ? 'bg-cyan-500' : 'bg-white/15'}`}
+                    >
+                      <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform ${inProgram ? 'left-[22px]' : 'left-0.5'}`} />
+                    </button>
+                    <span className={`font-medium ${inProgram ? 'text-white' : 'text-muted-foreground'}`}>In Program</span>
+                  </div>
                 </div>
 
-                <p className="text-sm text-muted-foreground -mt-4">
-                  Your partnership tier determines what programs you can apply to. Higher tiers include everything below them.
-                </p>
-
-                {/* Active application form */}
-                {activeApplication ? (
-                  (() => {
-                    const app = partnerTiers.flatMap((t) => t.applications.map((a) => ({ ...a, tier: t }))).find((a) => a.id === activeApplication);
-                    if (!app) return null;
-                    return (
-                      <>
-                        <button
-                          onClick={() => setActiveApplication(null)}
-                          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-white transition-colors -mt-4"
-                        >
-                          <ChevronLeft className="w-4 h-4" />
-                          Back to programs
-                        </button>
-
-                        <div className={`rounded-2xl border ${app.tier.borderColor} ${app.tier.bgColor} p-5`}>
-                          <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-[10px] font-bold uppercase tracking-wider ${app.tier.color}`}>{app.tier.name} Tier</span>
-                            <span className="text-[10px] text-muted-foreground">· Deadline: {app.deadline}</span>
-                          </div>
-                          <h3 className="text-xl font-bold text-white">{app.title}</h3>
-                          <p className="text-sm text-muted-foreground mt-1">{app.description}</p>
-                        </div>
-
-                        <div className="space-y-5">
-                          {app.fields.map((field, i) => (
-                            <div key={i} className="space-y-1.5">
-                              <label className="text-sm font-medium text-white/80">{field.label}</label>
-                              <input
-                                type="text"
-                                placeholder={field.placeholder}
-                                className="w-full bg-white/5 border border-white/10 rounded-lg h-11 px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
-                              />
-                            </div>
-                          ))}
-                          <div className="pt-4">
-                            <button className="px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors">
-                              Submit Application
-                            </button>
-                          </div>
-                        </div>
-                      </>
-                    );
-                  })()
-                ) : (
+                {/* ── PUBLIC VIEW (not in program) ── */}
+                {!inProgram && !activeApplication && (
                   <>
-                    {/* Tier progression — visual summary */}
-                    <div className="rounded-2xl border border-white/5 bg-[#1C2230] p-5">
-                      <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-4">Partnership Tiers</h3>
-                      <div className="flex items-center gap-1">
-                        {partnerTiers.map((tier, i) => (
-                          <div key={tier.id} className="flex items-center gap-1 flex-1">
-                            <button
-                              onClick={() => setExpandedTier(expandedTier === tier.id ? null : tier.id)}
-                              className={`flex-1 rounded-lg px-3 py-2.5 text-center transition-all border ${expandedTier === tier.id ? `${tier.borderColor} ${tier.bgColor}` : "border-transparent hover:bg-white/5"}`}
-                            >
-                              <span className={`text-xs font-bold ${expandedTier === tier.id ? tier.color : "text-muted-foreground"}`}>{tier.name}</span>
-                            </button>
-                            {i < partnerTiers.length - 1 && <ChevronRight className="w-3 h-3 text-white/10 shrink-0" />}
-                          </div>
-                        ))}
-                      </div>
+                    <p className="text-sm text-muted-foreground -mt-4">
+                      The StarCraft II Partnership Program supports community organizers running tournaments on Matcherino.
+                    </p>
 
-                      {/* Expanded tier detail */}
-                      {expandedTier && (() => {
-                        const tierIdx = partnerTiers.findIndex((t) => t.id === expandedTier);
-                        const tier = partnerTiers[tierIdx];
-                        if (!tier) return null;
-                        const inherited = partnerTiers.slice(0, tierIdx).flatMap((t) => t.perks);
-                        return (
-                          <div className="mt-4 pt-4 border-t border-white/5">
-                            <p className="text-sm text-muted-foreground mb-3">{tier.description}</p>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-1.5">
-                              {tier.perks.map((perk, i) => (
-                                <div key={`own-${i}`} className="flex items-center gap-2 text-sm">
-                                  <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 ${tier.color}`} />
-                                  <span className="text-white/80">{perk}</span>
-                                </div>
-                              ))}
-                              {inherited.map((perk, i) => (
-                                <div key={`inh-${i}`} className="flex items-center gap-2 text-sm">
-                                  <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-muted-foreground/30" />
-                                  <span className="text-white/30">{perk}</span>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      })()}
+                    {/* What is the program */}
+                    <div className="rounded-2xl border border-white/5 bg-[#1C2230] p-5 space-y-4">
+                      <h3 className="text-sm font-bold text-white">How the Program Works</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        Anyone can create and run a StarCraft II tournament on Matcherino for free. Program partners get access to additional tools to grow their events:
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="rounded-xl border border-white/5 bg-white/[0.03] p-4 space-y-2">
+                          <h4 className="text-sm font-semibold text-white">Contribution Codes</h4>
+                          <p className="text-xs text-muted-foreground leading-relaxed">Sponsor-funded codes that let fans add money to your prize pool at zero cost.</p>
+                        </div>
+                        <div className="rounded-xl border border-white/5 bg-white/[0.03] p-4 space-y-2">
+                          <h4 className="text-sm font-semibold text-white">In-Game Item Drops</h4>
+                          <p className="text-xs text-muted-foreground leading-relaxed">Portraits, skins, and banners to reward your tournament winners and contributors.</p>
+                        </div>
+                        <div className="rounded-xl border border-white/5 bg-white/[0.03] p-4 space-y-2">
+                          <h4 className="text-sm font-semibold text-white">Prize Pool Funding</h4>
+                          <p className="text-xs text-muted-foreground leading-relaxed">Direct funding for events based on your track record and community reach.</p>
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Open applications — grouped by tier */}
-                    <div className="space-y-6">
-                      {partnerTiers.map((tier) => {
-                        const openApps = tier.applications.filter((a) => a.status !== "closed");
-                        if (openApps.length === 0) return null;
-                        return (
-                          <div key={tier.id}>
-                            <div className="flex items-center gap-2 mb-3">
-                              <span className={`text-xs font-bold uppercase tracking-wider ${tier.color}`}>{tier.name}</span>
-                              <div className="flex-1 h-px bg-white/5" />
-                            </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                              {openApps.map((app) => (
-                                <button
-                                  key={app.id}
-                                  onClick={() => setActiveApplication(app.id)}
-                                  className={`text-left p-4 rounded-xl border ${tier.borderColor} bg-[#1C2230] hover:bg-white/5 transition-colors group`}
-                                >
-                                  <div className="flex items-center justify-between mb-1.5">
-                                    <h5 className="text-sm font-semibold text-white group-hover:text-cyan-400 transition-colors">{app.title}</h5>
-                                    <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0 ml-2 ${app.status === "closing_soon" ? "bg-yellow-500/10 text-yellow-400" : "bg-emerald-500/10 text-emerald-400"}`}>
-                                      {app.status === "closing_soon" ? "Closing soon" : "Open"}
-                                    </span>
-                                  </div>
-                                  <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{app.description}</p>
-                                  <div className="flex items-center justify-between mt-3">
-                                    <span className="text-[11px] text-muted-foreground">Deadline: {app.deadline}</span>
-                                    <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground group-hover:text-white transition-colors">
-                                      Apply <ChevronRight className="w-3 h-3" />
-                                    </span>
-                                  </div>
-                                </button>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      })}
+                    {/* Apply to join */}
+                    <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-5 space-y-3">
+                      <h3 className="text-sm font-bold text-cyan-400">Apply to Join</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed">
+                        If you're a community organizer running StarCraft II events, apply to join the program. Applications are reviewed within 3–5 business days.
+                      </p>
+                      <button
+                        onClick={() => setActiveApplication("apply-join")}
+                        className="px-5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black text-sm font-bold transition-colors"
+                      >
+                        Apply Now
+                      </button>
                     </div>
 
                     {/* Bottom CTA */}
                     <div className="rounded-xl border border-white/5 bg-card p-6 text-center">
-                      <h3 className="text-base font-semibold text-white mb-1">Questions about your tier or applications?</h3>
+                      <h3 className="text-base font-semibold text-white mb-1">Questions about the program?</h3>
                       <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
                         Reach out in the StarCraft Discord or contact Matcherino support.
                       </p>
@@ -1022,6 +785,154 @@ export default function StarcraftPage() {
                     </div>
                   </>
                 )}
+
+                {/* ── IN PROGRAM VIEW ── */}
+                {inProgram && !activeApplication && (
+                  <>
+                    <p className="text-sm text-muted-foreground -mt-4">
+                      Apply programs to your upcoming tournaments.
+                    </p>
+
+                    {/* Application cards */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {programApplications.filter((a) => a.status !== "closed").map((app) => (
+                        <button
+                          key={app.id}
+                          onClick={() => setActiveApplication(app.id)}
+                          className="text-left p-4 rounded-xl border border-white/5 bg-[#1C2230] hover:bg-white/5 transition-colors group"
+                        >
+                          <div className="flex items-center justify-between mb-1.5">
+                            <h5 className="text-sm font-semibold text-white group-hover:text-cyan-400 transition-colors">{app.title}</h5>
+                            <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full shrink-0 ml-2 ${app.status === "closing_soon" ? "bg-yellow-500/10 text-yellow-400" : "bg-emerald-500/10 text-emerald-400"}`}>
+                              {app.status === "closing_soon" ? "Closing soon" : "Open"}
+                            </span>
+                          </div>
+                          <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{app.description}</p>
+                          <div className="flex items-center justify-between mt-3">
+                            <span className="text-[11px] text-muted-foreground">Deadline: {app.deadline}</span>
+                            <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground group-hover:text-white transition-colors">
+                              Apply <ChevronRight className="w-3 h-3" />
+                            </span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Bottom CTA */}
+                    <div className="rounded-xl border border-white/5 bg-card p-6 text-center">
+                      <h3 className="text-base font-semibold text-white mb-1">Need help with an application?</h3>
+                      <p className="text-sm text-muted-foreground mb-4 max-w-md mx-auto">
+                        Reach out in the StarCraft Discord or contact Matcherino support.
+                      </p>
+                      <div className="flex items-center justify-center gap-3">
+                        <Button variant="outline" className="text-white/60 border-white/10 hover:bg-white/10 text-xs gap-1.5">
+                          <ExternalLink className="w-3.5 h-3.5" /> StarCraft Discord
+                        </Button>
+                        <Button variant="outline" className="text-white/60 border-white/10 hover:bg-white/10 text-xs gap-1.5">
+                          <ExternalLink className="w-3.5 h-3.5" /> Contact Support
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                )}
+
+                {/* ── APPLICATION FORM (both views) ── */}
+                {activeApplication && (() => {
+                  // "apply-join" is the public program application
+                  if (activeApplication === "apply-join") {
+                    return (
+                      <>
+                        <button
+                          onClick={() => setActiveApplication(null)}
+                          className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-white transition-colors -mt-4"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                          Back
+                        </button>
+
+                        <div className="rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-5">
+                          <h3 className="text-xl font-bold text-white">Join the StarCraft II Partnership Program</h3>
+                          <p className="text-sm text-muted-foreground mt-1">Tell us about your community and events.</p>
+                        </div>
+
+                        <div className="space-y-5">
+                          {[
+                            { label: "Organization / Streamer Name", placeholder: "Your org or channel name" },
+                            { label: "Email Address", placeholder: "you@example.com" },
+                            { label: "Tell us about your community", placeholder: "How many members, where do you organize (Discord, stream, etc.)" },
+                            { label: "Past events (if any)", placeholder: "Links to previous tournaments or VODs" },
+                            { label: "What are you looking for?", placeholder: "Contribution codes, in-game items, prize funding, etc." },
+                          ].map((field, i) => (
+                            <div key={i} className="space-y-1.5">
+                              <label className="text-sm font-medium text-white/80">{field.label}</label>
+                              <input
+                                type="text"
+                                placeholder={field.placeholder}
+                                className="w-full bg-white/5 border border-white/10 rounded-lg h-11 px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
+                              />
+                            </div>
+                          ))}
+                          <div className="pt-4">
+                            <button className="px-5 py-2 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black text-sm font-bold transition-colors">
+                              Submit Application
+                            </button>
+                          </div>
+                        </div>
+                      </>
+                    );
+                  }
+
+                  // In-program application form
+                  const app = programApplications.find((a) => a.id === activeApplication);
+                  if (!app) return null;
+                  return (
+                    <>
+                      <button
+                        onClick={() => setActiveApplication(null)}
+                        className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-white transition-colors -mt-4"
+                      >
+                        <ChevronLeft className="w-4 h-4" />
+                        Back to applications
+                      </button>
+
+                      <div className="rounded-2xl border border-white/5 bg-[#1C2230] p-5">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[10px] text-muted-foreground">Deadline: {app.deadline}</span>
+                        </div>
+                        <h3 className="text-xl font-bold text-white">{app.title}</h3>
+                        <p className="text-sm text-muted-foreground mt-1">{app.description}</p>
+                      </div>
+
+                      <div className="space-y-5">
+                        <div className="space-y-1.5">
+                          <label className="text-sm font-medium text-white/80">Select Tournament</label>
+                          <select className="w-full bg-white/5 border border-white/10 rounded-lg h-11 px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all">
+                            <option value="">Choose a tournament...</option>
+                            <option>uThermal 2v2 Circuit 2026</option>
+                            <option>Transcending Void — Rising Division #6</option>
+                            <option>AcesQuadrive Asia Circuit #14</option>
+                            <option>Northern Lights AS #25</option>
+                          </select>
+                        </div>
+                        {app.fields.map((field, i) => (
+                          <div key={i} className="space-y-1.5">
+                            <label className="text-sm font-medium text-white/80">{field.label}</label>
+                            <input
+                              type="text"
+                              placeholder={field.placeholder}
+                              className="w-full bg-white/5 border border-white/10 rounded-lg h-11 px-4 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary/50 transition-all placeholder:text-muted-foreground/60"
+                            />
+                          </div>
+                        ))}
+                        <div className="pt-4">
+                          <button className="px-5 py-2 rounded-lg bg-primary hover:bg-primary/90 text-black text-sm font-bold transition-colors">
+                            Submit Application
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
               </>
             )}
 

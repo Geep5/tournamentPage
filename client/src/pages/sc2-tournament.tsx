@@ -16,7 +16,7 @@ import { MobileSidebarBar } from "@/components/mobile-sidebar-bar";
 import {
   Search, Trophy, Users, Heart, ChevronRight, ChevronDown,
   ChevronLeft, Menu, LayoutGrid, ClipboardList, Coins, GitMerge, Radio,
-  Zap, CircleDollarSign, X, Star,
+  Zap, CircleDollarSign, X,
   Crown, Check, Twitch, CheckCircle2, MapPin,
 } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -58,14 +58,14 @@ interface SC2Tournament {
   region: string;
   img: string;
   partnered?: boolean;
-  qualifier?: boolean;
+  featured?: boolean;
 }
 
 const allTournaments: SC2Tournament[] = [
-  { id: 1, name: "uThermal 2v2 Circuit 2026", date: "Jun 6, 2026", format: "Double Elimination", participants: 618, maxParticipants: 1024, prize: "$62,200", status: "upcoming", organizer: "LindaLee", organizerAvatar: "L", region: "Global", img: SC2_IMGS[0], partnered: true, qualifier: true },
-  { id: 2, name: "Transcending Void — Rising Division #6", date: "Mar 22, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$1,200", status: "upcoming", organizer: "TVoid", organizerAvatar: "T", region: "NA / EU", img: SC2_IMGS[1], partnered: true, qualifier: true },
-  { id: 3, name: "AcesQuadrive Asia Circuit #14", date: "Mar 29, 2026", format: "Double Elimination", participants: 48, maxParticipants: 64, prize: "$2,800", status: "upcoming", organizer: "ASQ", organizerAvatar: "A", region: "Asia", img: SC2_IMGS[2], partnered: true, qualifier: true },
-  { id: 4, name: "Northern Lights AS #25", date: "Apr 5, 2026", format: "Swiss", participants: 36, maxParticipants: 64, prize: "$1,500", status: "upcoming", organizer: "NorthernSC", organizerAvatar: "N", region: "EU", img: SC2_IMGS[3], partnered: true, qualifier: true },
+  { id: 1, name: "uThermal 2v2 Circuit 2026", date: "Jun 6, 2026", format: "Double Elimination", participants: 618, maxParticipants: 1024, prize: "$62,200", status: "upcoming", organizer: "LindaLee", organizerAvatar: "L", region: "Global", img: SC2_IMGS[0], partnered: true, featured: true },
+  { id: 2, name: "Transcending Void — Rising Division #6", date: "Mar 22, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$1,200", status: "upcoming", organizer: "TVoid", organizerAvatar: "T", region: "NA / EU", img: SC2_IMGS[1], partnered: true, featured: true },
+  { id: 3, name: "AcesQuadrive Asia Circuit #14", date: "Mar 29, 2026", format: "Double Elimination", participants: 48, maxParticipants: 64, prize: "$2,800", status: "upcoming", organizer: "ASQ", organizerAvatar: "A", region: "Asia", img: SC2_IMGS[2], partnered: true, featured: true },
+  { id: 4, name: "Northern Lights AS #25", date: "Apr 5, 2026", format: "Swiss", participants: 36, maxParticipants: 64, prize: "$1,500", status: "upcoming", organizer: "NorthernSC", organizerAvatar: "N", region: "EU", img: SC2_IMGS[3], partnered: true, featured: true },
   { id: 5, name: "Korean Starcraft League: Week 88", date: "Mar 17, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$2,400", status: "upcoming", organizer: "KSL", organizerAvatar: "K", region: "Korea", img: SC2_IMGS[4], partnered: true },
   { id: 6, name: "StarCraft Evolution League #20", date: "Mar 15, 2026", format: "Double Elimination", participants: 48, maxParticipants: 64, prize: "$3,200", status: "live", organizer: "ESL", organizerAvatar: "E", region: "Global", img: SC2_IMGS[5], partnered: true },
   { id: 7, name: "Community Showdown III — EMEA", date: "Mar 8, 2026", format: "Single Elimination", participants: 64, maxParticipants: 64, prize: "$1,000", status: "completed", organizer: "ESL", organizerAvatar: "E", region: "EMEA", img: SC2_IMGS[6], partnered: true },
@@ -221,11 +221,6 @@ export default function SC2TournamentPage() {
           {tournament.partnered && (
             <Badge className="text-[10px] font-bold border-none gap-0.5 bg-cyan-500/20 text-cyan-400">
               <CheckCircle2 className="w-2.5 h-2.5" /> Partnered
-            </Badge>
-          )}
-          {tournament.qualifier && (
-            <Badge className="text-[10px] font-bold border-none gap-0.5 bg-yellow-500/20 text-yellow-400">
-              <Star className="w-2.5 h-2.5" /> EWC Qualifier
             </Badge>
           )}
         </div>

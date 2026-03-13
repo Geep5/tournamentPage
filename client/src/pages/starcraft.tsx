@@ -43,14 +43,14 @@ interface Tournament {
   region: string;
   img: string;
   partnered: boolean;
-  qualifier?: boolean;
+  featured?: boolean;
 }
 
 const tournaments: Tournament[] = [
-  { id: 1, name: "uThermal 2v2 Circuit 2026", date: "Jun 6, 2026", format: "Double Elimination", participants: 618, maxParticipants: 1024, prize: "$62,200", status: "upcoming", organizer: "LindaLee", organizerAvatar: "L", region: "Global", img: "https://cdn.matcherino.com/684148c1-caae-44a6-9ad6-332481b101a0/-/crop/581x327/0,4/-/resize/800x450/", partnered: true, qualifier: true },
-  { id: 2, name: "Transcending Void — Rising Division #6", date: "Mar 22, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$1,200", status: "upcoming", organizer: "TVoid", organizerAvatar: "T", region: "NA / EU", img: "https://cdn.matcherino.com/09e34bd3-d6c3-428d-93d0-c0957deb41d0/-/crop/3000x1687/0,508/-/resize/800x450/", partnered: true, qualifier: true },
-  { id: 3, name: "AcesQuadrive Asia Circuit #14", date: "Mar 29, 2026", format: "Double Elimination", participants: 48, maxParticipants: 64, prize: "$2,800", status: "upcoming", organizer: "ASQ", organizerAvatar: "A", region: "Asia", img: "https://cdn.matcherino.com/41541e69-049f-40de-8619-031f3ca69fb1/-/crop/552x310/191,0/-/resize/800x450/", partnered: true, qualifier: true },
-  { id: 4, name: "Northern Lights AS #25", date: "Apr 5, 2026", format: "Swiss", participants: 36, maxParticipants: 64, prize: "$1,500", status: "upcoming", organizer: "NorthernSC", organizerAvatar: "N", region: "EU", img: "https://cdn.matcherino.com/73a4e53a-1900-4ec0-bac5-1b9a6a8c11af/-/resize/800x450/", partnered: true, qualifier: true },
+  { id: 1, name: "uThermal 2v2 Circuit 2026", date: "Jun 6, 2026", format: "Double Elimination", participants: 618, maxParticipants: 1024, prize: "$62,200", status: "upcoming", organizer: "LindaLee", organizerAvatar: "L", region: "Global", img: "https://cdn.matcherino.com/684148c1-caae-44a6-9ad6-332481b101a0/-/crop/581x327/0,4/-/resize/800x450/", partnered: true, featured: true },
+  { id: 2, name: "Transcending Void — Rising Division #6", date: "Mar 22, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$1,200", status: "upcoming", organizer: "TVoid", organizerAvatar: "T", region: "NA / EU", img: "https://cdn.matcherino.com/09e34bd3-d6c3-428d-93d0-c0957deb41d0/-/crop/3000x1687/0,508/-/resize/800x450/", partnered: true, featured: true },
+  { id: 3, name: "AcesQuadrive Asia Circuit #14", date: "Mar 29, 2026", format: "Double Elimination", participants: 48, maxParticipants: 64, prize: "$2,800", status: "upcoming", organizer: "ASQ", organizerAvatar: "A", region: "Asia", img: "https://cdn.matcherino.com/41541e69-049f-40de-8619-031f3ca69fb1/-/crop/552x310/191,0/-/resize/800x450/", partnered: true, featured: true },
+  { id: 4, name: "Northern Lights AS #25", date: "Apr 5, 2026", format: "Swiss", participants: 36, maxParticipants: 64, prize: "$1,500", status: "upcoming", organizer: "NorthernSC", organizerAvatar: "N", region: "EU", img: "https://cdn.matcherino.com/73a4e53a-1900-4ec0-bac5-1b9a6a8c11af/-/resize/800x450/", partnered: true, featured: true },
   { id: 5, name: "Korean Starcraft League: Week 88", date: "Mar 17, 2026", format: "Round Robin", participants: 24, maxParticipants: 32, prize: "$2,400", status: "upcoming", organizer: "KSL", organizerAvatar: "K", region: "Korea", img: "https://cdn.matcherino.com/af8bd6ca-b994-4531-8426-09764770bd11/-/resize/800x450/", partnered: true },
   { id: 6, name: "StarCraft Evolution League #20", date: "Mar 15, 2026", format: "Double Elimination", participants: 48, maxParticipants: 64, prize: "$3,200", status: "live", organizer: "ESL", organizerAvatar: "E", region: "Global", img: "https://cdn.matcherino.com/a0e8d1ec-04e6-49ad-b32c-f258cba3fa73/-/resize/800x450/", partnered: true },
   { id: 7, name: "Community Showdown III — EMEA", date: "Mar 8, 2026", format: "Single Elimination", participants: 64, maxParticipants: 64, prize: "$1,000", status: "completed", organizer: "ESL", organizerAvatar: "E", region: "EMEA", img: "https://cdn.matcherino.com/00298fde-bca7-47b0-a0df-aca9ae736306/-/resize/800x450/", partnered: true },
@@ -59,7 +59,7 @@ const tournaments: Tournament[] = [
   { id: 10, name: "Casual 2v2 Bash", date: "Mar 20, 2026", format: "Double Elimination", participants: 16, maxParticipants: 32, prize: "$150", status: "upcoming", organizer: "SC2Fun", organizerAvatar: "S", region: "Global", img: "https://cdn.matcherino.com/09e34bd3-d6c3-428d-93d0-c0957deb41d0/-/crop/3000x1687/0,508/-/resize/800x450/", partnered: false },
 ];
 
-const qualifierTournaments = tournaments.filter((t) => t.qualifier);
+const featuredTournaments = tournaments.filter((t) => t.featured);
 
 interface EwcQualifier {
   name: string;
@@ -437,7 +437,7 @@ export default function StarcraftPage() {
   // Auto-advance carousel
   useEffect(() => {
     const id = setInterval(() => {
-      setCarouselIdx((prev) => (prev + 1) % qualifierTournaments.length);
+      setCarouselIdx((prev) => (prev + 1) % featuredTournaments.length);
     }, 5000);
     return () => clearInterval(id);
   }, []);
@@ -717,13 +717,13 @@ export default function StarcraftPage() {
                     </div>
                     <div className="flex items-center gap-1">
                       <button
-                        onClick={() => setCarouselIdx((prev) => (prev - 1 + qualifierTournaments.length) % qualifierTournaments.length)}
+                        onClick={() => setCarouselIdx((prev) => (prev - 1 + featuredTournaments.length) % featuredTournaments.length)}
                         className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"
                       >
                         <ChevronLeft className="w-4 h-4" />
                       </button>
                       <button
-                        onClick={() => setCarouselIdx((prev) => (prev + 1) % qualifierTournaments.length)}
+                        onClick={() => setCarouselIdx((prev) => (prev + 1) % featuredTournaments.length)}
                         className="p-1.5 rounded-lg hover:bg-white/10 text-muted-foreground hover:text-white transition-colors"
                       >
                         <ChevronRight className="w-4 h-4" />
@@ -736,24 +736,14 @@ export default function StarcraftPage() {
                       ref={carouselRef}
                       className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                     >
-                      {qualifierTournaments.map((t) => (
+                      {featuredTournaments.map((t) => (
                         <Link
                           key={t.id}
                           href={`/p/starcraft/t/${t.id}`}
                           className="snap-center shrink-0 w-full md:w-[calc(50%-8px)] lg:w-[calc(33.333%-11px)] group rounded-2xl bg-card border border-yellow-500/10 overflow-hidden hover:border-yellow-500/30 transition-all cursor-pointer"
                         >
-                          <div className="aspect-[16/9] overflow-hidden relative">
+                          <div className="aspect-[16/9] overflow-hidden">
                             <img src={t.img} alt={t.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                            <div className="absolute top-2 left-2">
-                              <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px] uppercase tracking-wider font-bold">
-                                EWC Qualifier
-                              </Badge>
-                            </div>
-                            <div className="absolute bottom-2 right-2">
-                              <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] font-bold backdrop-blur-sm">
-                                {t.prize}
-                              </Badge>
-                            </div>
                           </div>
                           <div className="p-3 space-y-2">
                             <h3 className="text-sm font-semibold text-white truncate group-hover:text-cyan-400 transition-colors">{t.name}</h3>
@@ -770,7 +760,7 @@ export default function StarcraftPage() {
 
                   {/* Carousel dots */}
                   <div className="flex items-center justify-center gap-1.5">
-                    {qualifierTournaments.map((_, i) => (
+                    {featuredTournaments.map((_, i) => (
                       <button
                         key={i}
                         onClick={() => setCarouselIdx(i)}
@@ -824,9 +814,11 @@ export default function StarcraftPage() {
                         href={`/p/starcraft/t/${t.id}`}
                         className="group rounded-2xl bg-card border border-white/5 overflow-hidden hover:border-white/10 transition-all cursor-pointer"
                       >
-                        <div className="aspect-[16/9] overflow-hidden relative">
+                        <div className="aspect-[16/9] overflow-hidden">
                           <img src={t.img} alt={t.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
-                          <div className="absolute top-2 left-2 flex items-center gap-1.5">
+                        </div>
+                        <div className="p-3 space-y-2">
+                          <div className="flex items-center gap-1.5">
                             <StatusBadge status={t.status} />
                             {t.partnered && (
                               <Badge className="bg-cyan-500/20 text-cyan-400 border-cyan-500/30 text-[10px] font-bold">
@@ -834,18 +826,12 @@ export default function StarcraftPage() {
                               </Badge>
                             )}
                           </div>
-                          <div className="absolute bottom-2 right-2">
-                            <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] font-bold backdrop-blur-sm">
-                              {t.prize}
-                            </Badge>
-                          </div>
-                        </div>
-                        <div className="p-3 space-y-2">
                           <h3 className="text-sm font-semibold text-white truncate group-hover:text-cyan-400 transition-colors">{t.name}</h3>
                           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                             <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {t.date}</span>
                             <span className="flex items-center gap-1"><Gamepad2 className="w-3 h-3" /> {t.format}</span>
                             <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.region}</span>
+                            <span className="flex items-center gap-1 text-yellow-400 font-semibold">{t.prize}</span>
                           </div>
                           <div className="flex items-center justify-between pt-1">
                             <div className="flex items-center gap-1.5">

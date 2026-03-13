@@ -630,12 +630,14 @@ export default function StarcraftPage() {
                           <>
                             <div className="flex items-center justify-between mb-3">
                               <div>
-                                <h4 className="text-sm font-bold text-white">{r.region}</h4>
+                                <div className="flex items-center gap-2">
+                                  <h4 className="text-sm font-bold text-white">{r.region}</h4>
+                                  <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px] px-1.5 py-0 font-bold">{r.prize}</Badge>
+                                </div>
                                 <span className="text-[10px] text-[#777]">
                                   {r.org} · {filled}/{r.qualified.length} qualified
                                   {singleQualifier && " · " + r.qualifiers[0].date}
                                 </span>
-                                <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] font-bold mt-1">{r.prize}</Badge>
                               </div>
                               {!singleQualifier && (
                                 <ChevronRight className={`w-3.5 h-3.5 text-white/30 transition-transform ${isExpanded ? "rotate-90" : ""}`} />
@@ -748,12 +750,14 @@ export default function StarcraftPage() {
                             <img src={t.img} alt={t.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                           </div>
                           <div className="p-3 space-y-2">
-                            <h3 className="text-sm font-semibold text-white truncate group-hover:text-cyan-400 transition-colors">{t.name}</h3>
+                            <div className="flex items-center justify-between gap-2">
+                              <h3 className="text-sm font-semibold text-white truncate group-hover:text-cyan-400 transition-colors">{t.name}</h3>
+                              <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px] px-1.5 py-0 font-bold shrink-0">{t.prize}</Badge>
+                            </div>
                             <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                               <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {t.date}</span>
                               <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.region}</span>
                               <span className="flex items-center gap-1"><Users className="w-3 h-3" /> {t.participants}/{t.maxParticipants}</span>
-                              <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] font-bold">{t.prize}</Badge>
                             </div>
                           </div>
                         </Link>
@@ -829,12 +833,14 @@ export default function StarcraftPage() {
                               </Badge>
                             )}
                           </div>
-                          <h3 className="text-sm font-semibold text-white truncate group-hover:text-cyan-400 transition-colors">{t.name}</h3>
+                          <div className="flex items-center justify-between gap-2">
+                            <h3 className="text-sm font-semibold text-white truncate group-hover:text-cyan-400 transition-colors">{t.name}</h3>
+                            <Badge className="bg-yellow-500/20 text-yellow-400 border-yellow-500/30 text-[10px] px-1.5 py-0 font-bold shrink-0">{t.prize}</Badge>
+                          </div>
                           <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                             <span className="flex items-center gap-1"><Calendar className="w-3 h-3" /> {t.date}</span>
                             <span className="flex items-center gap-1"><Gamepad2 className="w-3 h-3" /> {t.format}</span>
                             <span className="flex items-center gap-1"><MapPin className="w-3 h-3" /> {t.region}</span>
-                            <Badge className="bg-yellow-500/20 text-yellow-400 border-none text-[10px] font-bold">{t.prize}</Badge>
                           </div>
                           <div className="flex items-center justify-between pt-1">
                             <div className="flex items-center gap-1.5">
